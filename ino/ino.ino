@@ -12,15 +12,6 @@ const byte Motor_Left2 = 6;
 const byte Motor_Right1 = 10;
 const byte Motor_Right2 = 11;
 
-uint32_t lastloopmillis = 0;
-uint32_t lastcalmillis = 0;
-uint32_t lastconmillis = 0;
-uint32_t lastconmillis_fine = 0;
-uint32_t calperiod = 0;
-uint32_t conperiod = 0;
-uint32_t conperiod_fine = 0;
-
-
 Wheel leftwheel = Wheel(Motor_Left1,Motor_Left2,Encoder_Left,"LeftWheel");
 Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right,"RightWheel");
 void ISRencoder_left(){
@@ -31,6 +22,14 @@ void ISRencoder_right(){
 }
 
 Displayer oled = Displayer();
+
+uint32_t lastloopmillis = 0;
+uint32_t lastcalmillis = 0;
+uint32_t lastconmillis = 0;
+uint32_t lastconmillis_fine = 0;
+uint32_t calperiod = 0;
+uint32_t conperiod = 0;
+uint32_t conperiod_fine = 0;
 
 int updateCalc(){
     if(millis()-lastcalmillis>=calperiod){
