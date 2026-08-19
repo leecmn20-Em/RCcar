@@ -1,21 +1,27 @@
 #line 1 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\modules\\Commands.h"
 #pragma once
 
-void doSerialCommand(){
+String* splitCommand(String commandline, char delimeter, int maxlength = 5){
+    String command[maxlength] = {};
+        for (int i=0;i<maxlength;i++){
+            int parser = commandline.indexOf(delimeter);
+            if(parser<0){
+                command[i] = commandline;
+                break;
+            }
+            command[i] = commandline.substring(0,parser);
+            commandline = commandline.substring(parser+1);
+        }
+    return command;
+}
+
+String* getSerialCommand(){
     if(Serial.available()){
         String input = Serial.readString();
         input.trim();
         Serial.print("Command received: ");
         Serial.println(input);
-        String command[5] = {};
-        for (int i=0;i<5;i++){
-            int parser = input.indexOf(':');
-            if(parser<0){
-                command[i] = input;
-                break;
-            }
-            command[i] = input.substring(0,parser);
-            input = input.substring(parser+1);
-        }
+        return splitCommand(input, ':', 5);
     }
+    return;
 }

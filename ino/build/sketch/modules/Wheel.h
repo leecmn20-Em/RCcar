@@ -142,5 +142,4 @@ private:
 
     static const int duty_Max = 255;
     static const int duty_Min = 0;
-    
 };

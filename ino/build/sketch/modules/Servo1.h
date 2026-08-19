@@ -16,6 +16,7 @@ public:
     void attach(){
         Servo::attach(pin);
     }
+    using Servo::detach;
     void write(int angle){
         angle_tgt = angle;
     }

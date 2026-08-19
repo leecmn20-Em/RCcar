@@ -23,50 +23,97 @@ void ISRencoder_right(){
 
 Displayer oled = Displayer();
 
-uint32_t lastloopmillis = 0;
-uint32_t lastcalmillis = 0;
-uint32_t lastconmillis = 0;
-uint32_t lastconmillis_fine = 0;
-uint32_t calperiod = 0;
-uint32_t conperiod = 0;
-uint32_t conperiod_fine = 0;
+namespace DrivePolicy {
+    int drivemode = 0;
 
-int updateCalc(){
-    if(millis()-lastcalmillis>=calperiod){
-        leftwheel.estimateRPM(calperiod);
-        rightwheel.estimateRPM(calperiod);
-        lastcalmillis = millis();
-        return 1;
+    void drive(){
+        if(drivemode = 0){
+            leftwheel.stop();
+            rightwheel.stop();
+        }
     }
-    return 0;
+
+    void drive(int mode){
+        drivemode = mode;
+        drive();
+    }
+
+    void force(int ls = 0, int rs = 0){
+        drivemode = 2;
+        leftwheel.setTargetRPM(ls);
+        rightwheel.setTargetRPM(rs);
+    }
+
+    void emergencystop(){
+        leftwheel.stop();
+        rightwheel.stop();
+    }
 }
 
-int updateCon(){
-    if(millis()-lastconmillis>=conperiod){
-        leftwheel.followRPM();
-        rightwheel.followRPM();
-        lastconmillis = millis();
-        return 1;
+namespace {
+    void doSerialCommand(){
+        String* command = getSerialCommand();
+        if(command[0]=="SETSPEED"){
+            int ls = command[1].toInt();
+            int rs = command[2].toInt();
+            DrivePolicy::force(ls, rs);
+        }
     }
-    return 0;
 }
 
-int updateFine(){
-    if(millis()-lastconmillis_fine>=conperiod_fine){
-        leftwheel.updateMotor();
-        rightwheel.updateMotor();
-        lastconmillis_fine = millis();
-        return 1;
-    }
-    return 0;
-}
+namespace Update {
+    uint32_t lastloopmillis = 0;
+    uint32_t lastcalmillis = 0;
+    uint32_t lastconmillis = 0;
+    uint32_t lastconmillis_fine = 0;
+    uint32_t calperiod = 1000;
+    uint32_t conperiod = 1000;
+    uint32_t conperiod_fine = 1000;
 
-int updateLoop(){
-    if(millis()-lastloopmillis>=1000){
-        lastloopmillis = millis();
-        return 1;
+    void init(){
+        lastloopmillis = 0;
+        lastcalmillis = 0;
+        lastconmillis = 0;
+        lastconmillis_fine = 0;
     }
-    return 0;
+
+    int updateCalc(){
+        if(millis()-lastcalmillis>=calperiod){
+            leftwheel.estimateRPM(calperiod);
+            rightwheel.estimateRPM(calperiod);
+            lastcalmillis = millis();
+            return 1;
+        }
+        return 0;
+    }
+
+    int updateCon(){
+        if(millis()-lastconmillis>=conperiod){
+            leftwheel.followRPM();
+            rightwheel.followRPM();
+            lastconmillis = millis();
+            return 1;
+        }
+        return 0;
+    }
+
+    int updateFine(){
+        if(millis()-lastconmillis_fine>=conperiod_fine){
+            leftwheel.updateMotor();
+            rightwheel.updateMotor();
+            lastconmillis_fine = millis();
+            return 1;
+        }
+        return 0;
+    }
+
+    int updateLoop(){
+        if(millis()-lastloopmillis>=1000){
+            lastloopmillis = millis();
+            return 1;
+        }
+        return 0;
+    }
 }
 
 void setup() {
@@ -75,20 +122,20 @@ void setup() {
     rightwheel.setup();
     attachInterrupt(digitalPinToInterrupt(leftwheel.getEncoder()), ISRencoder_left, FALLING);
     attachInterrupt(digitalPinToInterrupt(rightwheel.getEncoder()), ISRencoder_right, FALLING);
-    calperiod = 100;
-    conperiod = 100;
-    conperiod_fine = 10;
+    Update::calperiod = 100;
+    Update::conperiod = 100;
+    Update::conperiod_fine = 10;
     oled.init();
+    DrivePolicy::drive(0);
 }
 
 void loop() {
-    //doSerialCommand();
+    doSerialCommand();
 
-    //updateCalc();
-    //updateCon();
-    //updateFine();
-    //updateLoop();
-    
-    //leftwheel.stop();
-    //rightwheel.stop();
+    Update::updateCalc();
+    Update::updateCon();
+    Update::updateFine();
+    Update::updateLoop();
+
+
 }
