@@ -4,6 +4,7 @@
 #include "modules\Displayer.h"
 #include "modules\Arms.h"
 #include "modules\Wheel.h"
+#include "modules\Sensors.h"
 
 const byte Encoder_Left = 2;
 const byte Encoder_Right = 3;
@@ -11,6 +12,10 @@ const byte Motor_Left1 = 5;
 const byte Motor_Left2 = 6;
 const byte Motor_Right1 = 10;
 const byte Motor_Right2 = 11;
+
+//const byte LineSensor::Obstacle_Sensor = -1;
+const byte LineSensor::Line_Sensor_Left = 3;
+const byte LineSensor::Line_Sensor_Right = 4;
 
 Wheel leftwheel = Wheel(Motor_Left1,Motor_Left2,Encoder_Left,"LeftWheel");
 Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right,"RightWheel");
@@ -25,17 +30,45 @@ Displayer oled = Displayer();
 
 namespace DrivePolicy {
     int drivemode = 0;
+    
+    const int BASE_RPM = 60;
+    const int TURN_RPM = 30;
 
     void drive(){
-        if(drivemode == 0){
-            leftwheel.stop();
-            rightwheel.stop();
+        switch(drivemode){
+            case 0:
+                leftwheel.setTargetRPM(0);
+                rightwheel.setTargetRPM(0);
+            case 1:
+                lineTrace();
+                break;
+            default:
+                break;
         }
     }
 
     void drive(int mode){
         drivemode = mode;
         drive();
+    }
+
+    void lineTrace(){
+        bool left = LineSensor::onLine_left;
+        bool right = LineSensor::onLine_right;
+
+        if(!left && !right){
+            leftwheel.setTargetRPM(BASE_RPM);
+            rightwheel.setTargetRPM(BASE_RPM);
+        } else if(left && !right){
+            leftwheel.setTargetRPM(BASE_RPM - TURN_RPM);
+            rightwheel.setTargetRPM(BASE_RPM);
+        } else if(!left && right){
+            leftwheel.setTargetRPM(BASE_RPM);
+            rightwheel.setTargetRPM(BASE_RPM - TURN_RPM);
+        } else {
+            leftwheel.stop();
+            rightwheel.stop();
+        }
     }
 
     void force(int ls = 0, int rs = 0){
@@ -49,6 +82,7 @@ namespace DrivePolicy {
     }
 
     void emergencystop(){
+        drivemode = -1;
         leftwheel.stop();
         rightwheel.stop();
     }
@@ -116,10 +150,20 @@ namespace Update {
 
     int updateLoop(){
         if(millis()-lastloopmillis>=1000){
+            monitor();
             lastloopmillis = millis();
             return 1;
         }
         return 0;
+    }
+
+    void monitor(){
+        if(LineSensor::onLine_left){
+            Serial.println("left on-line");
+        }
+        else{
+            Serial.println("left off-line");
+        }
     }
 }
 
