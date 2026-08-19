@@ -3,7 +3,7 @@
 
 const uint16_t COMMAND_MAXLENGTH = 5;
 
-void splitCommand(String commandline, char delimeter, String command[], int maxlength = 5){
+inline void splitCommand(String commandline, char delimeter, String command[], int maxlength = 5){
     for (int i=0;i<maxlength;i++){
         int parser = commandline.indexOf(delimeter);
         if(parser<0){
@@ -15,7 +15,7 @@ void splitCommand(String commandline, char delimeter, String command[], int maxl
     }
 }
 
-bool getSerialCommand(String command[]){
+inline bool getSerialCommand(String command[]){
     if(Serial.available()){
         String input = Serial.readString();
         input.trim();

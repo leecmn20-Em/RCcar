@@ -26,4 +26,5 @@ C:\Users\121\Desktop\0727\RCcar\ino\build\sketch\ino.ino.cpp.o: \
  c:\Users\121\Desktop\0727\dev\Arduino\libraries\Adafruit_BusIO/Adafruit_SPIDevice.h \
  C:\Users\121\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.8\libraries\SPI\src/SPI.h \
  C:\Users\121\Desktop\0727\RCcar\ino\build\sketch\modules\Arms.h \
- C:\Users\121\Desktop\0727\RCcar\ino\build\sketch\modules\Wheel.h
+ C:\Users\121\Desktop\0727\RCcar\ino\build\sketch\modules\Wheel.h \
+ C:\Users\121\Desktop\0727\RCcar\ino\build\sketch\modules\Sensors.h

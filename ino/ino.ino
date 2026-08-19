@@ -34,24 +34,6 @@ namespace DrivePolicy {
     const int BASE_RPM = 60;
     const int TURN_RPM = 30;
 
-    void drive(){
-        switch(drivemode){
-            case 0:
-                leftwheel.setTargetRPM(0);
-                rightwheel.setTargetRPM(0);
-            case 1:
-                lineTrace();
-                break;
-            default:
-                break;
-        }
-    }
-
-    void drive(int mode){
-        drivemode = mode;
-        drive();
-    }
-
     void lineTrace(){
         bool left = LineSensor::onLine_left;
         bool right = LineSensor::onLine_right;
@@ -86,6 +68,24 @@ namespace DrivePolicy {
         leftwheel.stop();
         rightwheel.stop();
     }
+
+    void drive(){
+        switch(drivemode){
+            case 0:
+                leftwheel.setTargetRPM(0);
+                rightwheel.setTargetRPM(0);
+            case 1:
+                lineTrace();
+                break;
+            default:
+                break;
+        }
+    }
+
+    void drive(int mode){
+        drivemode = mode;
+        drive();
+    }
 }
 
 namespace {
@@ -116,6 +116,15 @@ namespace Update {
         lastcalmillis = 0;
         lastconmillis = 0;
         lastconmillis_fine = 0;
+    }
+
+    void monitor(){
+        if(LineSensor::onLine_left){
+            Serial.println("left on-line");
+        }
+        else{
+            Serial.println("left off-line");
+        }
     }
 
     int updateCalc(){
@@ -155,15 +164,6 @@ namespace Update {
             return 1;
         }
         return 0;
-    }
-
-    void monitor(){
-        if(LineSensor::onLine_left){
-            Serial.println("left on-line");
-        }
-        else{
-            Serial.println("left off-line");
-        }
     }
 }
 
