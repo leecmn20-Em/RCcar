@@ -5,7 +5,7 @@
   "configuration": "",
   "output": "build",
   "board": "arduino:avr:uno",
-  "programmer": "",
+  "programmer": "arduinoasisp",
   "useProgrammer": false,
   "optimize_for_debug": false,
   "configurationRequired": false,
