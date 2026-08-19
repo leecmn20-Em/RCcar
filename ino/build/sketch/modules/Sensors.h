@@ -13,11 +13,11 @@ namespace LineSensor{
     }
 
     inline bool onLine_left(){
-        return digitalRead(Line_Sensor_Left) == LOW;
+        return digitalRead(Line_Sensor_Left) == HIGH;
     }
 
     inline bool onLine_right(){
-        return digitalRead(Line_Sensor_Right) == LOW;
+        return digitalRead(Line_Sensor_Right) == HIGH;
     }
 
     inline bool obstacleDetected(){

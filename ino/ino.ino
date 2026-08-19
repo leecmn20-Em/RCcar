@@ -4,7 +4,8 @@
 #include "modules\Displayer.h"
 #include "modules\Arms.h"
 #include "modules\Wheel.h"
-#include "modules\Sensors.h"
+#include "modules\LineSensor.h"
+#include "modules\ObstacleSensor.h"
 
 const byte Encoder_Left = 2;
 const byte Encoder_Right = 3;
@@ -14,8 +15,8 @@ const byte Motor_Right1 = 10;
 const byte Motor_Right2 = 11;
 
 //const byte LineSensor::Obstacle_Sensor = -1;
-const byte LineSensor::Line_Sensor_Left = 3;
-const byte LineSensor::Line_Sensor_Right = 4;
+const byte LineSensor::Line_Sensor_Left = A0;
+const byte LineSensor::Line_Sensor_Right = A1;
 
 Wheel leftwheel = Wheel(Motor_Left1,Motor_Left2,Encoder_Left,"LeftWheel");
 Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right,"RightWheel");
@@ -27,6 +28,7 @@ void ISRencoder_right(){
 }
 
 Displayer oled = Displayer();
+ObstacleSensor obsensor = ObstacleSensor();
 
 namespace DrivePolicy {
     int drivemode = 0;
@@ -35,8 +37,8 @@ namespace DrivePolicy {
     const int TURN_RPM = 30;
 
     void lineTrace(){
-        bool left = LineSensor::onLine_left;
-        bool right = LineSensor::onLine_right;
+        bool left = LineSensor::onLine_left();
+        bool right = LineSensor::onLine_right();
 
         if(!left && !right){
             leftwheel.setTargetRPM(BASE_RPM);
@@ -119,7 +121,7 @@ namespace Update {
     }
 
     void monitor(){
-        if(LineSensor::onLine_left){
+        if(LineSensor::onLine_left()){
             Serial.println("left on-line");
         }
         else{
@@ -131,6 +133,12 @@ namespace Update {
         if(millis()-lastcalmillis>=calperiod){
             leftwheel.estimateRPM(calperiod);
             rightwheel.estimateRPM(calperiod);
+            
+            int range = obsensor.getrange();
+            if(range!=-1 && range<300){
+                DrivePolicy::drive(0);
+            }
+
             lastcalmillis = millis();
             return 1;
         }
@@ -177,6 +185,7 @@ void setup() {
     Update::conperiod = 100;
     Update::conperiod_fine = 10;
     oled.init();
+    obsensor.init();
     DrivePolicy::drive(0);
 }
 
@@ -187,4 +196,6 @@ void loop() {
     Update::updateCon();
     Update::updateFine();
     Update::updateLoop();
+
+    DrivePolicy::emergencystop();
 }
