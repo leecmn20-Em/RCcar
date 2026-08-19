@@ -1,4 +1,7 @@
+#line 1 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 #include <Arduino.h>
+#include <Wire.h>
+#include <Adafruit_SSD1306.h>
 #include "modules\Commands.h"
 #include "modules\Servo1.h"
 #include "modules\Displayer.h"
@@ -244,6 +247,7 @@ void loop() {
     //leftwheel.stop();
     //rightwheel.stop();
 }
+
 
 
 

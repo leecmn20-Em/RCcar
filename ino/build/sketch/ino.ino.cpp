@@ -1,4 +1,7 @@
+#line 1 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 #include <Arduino.h>
+#include <Wire.h>
+#include <Adafruit_SSD1306.h>
 #include "modules\Commands.h"
 #include "modules\Servo1.h"
 #include "modules\Displayer.h"
@@ -166,6 +169,23 @@ private:
 
 Wheel leftwheel = Wheel(Motor_Left1,Motor_Left2,Encoder_Left,"LeftWheel");
 Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right,"RightWheel");
+#line 171 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+void ISRencoder_left();
+#line 174 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+void ISRencoder_right();
+#line 178 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+int updateCalc();
+#line 188 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+int updateCon();
+#line 198 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+int updateFine();
+#line 208 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+int updateLoop();
+#line 221 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+void setup();
+#line 238 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+void loop();
+#line 171 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left(){
     leftwheel.onEncoderInterrupt();
 }
@@ -244,6 +264,7 @@ void loop() {
     //leftwheel.stop();
     //rightwheel.stop();
 }
+
 
 
 
