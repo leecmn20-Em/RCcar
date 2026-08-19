@@ -19,9 +19,9 @@ Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right,"RightWheel");
 void ISRencoder_left();
 #line 20 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_right();
-#line 119 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 126 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void setup();
-#line 132 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 139 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void loop();
 #line 17 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left(){
@@ -37,7 +37,7 @@ namespace DrivePolicy {
     int drivemode = 0;
 
     void drive(){
-        if(drivemode = 0){
+        if(drivemode == 0){
             leftwheel.stop();
             rightwheel.stop();
         }
@@ -52,6 +52,10 @@ namespace DrivePolicy {
         drivemode = 2;
         leftwheel.setTargetRPM(ls);
         rightwheel.setTargetRPM(rs);
+        Serial.print("left wheel RPM set to: ");
+        Serial.println(ls);
+        Serial.print("right wheel RPM set to: ");
+        Serial.println(rs);
     }
 
     void emergencystop(){
@@ -62,7 +66,10 @@ namespace DrivePolicy {
 
 namespace {
     void doSerialCommand(){
-        String* command = getSerialCommand();
+        String command[COMMAND_MAXLENGTH];
+        if(!getSerialCommand(command)){
+            return;
+        }
         if(command[0]=="SETSPEED"){
             int ls = command[1].toInt();
             int rs = command[2].toInt();
@@ -146,6 +153,5 @@ void loop() {
     Update::updateCon();
     Update::updateFine();
     Update::updateLoop();
-
 
 }

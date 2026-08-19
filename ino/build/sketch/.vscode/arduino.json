@@ -1,7 +1,7 @@
 #line 1 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\.vscode\\arduino.json"
 {
   "schemaVersion": 1,
-  "port": "",
+  "port": "COM4",
   "configuration": "",
   "output": "build",
   "board": "arduino:avr:uno",
@@ -11,7 +11,7 @@
   "configurationRequired": false,
   "compile_profile": "",
   "monitorPortSettings": {
-    "port": "",
+    "port": "COM4",
     "baudRate": 115200,
     "lineEnding": "\r\n",
     "dataBits": 8,

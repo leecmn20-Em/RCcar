@@ -27,7 +27,7 @@ namespace DrivePolicy {
     int drivemode = 0;
 
     void drive(){
-        if(drivemode = 0){
+        if(drivemode == 0){
             leftwheel.stop();
             rightwheel.stop();
         }
@@ -42,6 +42,10 @@ namespace DrivePolicy {
         drivemode = 2;
         leftwheel.setTargetRPM(ls);
         rightwheel.setTargetRPM(rs);
+        Serial.print("left wheel RPM set to: ");
+        Serial.println(ls);
+        Serial.print("right wheel RPM set to: ");
+        Serial.println(rs);
     }
 
     void emergencystop(){
@@ -52,7 +56,10 @@ namespace DrivePolicy {
 
 namespace {
     void doSerialCommand(){
-        String* command = getSerialCommand();
+        String command[COMMAND_MAXLENGTH];
+        if(!getSerialCommand(command)){
+            return;
+        }
         if(command[0]=="SETSPEED"){
             int ls = command[1].toInt();
             int rs = command[2].toInt();
@@ -136,6 +143,4 @@ void loop() {
     Update::updateCon();
     Update::updateFine();
     Update::updateLoop();
-
-
 }

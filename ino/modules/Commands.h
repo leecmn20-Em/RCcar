@@ -1,26 +1,29 @@
 #pragma once
 
-String* splitCommand(String commandline, char delimeter, int maxlength = 5){
-    String command[maxlength] = {};
-        for (int i=0;i<maxlength;i++){
-            int parser = commandline.indexOf(delimeter);
-            if(parser<0){
-                command[i] = commandline;
-                break;
-            }
-            command[i] = commandline.substring(0,parser);
-            commandline = commandline.substring(parser+1);
+const uint16_t COMMAND_MAXLENGTH = 5;
+
+void splitCommand(String commandline, char delimeter, String command[], int maxlength = 5){
+    for (int i=0;i<maxlength;i++){
+        int parser = commandline.indexOf(delimeter);
+        if(parser<0){
+            command[i] = commandline;
+            break;
         }
-    return command;
+        command[i] = commandline.substring(0,parser);
+        commandline = commandline.substring(parser+1);
+    }
 }
 
-String* getSerialCommand(){
+bool getSerialCommand(String command[]){
     if(Serial.available()){
         String input = Serial.readString();
         input.trim();
+        if(input.length()==0){
+            return false;
+        }
         Serial.print("Command received: ");
         Serial.println(input);
-        return splitCommand(input, ':', 5);
+        splitCommand(input, ':', command, COMMAND_MAXLENGTH);
+        return true;
     }
-    return;
 }
