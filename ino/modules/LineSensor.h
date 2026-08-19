@@ -3,6 +3,7 @@
 namespace LineSensor{
     extern const byte Line_Sensor_Left;
     extern const byte Line_Sensor_Right;
+    uint16_t bufftime = 320;
 
     void setupSensors(){
         pinMode(Line_Sensor_Left, INPUT);

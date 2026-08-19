@@ -25,9 +25,9 @@ Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right,"RightWheel");
 void ISRencoder_left();
 #line 26 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_right();
-#line 234 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 255 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void setup();
-#line 253 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 274 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void loop();
 #line 23 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left(){
@@ -44,10 +44,12 @@ namespace DrivePolicy {
     int drivemode = 0;
     bool onobstacle;
     bool iolleft;
+    uint16_t iolleftbuffer;
     bool iolright;
+    uint16_t iolrightbuffer;
     
-    const int BASE_RPM = 120;
-    const int TURN_RPM = 60;
+    const int BASE_RPM = 90;
+    const int TURN_RPM = 50;
 
     void lineTrace(){
         if(onobstacle){
@@ -175,6 +177,13 @@ namespace Update {
         else{
             Serial.println("right OFF-line");
         }
+        Serial.print("Obstacle? ");
+        if(DrivePolicy::onobstacle){
+            Serial.println("yes");
+        }
+        else{
+            Serial.println("no");
+        }
     }
 
     int updateCalc(){
@@ -198,8 +207,20 @@ namespace Update {
 
     int updateFast(){
         if(cmillis-lastcalmillis_fast>=calperiod_fast){
-            DrivePolicy::iolleft = LineSensor::onLine_left();
-            DrivePolicy::iolright = LineSensor::onLine_right();
+            if(LineSensor::onLine_left()){
+                DrivePolicy::iolleft = true;
+                DrivePolicy::iolleftbuffer = cmillis;
+            }
+            else if(cmillis-DrivePolicy::iolleftbuffer>=LineSensor::bufftime){
+                DrivePolicy::iolleft = false;
+            }
+            if(LineSensor::onLine_right()){
+                DrivePolicy::iolright = true;
+                DrivePolicy::iolrightbuffer = cmillis;
+            }
+            else if(cmillis-DrivePolicy::iolrightbuffer>=LineSensor::bufftime){
+                DrivePolicy::iolright = false;
+            }
 
             lastcalmillis_fast = cmillis;
             return 1;

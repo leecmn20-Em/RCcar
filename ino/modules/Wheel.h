@@ -73,7 +73,6 @@ public:
             analogWrite(in1, 0);
             analogWrite(in2, 0);
         }
-        setTargetRPM(s);
     }
     void stop(){
         setTargetRPM(0);
@@ -82,11 +81,11 @@ public:
     }
     void followRPM(){
         double rpm_err = rpm_tgt - rpm_est;
-        if(rpm_err>10){
-            duty_tgt += min(5,rpm_err);
+        if(rpm_err>0){
+            duty_tgt += min(10,Kp*rpm_err);
         }
         else if(rpm_err<0){
-            duty_tgt -= min(5,-rpm_err);
+            duty_tgt -= min(10,-(Kp*rpm_err));
         }
         else;
         if(duty_tgt>duty_Max){
@@ -100,10 +99,10 @@ public:
         if(dir_tgt == dir_est){
             int duty_err = duty_tgt - duty_cur;
             if(duty_err>0){
-                duty_cur += min(5,duty_err);
+                duty_cur += min(10,duty_err);
             }
             else if(duty_err<0){
-                duty_cur -= min(5,-duty_err);
+                duty_cur -= min(10,-duty_err);
             }
             else;
             setMotorPower(duty_cur*dir_tgt);
@@ -144,6 +143,8 @@ private:
     int dir_est;
     int duty_cur;
     int duty_tgt;
+
+    const float Kp = 0.5;
 
     static const int duty_Max = 255;
     static const int duty_Min = 0;
