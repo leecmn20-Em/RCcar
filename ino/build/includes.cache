@@ -95,59 +95,10 @@
     }
   },
   {
-    "missing_include_h": "Adafruit_SSD1306.h"
+    "missing_include_h": "Adafruit_VL53L0X.h"
   },
   {
-    "added_include_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306"
-  },
-  {
-    "compile": {
-      "source_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged.libsdetect.d"
-    },
-    "compile_task": {
-      "args": [
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-flto",
-        "-w",
-        "-x",
-        "c++",
-        "-E",
-        "-CC",
-        "-mmcu=atmega328p",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_UNO",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged",
-        "-o",
-        "nul",
-        "-MMD",
-        "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged.libsdetect.d"
-      ]
-    }
-  },
-  {
-    "missing_include_h": "Adafruit_GFX.h"
-  },
-  {
-    "added_include_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library"
+    "added_include_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src"
   },
   {
     "compile": {
@@ -182,59 +133,7 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged",
-        "-o",
-        "nul",
-        "-MMD",
-        "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged.libsdetect.d"
-      ]
-    }
-  },
-  {
-    "missing_include_h": "Adafruit_I2CDevice.h"
-  },
-  {
-    "added_include_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO"
-  },
-  {
-    "compile": {
-      "source_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged.libsdetect.d"
-    },
-    "compile_task": {
-      "args": [
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-flto",
-        "-w",
-        "-x",
-        "c++",
-        "-E",
-        "-CC",
-        "-mmcu=atmega328p",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_UNO",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged",
         "-o",
         "nul",
@@ -283,63 +182,8 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged",
-        "-o",
-        "nul",
-        "-MMD",
-        "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged.libsdetect.d"
-      ]
-    }
-  },
-  {
-    "missing_include_h": "SPI.h"
-  },
-  {
-    "added_include_path": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src"
-  },
-  {
-    "compile": {
-      "source_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged.libsdetect.d"
-    },
-    "compile_task": {
-      "args": [
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-flto",
-        "-w",
-        "-x",
-        "c++",
-        "-E",
-        "-CC",
-        "-mmcu=atmega328p",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_UNO",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
         "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged",
         "-o",
         "nul",
@@ -385,11 +229,8 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\avr\\Servo.cpp",
         "-o",
         "nul",
@@ -435,11 +276,8 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\esp32\\Servo.cpp",
         "-o",
         "nul",
@@ -485,11 +323,8 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\mbed\\Servo.cpp",
         "-o",
         "nul",
@@ -535,11 +370,8 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\megaavr\\Servo.cpp",
         "-o",
         "nul",
@@ -585,11 +417,8 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\nrf52\\Servo.cpp",
         "-o",
         "nul",
@@ -635,11 +464,8 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\renesas\\Servo.cpp",
         "-o",
         "nul",
@@ -685,11 +511,8 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\sam\\Servo.cpp",
         "-o",
         "nul",
@@ -735,11 +558,8 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\samd\\Servo.cpp",
         "-o",
         "nul",
@@ -785,11 +605,8 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\stm32f4\\Servo.cpp",
         "-o",
         "nul",
@@ -835,11 +652,8 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\xmc\\Servo.cpp",
         "-o",
         "nul",
@@ -885,11 +699,8 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\zephyr\\Servo.cpp",
         "-o",
         "nul",
@@ -904,8 +715,8 @@
   },
   {
     "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306\\Adafruit_SSD1306.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_SSD1306\\Adafruit_SSD1306.cpp.libsdetect.d"
+      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\Adafruit_VL53L0X.cpp",
+      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\Adafruit_VL53L0X.cpp.libsdetect.d"
     },
     "compile_task": {
       "args": [
@@ -935,17 +746,14 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306\\Adafruit_SSD1306.cpp",
+        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\Adafruit_VL53L0X.cpp",
         "-o",
         "nul",
         "-MMD",
         "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_SSD1306\\Adafruit_SSD1306.cpp.libsdetect.d"
+        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\Adafruit_VL53L0X.cpp.libsdetect.d"
       ]
     }
   },
@@ -954,8 +762,8 @@
   },
   {
     "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library\\Adafruit_GFX.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_GFX_Library\\Adafruit_GFX.cpp.libsdetect.d"
+      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api.cpp",
+      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\core\\src\\vl53l0x_api.cpp.libsdetect.d"
     },
     "compile_task": {
       "args": [
@@ -985,17 +793,14 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library\\Adafruit_GFX.cpp",
+        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api.cpp",
         "-o",
         "nul",
         "-MMD",
         "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_GFX_Library\\Adafruit_GFX.cpp.libsdetect.d"
+        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\core\\src\\vl53l0x_api.cpp.libsdetect.d"
       ]
     }
   },
@@ -1004,8 +809,8 @@
   },
   {
     "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library\\Adafruit_GrayOLED.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_GFX_Library\\Adafruit_GrayOLED.cpp.libsdetect.d"
+      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api_calibration.cpp",
+      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\core\\src\\vl53l0x_api_calibration.cpp.libsdetect.d"
     },
     "compile_task": {
       "args": [
@@ -1035,17 +840,14 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library\\Adafruit_GrayOLED.cpp",
+        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api_calibration.cpp",
         "-o",
         "nul",
         "-MMD",
         "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_GFX_Library\\Adafruit_GrayOLED.cpp.libsdetect.d"
+        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\core\\src\\vl53l0x_api_calibration.cpp.libsdetect.d"
       ]
     }
   },
@@ -1054,8 +856,8 @@
   },
   {
     "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library\\Adafruit_SPITFT.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_GFX_Library\\Adafruit_SPITFT.cpp.libsdetect.d"
+      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api_core.cpp",
+      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\core\\src\\vl53l0x_api_core.cpp.libsdetect.d"
     },
     "compile_task": {
       "args": [
@@ -1085,17 +887,14 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library\\Adafruit_SPITFT.cpp",
+        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api_core.cpp",
         "-o",
         "nul",
         "-MMD",
         "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_GFX_Library\\Adafruit_SPITFT.cpp.libsdetect.d"
+        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\core\\src\\vl53l0x_api_core.cpp.libsdetect.d"
       ]
     }
   },
@@ -1104,8 +903,8 @@
   },
   {
     "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library\\glcdfont.c",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_GFX_Library\\glcdfont.c.libsdetect.d"
+      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api_ranging.cpp",
+      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\core\\src\\vl53l0x_api_ranging.cpp.libsdetect.d"
     },
     "compile_task": {
       "args": [
@@ -1135,17 +934,14 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library\\glcdfont.c",
+        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api_ranging.cpp",
         "-o",
         "nul",
         "-MMD",
         "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_GFX_Library\\glcdfont.c.libsdetect.d"
+        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\core\\src\\vl53l0x_api_ranging.cpp.libsdetect.d"
       ]
     }
   },
@@ -1154,8 +950,8 @@
   },
   {
     "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_BusIO_Register.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_BusIO\\Adafruit_BusIO_Register.cpp.libsdetect.d"
+      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api_strings.cpp",
+      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\core\\src\\vl53l0x_api_strings.cpp.libsdetect.d"
     },
     "compile_task": {
       "args": [
@@ -1185,17 +981,14 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_BusIO_Register.cpp",
+        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api_strings.cpp",
         "-o",
         "nul",
         "-MMD",
         "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_BusIO\\Adafruit_BusIO_Register.cpp.libsdetect.d"
+        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\core\\src\\vl53l0x_api_strings.cpp.libsdetect.d"
       ]
     }
   },
@@ -1204,8 +997,8 @@
   },
   {
     "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_GenericDevice.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_BusIO\\Adafruit_GenericDevice.cpp.libsdetect.d"
+      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\platform\\src\\vl53l0x_i2c_comms.cpp",
+      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\platform\\src\\vl53l0x_i2c_comms.cpp.libsdetect.d"
     },
     "compile_task": {
       "args": [
@@ -1235,17 +1028,14 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_GenericDevice.cpp",
+        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\platform\\src\\vl53l0x_i2c_comms.cpp",
         "-o",
         "nul",
         "-MMD",
         "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_BusIO\\Adafruit_GenericDevice.cpp.libsdetect.d"
+        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\platform\\src\\vl53l0x_i2c_comms.cpp.libsdetect.d"
       ]
     }
   },
@@ -1254,8 +1044,8 @@
   },
   {
     "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_I2CDevice.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_BusIO\\Adafruit_I2CDevice.cpp.libsdetect.d"
+      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\platform\\src\\vl53l0x_platform.cpp",
+      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\platform\\src\\vl53l0x_platform.cpp.libsdetect.d"
     },
     "compile_task": {
       "args": [
@@ -1285,67 +1075,14 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_I2CDevice.cpp",
+        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\platform\\src\\vl53l0x_platform.cpp",
         "-o",
         "nul",
         "-MMD",
         "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_BusIO\\Adafruit_I2CDevice.cpp.libsdetect.d"
-      ]
-    }
-  },
-  {
-    "missing_include_h": ""
-  },
-  {
-    "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_SPIDevice.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_BusIO\\Adafruit_SPIDevice.cpp.libsdetect.d"
-    },
-    "compile_task": {
-      "args": [
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-flto",
-        "-w",
-        "-x",
-        "c++",
-        "-E",
-        "-CC",
-        "-mmcu=atmega328p",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_UNO",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO\\Adafruit_SPIDevice.cpp",
-        "-o",
-        "nul",
-        "-MMD",
-        "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_BusIO\\Adafruit_SPIDevice.cpp.libsdetect.d"
+        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\platform\\src\\vl53l0x_platform.cpp.libsdetect.d"
       ]
     }
   },
@@ -1385,11 +1122,8 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
         "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src\\Wire.cpp",
         "-o",
         "nul",
@@ -1435,67 +1169,14 @@
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
+        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
         "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src\\utility\\twi.c",
         "-o",
         "nul",
         "-MMD",
         "-MF",
         "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Wire\\utility\\twi.c.libsdetect.d"
-      ]
-    }
-  },
-  {
-    "missing_include_h": ""
-  },
-  {
-    "compile": {
-      "source_path": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src\\SPI.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\SPI\\SPI.cpp.libsdetect.d"
-    },
-    "compile_task": {
-      "args": [
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-flto",
-        "-w",
-        "-x",
-        "c++",
-        "-E",
-        "-CC",
-        "-mmcu=atmega328p",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_UNO",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_SSD1306",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_GFX_Library",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_BusIO",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src",
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\SPI\\src\\SPI.cpp",
-        "-o",
-        "nul",
-        "-MMD",
-        "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\SPI\\SPI.cpp.libsdetect.d"
       ]
     }
   },

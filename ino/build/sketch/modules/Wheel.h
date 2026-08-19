@@ -61,10 +61,6 @@ public:
             analogWrite(in2, 0);
         }
     }
-    void stop(){
-        analogWrite(in1, 0);
-        analogWrite(in2, 0);
-    }
     void setTargetRPM(double rpm){
         if(rpm>0){
             rpm_tgt = rpm;
@@ -78,6 +74,11 @@ public:
             rpm_tgt = 0;
             dir_tgt = 0;
         }
+    }
+    void stop(){
+        setTargetRPM(0);
+        analogWrite(in1, 0);
+        analogWrite(in2, 0);
     }
     void followRPM(){
         double rpm_err = rpm_tgt - rpm_est;

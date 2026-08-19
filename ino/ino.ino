@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "modules\Commands.h"
 #include "modules\Servo1.h"
-#include "modules\Displayer.h"
+//#include "modules\Displayer.h"
 #include "modules\Arms.h"
 #include "modules\Wheel.h"
 #include "modules\LineSensor.h"
@@ -27,11 +27,12 @@ void ISRencoder_right(){
     rightwheel.onEncoderInterrupt();
 }
 
-Displayer oled = Displayer();
+//Displayer oled = Displayer();
 ObstacleSensor obsensor = ObstacleSensor();
 
 namespace DrivePolicy {
     int drivemode = 0;
+    bool onobstacle;
     
     const int BASE_RPM = 60;
     const int TURN_RPM = 30;
@@ -39,7 +40,12 @@ namespace DrivePolicy {
     void lineTrace(){
         bool left = LineSensor::onLine_left();
         bool right = LineSensor::onLine_right();
-
+        
+        if(onobstacle){
+            leftwheel.stop();
+            rightwheel.stop();
+            return;
+        }
         if(!left && !right){
             leftwheel.setTargetRPM(BASE_RPM);
             rightwheel.setTargetRPM(BASE_RPM);
@@ -73,10 +79,10 @@ namespace DrivePolicy {
 
     void drive(){
         switch(drivemode){
-            case 0:
+            case 0: //stop
                 leftwheel.setTargetRPM(0);
                 rightwheel.setTargetRPM(0);
-            case 1:
+            case 1: //free trace
                 lineTrace();
                 break;
             default:
@@ -127,6 +133,13 @@ namespace Update {
         else{
             Serial.println("left off-line");
         }
+        Serial.print("Obstacle? ");
+        if(DrivePolicy::onobstacle){
+            Serial.println("yes");
+        }
+        else{
+            Serial.println("no");
+        }
     }
 
     int updateCalc(){
@@ -135,8 +148,11 @@ namespace Update {
             rightwheel.estimateRPM(calperiod);
             
             int range = obsensor.getrange();
-            if(range!=-1 && range<300){
-                DrivePolicy::drive(0);
+            if(range!=-1 && range<150){
+                DrivePolicy::onobstacle = true;
+            }
+            else{
+                DrivePolicy::onobstacle = false;
             }
 
             lastcalmillis = millis();
@@ -184,7 +200,7 @@ void setup() {
     Update::calperiod = 100;
     Update::conperiod = 100;
     Update::conperiod_fine = 10;
-    oled.init();
+    //oled.init();
     obsensor.init();
     DrivePolicy::drive(0);
 }

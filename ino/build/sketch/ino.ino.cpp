@@ -2,10 +2,11 @@
 #include <Arduino.h>
 #include "modules\Commands.h"
 #include "modules\Servo1.h"
-#include "modules\Displayer.h"
+//#include "modules\Displayer.h"
 #include "modules\Arms.h"
 #include "modules\Wheel.h"
-#include "modules\Sensors.h"
+#include "modules\LineSensor.h"
+#include "modules\ObstacleSensor.h"
 
 const byte Encoder_Left = 2;
 const byte Encoder_Right = 3;
@@ -16,19 +17,19 @@ const byte Motor_Right2 = 11;
 
 //const byte LineSensor::Obstacle_Sensor = -1;
 const byte LineSensor::Line_Sensor_Left = A0;
-const byte LineSensor::Line_Sensor_Right = 4;
+const byte LineSensor::Line_Sensor_Right = A1;
 
 Wheel leftwheel = Wheel(Motor_Left1,Motor_Left2,Encoder_Left,"LeftWheel");
 Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right,"RightWheel");
-#line 22 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 23 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left();
-#line 25 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 26 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_right();
-#line 170 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 194 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void setup();
-#line 183 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 208 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void loop();
-#line 22 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 23 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left(){
     leftwheel.onEncoderInterrupt();
 }
@@ -36,10 +37,12 @@ void ISRencoder_right(){
     rightwheel.onEncoderInterrupt();
 }
 
-Displayer oled = Displayer();
+//Displayer oled = Displayer();
+ObstacleSensor obsensor = ObstacleSensor();
 
 namespace DrivePolicy {
     int drivemode = 0;
+    bool onobstacle;
     
     const int BASE_RPM = 60;
     const int TURN_RPM = 30;
@@ -47,7 +50,12 @@ namespace DrivePolicy {
     void lineTrace(){
         bool left = LineSensor::onLine_left();
         bool right = LineSensor::onLine_right();
-
+        
+        if(onobstacle){
+            leftwheel.stop();
+            rightwheel.stop();
+            return;
+        }
         if(!left && !right){
             leftwheel.setTargetRPM(BASE_RPM);
             rightwheel.setTargetRPM(BASE_RPM);
@@ -81,10 +89,10 @@ namespace DrivePolicy {
 
     void drive(){
         switch(drivemode){
-            case 0:
+            case 0: //stop
                 leftwheel.setTargetRPM(0);
                 rightwheel.setTargetRPM(0);
-            case 1:
+            case 1: //free trace
                 lineTrace();
                 break;
             default:
@@ -135,12 +143,28 @@ namespace Update {
         else{
             Serial.println("left off-line");
         }
+        Serial.print("Obstacle? ");
+        if(DrivePolicy::onobstacle){
+            Serial.println("yes");
+        }
+        else{
+            Serial.println("no");
+        }
     }
 
     int updateCalc(){
         if(millis()-lastcalmillis>=calperiod){
             leftwheel.estimateRPM(calperiod);
             rightwheel.estimateRPM(calperiod);
+            
+            int range = obsensor.getrange();
+            if(range!=-1 && range<300){
+                DrivePolicy::onobstacle = true;
+            }
+            else{
+                DrivePolicy::onobstacle = false;
+            }
+
             lastcalmillis = millis();
             return 1;
         }
@@ -186,7 +210,8 @@ void setup() {
     Update::calperiod = 100;
     Update::conperiod = 100;
     Update::conperiod_fine = 10;
-    oled.init();
+    //oled.init();
+    obsensor.init();
     DrivePolicy::drive(0);
 }
 
