@@ -92,11 +92,11 @@
    "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
    "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-   "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\avr\\Servo.cpp",
+   "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\esp32\\Servo.cpp",
    "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\avr\\Servo.cpp.o"
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\esp32\\Servo.cpp.o"
   ],
-  "file": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\avr\\Servo.cpp"
+  "file": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\esp32\\Servo.cpp"
  },
  {
   "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -125,11 +125,44 @@
    "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
    "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-   "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\esp32\\Servo.cpp",
+   "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\nrf52\\Servo.cpp",
    "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\esp32\\Servo.cpp.o"
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\nrf52\\Servo.cpp.o"
   ],
-  "file": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\esp32\\Servo.cpp"
+  "file": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\nrf52\\Servo.cpp"
+ },
+ {
+  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega328p",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_UNO",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
+   "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
+   "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
+   "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\avr\\Servo.cpp",
+   "-o",
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\avr\\Servo.cpp.o"
+  ],
+  "file": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\avr\\Servo.cpp"
  },
  {
   "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -224,11 +257,11 @@
    "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
    "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-   "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\nrf52\\Servo.cpp",
+   "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\renesas\\Servo.cpp",
    "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\nrf52\\Servo.cpp.o"
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\renesas\\Servo.cpp.o"
   ],
-  "file": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\nrf52\\Servo.cpp"
+  "file": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\renesas\\Servo.cpp"
  },
  {
   "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -328,39 +361,6 @@
    "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\sam\\Servo.cpp.o"
   ],
   "file": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\sam\\Servo.cpp"
- },
- {
-  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega328p",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_UNO",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-   "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-   "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\renesas\\Servo.cpp",
-   "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\renesas\\Servo.cpp.o"
-  ],
-  "file": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\renesas\\Servo.cpp"
  },
  {
   "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -521,11 +521,44 @@
    "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
    "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-   "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api_strings.cpp",
+   "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\platform\\src\\vl53l0x_platform.cpp",
    "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\core\\src\\vl53l0x_api_strings.cpp.o"
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\platform\\src\\vl53l0x_platform.cpp.o"
   ],
-  "file": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api_strings.cpp"
+  "file": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\platform\\src\\vl53l0x_platform.cpp"
+ },
+ {
+  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega328p",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_UNO",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
+   "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
+   "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
+   "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\platform\\src\\vl53l0x_i2c_comms.cpp",
+   "-o",
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\platform\\src\\vl53l0x_i2c_comms.cpp.o"
+  ],
+  "file": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\platform\\src\\vl53l0x_i2c_comms.cpp"
  },
  {
   "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -587,39 +620,6 @@
    "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
    "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-   "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\platform\\src\\vl53l0x_platform.cpp",
-   "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\platform\\src\\vl53l0x_platform.cpp.o"
-  ],
-  "file": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\platform\\src\\vl53l0x_platform.cpp"
- },
- {
-  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega328p",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_UNO",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-   "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
    "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api_ranging.cpp",
    "-o",
    "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\core\\src\\vl53l0x_api_ranging.cpp.o"
@@ -653,11 +653,44 @@
    "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
    "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-   "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\platform\\src\\vl53l0x_i2c_comms.cpp",
+   "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api_strings.cpp",
    "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\platform\\src\\vl53l0x_i2c_comms.cpp.o"
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Adafruit_VL53L0X\\core\\src\\vl53l0x_api_strings.cpp.o"
   ],
-  "file": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\platform\\src\\vl53l0x_i2c_comms.cpp"
+  "file": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api_strings.cpp"
+ },
+ {
+  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega328p",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_UNO",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
+   "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
+   "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src\\Wire.cpp",
+   "-o",
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Wire\\Wire.cpp.o"
+  ],
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src\\Wire.cpp"
  },
  {
   "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -713,104 +746,11 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-   "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src\\Wire.cpp",
-   "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Wire\\Wire.cpp.o"
-  ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src\\Wire.cpp"
- },
- {
-  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega328p",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_UNO",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
    "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\CDC.cpp",
    "-o",
    "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\CDC.cpp.o"
   ],
   "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\CDC.cpp"
- },
- {
-  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega328p",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_UNO",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\USBCore.cpp",
-   "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\USBCore.cpp.o"
-  ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\USBCore.cpp"
- },
- {
-  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega328p",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_UNO",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\PluggableUSB.cpp",
-   "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\PluggableUSB.cpp.o"
-  ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\PluggableUSB.cpp"
  },
  {
   "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -866,11 +806,11 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\Stream.cpp",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial1.cpp",
    "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\Stream.cpp.o"
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\HardwareSerial1.cpp.o"
   ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\Stream.cpp"
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial1.cpp"
  },
  {
   "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -896,11 +836,245 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial1.cpp",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\PluggableUSB.cpp",
    "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\HardwareSerial1.cpp.o"
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\PluggableUSB.cpp.o"
   ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial1.cpp"
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\PluggableUSB.cpp"
+ },
+ {
+  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega328p",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_UNO",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial3.cpp",
+   "-o",
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\HardwareSerial3.cpp.o"
+  ],
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial3.cpp"
+ },
+ {
+  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega328p",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_UNO",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial.cpp",
+   "-o",
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\HardwareSerial.cpp.o"
+  ],
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial.cpp"
+ },
+ {
+  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega328p",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_UNO",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial0.cpp",
+   "-o",
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\HardwareSerial0.cpp.o"
+  ],
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial0.cpp"
+ },
+ {
+  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega328p",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_UNO",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\IPAddress.cpp",
+   "-o",
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\IPAddress.cpp.o"
+  ],
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\IPAddress.cpp"
+ },
+ {
+  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega328p",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_UNO",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\USBCore.cpp",
+   "-o",
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\USBCore.cpp.o"
+  ],
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\USBCore.cpp"
+ },
+ {
+  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega328p",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_UNO",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial2.cpp",
+   "-o",
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\HardwareSerial2.cpp.o"
+  ],
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial2.cpp"
+ },
+ {
+  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu11",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-MMD",
+   "-flto",
+   "-fno-fat-lto-objects",
+   "-mmcu=atmega328p",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_UNO",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\hooks.c",
+   "-o",
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\hooks.c.o"
+  ],
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\hooks.c"
+ },
+ {
+  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu11",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-MMD",
+   "-flto",
+   "-fno-fat-lto-objects",
+   "-mmcu=atmega328p",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_UNO",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\WInterrupts.c",
+   "-o",
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\WInterrupts.c.o"
+  ],
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\WInterrupts.c"
  },
  {
   "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -986,6 +1160,36 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\Stream.cpp",
+   "-o",
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\Stream.cpp.o"
+  ],
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\Stream.cpp"
+ },
+ {
+  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
+  "arguments": [
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega328p",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_UNO",
+   "-DARDUINO_ARCH_AVR",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
+   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
    "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\WMath.cpp",
    "-o",
    "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\WMath.cpp.o"
@@ -995,36 +1199,6 @@
  {
   "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
   "arguments": [
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega328p",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_UNO",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial.cpp",
-   "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\HardwareSerial.cpp.o"
-  ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial.cpp"
- },
- {
-  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
    "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
    "-c",
    "-g",
@@ -1043,11 +1217,11 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\WInterrupts.c",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring.c",
    "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\WInterrupts.c.o"
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\wiring.c.o"
   ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\WInterrupts.c"
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring.c"
  },
  {
   "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1073,155 +1247,11 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial2.cpp",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\main.cpp",
    "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\HardwareSerial2.cpp.o"
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\main.cpp.o"
   ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial2.cpp"
- },
- {
-  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu11",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-MMD",
-   "-flto",
-   "-fno-fat-lto-objects",
-   "-mmcu=atmega328p",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_UNO",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\hooks.c",
-   "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\hooks.c.o"
-  ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\hooks.c"
- },
- {
-  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega328p",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_UNO",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\IPAddress.cpp",
-   "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\IPAddress.cpp.o"
-  ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\IPAddress.cpp"
- },
- {
-  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega328p",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_UNO",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\WString.cpp",
-   "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\WString.cpp.o"
-  ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\WString.cpp"
- },
- {
-  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega328p",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_UNO",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial3.cpp",
-   "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\HardwareSerial3.cpp.o"
-  ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial3.cpp"
- },
- {
-  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-gcc",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu11",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-MMD",
-   "-flto",
-   "-fno-fat-lto-objects",
-   "-mmcu=atmega328p",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_UNO",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring_digital.c",
-   "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\wiring_digital.c.o"
-  ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring_digital.c"
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\main.cpp"
  },
  {
   "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1267,41 +1297,11 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring_pulse.c",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring_analog.c",
    "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\wiring_pulse.c.o"
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\wiring_analog.c.o"
   ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring_pulse.c"
- },
- {
-  "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
-  "arguments": [
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega328p",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_UNO",
-   "-DARDUINO_ARCH_AVR",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-   "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\main.cpp",
-   "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\main.cpp.o"
-  ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\main.cpp"
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring_analog.c"
  },
  {
   "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1354,11 +1354,11 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring_shift.c",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring_pulse.c",
    "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\wiring_shift.c.o"
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\wiring_pulse.c.o"
   ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring_shift.c"
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring_pulse.c"
  },
  {
   "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1384,11 +1384,11 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial0.cpp",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\WString.cpp",
    "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\HardwareSerial0.cpp.o"
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\WString.cpp.o"
   ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\HardwareSerial0.cpp"
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\WString.cpp"
  },
  {
   "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1411,11 +1411,11 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring_analog.c",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring_digital.c",
    "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\wiring_analog.c.o"
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\wiring_digital.c.o"
   ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring_analog.c"
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring_digital.c"
  },
  {
   "directory": "C:\\Users\\121\\AppData\\Local\\Programs\\Microsoft VS Code",
@@ -1438,10 +1438,10 @@
    "-DARDUINO_ARCH_AVR",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
    "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring.c",
+   "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring_shift.c",
    "-o",
-   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\wiring.c.o"
+   "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\core\\wiring_shift.c.o"
   ],
-  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring.c"
+  "file": "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino\\wiring_shift.c"
  }
 ]

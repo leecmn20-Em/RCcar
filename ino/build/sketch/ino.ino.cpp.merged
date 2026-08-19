@@ -12,8 +12,8 @@ const byte Encoder_Left = 2;
 const byte Encoder_Right = 3;
 const byte Motor_Left1 = 5;
 const byte Motor_Left2 = 6;
-const byte Motor_Right1 = 10;
-const byte Motor_Right2 = 11;
+const byte Motor_Right1 = 11;
+const byte Motor_Right2 = 10;
 
 //const byte LineSensor::Obstacle_Sensor = -1;
 const byte LineSensor::Line_Sensor_Left = A0;
@@ -34,26 +34,25 @@ ObstacleSensor obsensor = ObstacleSensor();
 namespace DrivePolicy {
     int drivemode = 0;
     bool onobstacle;
+    bool iolleft;
+    bool iolright;
     
-    const int BASE_RPM = 60;
-    const int TURN_RPM = 30;
+    const int BASE_RPM = 120;
+    const int TURN_RPM = 60;
 
     void lineTrace(){
-        bool left = LineSensor::onLine_left();
-        bool right = LineSensor::onLine_right();
-        
         if(onobstacle){
             leftwheel.stop();
             rightwheel.stop();
             return;
         }
-        if(!left && !right){
+        if(!iolleft && !iolright){
             leftwheel.setTargetRPM(BASE_RPM);
             rightwheel.setTargetRPM(BASE_RPM);
-        } else if(left && !right){
+        } else if(iolleft && !iolright){
             leftwheel.setTargetRPM(BASE_RPM - TURN_RPM);
             rightwheel.setTargetRPM(BASE_RPM);
-        } else if(!left && right){
+        } else if(!iolleft && iolright){
             leftwheel.setTargetRPM(BASE_RPM);
             rightwheel.setTargetRPM(BASE_RPM - TURN_RPM);
         } else {
@@ -83,6 +82,7 @@ namespace DrivePolicy {
             case 0: //stop
                 leftwheel.setTargetRPM(0);
                 rightwheel.setTargetRPM(0);
+                break;
             case 1: //free trace
                 lineTrace();
                 break;
@@ -112,11 +112,14 @@ namespace {
 }
 
 namespace Update {
+    uint32_t cmillis = 0;
     uint32_t lastloopmillis = 0;
     uint32_t lastcalmillis = 0;
+    uint32_t lastcalmillis_fast = 0;
     uint32_t lastconmillis = 0;
     uint32_t lastconmillis_fine = 0;
     uint32_t calperiod = 1000;
+    uint32_t calperiod_fast = 1000;
     uint32_t conperiod = 1000;
     uint32_t conperiod_fine = 1000;
 
@@ -127,65 +130,102 @@ namespace Update {
         lastconmillis_fine = 0;
     }
 
+    void ready(){
+        cmillis = millis();
+    }
+
+    void end(){
+        return;
+    }
+
     void monitor(){
+        Serial.println("==========");
+        Serial.print("Drivemode: ");
+        Serial.println(DrivePolicy::drivemode);
+        Serial.print("Left wheel duty: ");
+        Serial.print(leftwheel.getCurrentDuty());
+        Serial.print('/');
+        Serial.print(leftwheel.getTargetDuty());
+        Serial.print('/');
+        Serial.println(leftwheel.getEstimatedRPM());
+        Serial.print("Right wheel duty: ");
+        Serial.print(rightwheel.getCurrentDuty());
+        Serial.print('/');
+        Serial.print(rightwheel.getTargetDuty());
+        Serial.print('/');
+        Serial.println(rightwheel.getEstimatedRPM());
         if(LineSensor::onLine_left()){
-            Serial.println("left on-line");
+            Serial.println("left ON-line");
         }
         else{
-            Serial.println("left off-line");
+            Serial.println("left OFF-line");
         }
-        Serial.print("Obstacle? ");
-        if(DrivePolicy::onobstacle){
-            Serial.println("yes");
+        if(LineSensor::onLine_right()){
+            Serial.println("right ON-line");
         }
         else{
-            Serial.println("no");
+            Serial.println("right OFF-line");
         }
     }
 
     int updateCalc(){
-        if(millis()-lastcalmillis>=calperiod){
+        if(cmillis-lastcalmillis>=calperiod){
             leftwheel.estimateRPM(calperiod);
             rightwheel.estimateRPM(calperiod);
             
             int range = obsensor.getrange();
-            if(range!=-1 && range<300){
+            if(range!=-1 && range<150){
                 DrivePolicy::onobstacle = true;
             }
             else{
                 DrivePolicy::onobstacle = false;
             }
 
-            lastcalmillis = millis();
+            lastcalmillis = cmillis;
+            return 1;
+        }
+        return 0;
+    }
+
+    int updateFast(){
+        if(cmillis-lastcalmillis_fast>=calperiod_fast){
+            DrivePolicy::iolleft = LineSensor::onLine_left();
+            DrivePolicy::iolright = LineSensor::onLine_right();
+
+            lastcalmillis_fast = cmillis;
             return 1;
         }
         return 0;
     }
 
     int updateCon(){
-        if(millis()-lastconmillis>=conperiod){
+        if(cmillis-lastconmillis>=conperiod){
+            DrivePolicy::drive();
             leftwheel.followRPM();
             rightwheel.followRPM();
-            lastconmillis = millis();
+
+            lastconmillis = cmillis;
             return 1;
         }
         return 0;
     }
 
     int updateFine(){
-        if(millis()-lastconmillis_fine>=conperiod_fine){
+        if(cmillis-lastconmillis_fine>=conperiod_fine){
             leftwheel.updateMotor();
             rightwheel.updateMotor();
-            lastconmillis_fine = millis();
+
+            lastconmillis_fine = cmillis;
             return 1;
         }
         return 0;
     }
 
     int updateLoop(){
-        if(millis()-lastloopmillis>=1000){
+        if(cmillis-lastloopmillis>=1000){
             monitor();
-            lastloopmillis = millis();
+
+            lastloopmillis = cmillis;
             return 1;
         }
         return 0;
@@ -194,25 +234,31 @@ namespace Update {
 
 void setup() {
     Serial.begin(115200);
+    Serial.println("Arduino Booting...");
     leftwheel.setup();
     rightwheel.setup();
     attachInterrupt(digitalPinToInterrupt(leftwheel.getEncoder()), ISRencoder_left, FALLING);
     attachInterrupt(digitalPinToInterrupt(rightwheel.getEncoder()), ISRencoder_right, FALLING);
     Update::calperiod = 100;
+    Update::calperiod_fast = 10;
     Update::conperiod = 100;
     Update::conperiod_fine = 10;
     //oled.init();
+    Serial.println("1");
     obsensor.init();
-    DrivePolicy::drive(0);
+    Serial.println("2");
+    DrivePolicy::drivemode = 1;
+    Serial.println("Arduino ONLINE");
 }
 
 void loop() {
     doSerialCommand();
 
+    Update::ready();
     Update::updateCalc();
+    Update::updateFast();
     Update::updateCon();
     Update::updateFine();
     Update::updateLoop();
-
-    DrivePolicy::emergencystop();
+    Update::end();
 }

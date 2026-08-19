@@ -33,7 +33,7 @@ public:
     uint32_t getEncoderCount(){
         return enc_count;
     }
-    uint32_t getEstimatedRPM(){
+    double getEstimatedRPM(){
         return rpm_est;
     }
     String getname(){
@@ -45,20 +45,6 @@ public:
     void estimateRPM(int timespan){
         rpm_est = double(enc_count)/Encoder_Slots * double(60000)/timespan;
         enc_count = 0;
-    }
-    void setMotorPower(int s){
-        if(s>0){
-            analogWrite(in1, s);
-            analogWrite(in2, 0);
-        }
-        else if(s<0){
-            analogWrite(in1, 0);
-            analogWrite(in2, -s);
-        }
-        else{
-            analogWrite(in1, 0);
-            analogWrite(in2, 0);
-        }
     }
     void setTargetRPM(double rpm){
         if(rpm>0){
@@ -74,6 +60,21 @@ public:
             dir_tgt = 0;
         }
     }
+    void setMotorPower(int s){
+        if(s>0){
+            analogWrite(in1, s);
+            analogWrite(in2, 0);
+        }
+        else if(s<0){
+            analogWrite(in1, 0);
+            analogWrite(in2, -s);
+        }
+        else{
+            analogWrite(in1, 0);
+            analogWrite(in2, 0);
+        }
+        setTargetRPM(s);
+    }
     void stop(){
         setTargetRPM(0);
         analogWrite(in1, 0);
@@ -81,11 +82,11 @@ public:
     }
     void followRPM(){
         double rpm_err = rpm_tgt - rpm_est;
-        if(rpm_err>0){
-            duty_tgt += 1;
+        if(rpm_err>10){
+            duty_tgt += min(5,rpm_err);
         }
         else if(rpm_err<0){
-            duty_tgt -= 1;
+            duty_tgt -= min(5,-rpm_err);
         }
         else;
         if(duty_tgt>duty_Max){
@@ -97,11 +98,12 @@ public:
     }
     void updateMotor(){
         if(dir_tgt == dir_est){
-            if(duty_tgt>duty_cur){
-                duty_cur += 1;
+            int duty_err = duty_tgt - duty_cur;
+            if(duty_err>0){
+                duty_cur += min(5,duty_err);
             }
-            else if(duty_tgt<duty_cur){
-                duty_cur -= 1;
+            else if(duty_err<0){
+                duty_cur -= min(5,-duty_err);
             }
             else;
             setMotorPower(duty_cur*dir_tgt);
@@ -126,6 +128,9 @@ public:
     }
     int getCurrentDuty(){
         return duty_cur;
+    }
+    int getTargetDuty(){
+        return duty_tgt;
     }
 private:
     byte in1;
