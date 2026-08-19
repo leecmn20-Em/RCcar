@@ -1,7 +1,5 @@
 #line 1 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 #include <Arduino.h>
-#include <Wire.h>
-#include <Adafruit_SSD1306.h>
 #include "modules\Commands.h"
 #include "modules\Servo1.h"
 #include "modules\Displayer.h"
@@ -169,9 +167,9 @@ private:
 
 Wheel leftwheel = Wheel(Motor_Left1,Motor_Left2,Encoder_Left,"LeftWheel");
 Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right,"RightWheel");
-#line 171 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 169 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left();
-#line 174 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 172 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_right();
 #line 178 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 int updateCalc();
@@ -181,17 +179,19 @@ int updateCon();
 int updateFine();
 #line 208 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 int updateLoop();
-#line 221 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 216 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void setup();
-#line 238 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 228 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void loop();
-#line 171 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 169 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left(){
     leftwheel.onEncoderInterrupt();
 }
 void ISRencoder_right(){
     rightwheel.onEncoderInterrupt();
 }
+
+Displayer oled = Displayer();
 
 int updateCalc(){
     if(millis()-lastcalmillis>=calperiod){
@@ -225,11 +225,6 @@ int updateFine(){
 
 int updateLoop(){
     if(millis()-lastloopmillis>=1000){
-        oled.clearDisplay();
-        oled.setCursor(0,5);
-        oled.updateWheel(leftwheel);
-        oled.updateWheel(rightwheel);
-        oled.display();
         lastloopmillis = millis();
         return 1;
     }
@@ -245,21 +240,16 @@ void setup() {
     calperiod = 100;
     conperiod = 100;
     conperiod_fine = 10;
-    if (!oled.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-        Serial.println("OLED initialization failed");
-        for(;;);
-    }
-    delay(2000);
-    oled.setup();
+    oled.init();
 }
 
 void loop() {
-    doSerialCommand();
+    //doSerialCommand();
 
-    updateCalc();
+    //updateCalc();
     //updateCon();
     //updateFine();
-    updateLoop();
+    //updateLoop();
     
     //leftwheel.stop();
     //rightwheel.stop();

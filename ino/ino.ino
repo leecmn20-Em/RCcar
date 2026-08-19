@@ -173,6 +173,8 @@ void ISRencoder_right(){
     rightwheel.onEncoderInterrupt();
 }
 
+Displayer oled = Displayer();
+
 int updateCalc(){
     if(millis()-lastcalmillis>=calperiod){
         leftwheel.estimateRPM(calperiod);
@@ -205,11 +207,6 @@ int updateFine(){
 
 int updateLoop(){
     if(millis()-lastloopmillis>=1000){
-        oled.clearDisplay();
-        oled.setCursor(0,5);
-        oled.updateWheel(leftwheel);
-        oled.updateWheel(rightwheel);
-        oled.display();
         lastloopmillis = millis();
         return 1;
     }
@@ -225,21 +222,16 @@ void setup() {
     calperiod = 100;
     conperiod = 100;
     conperiod_fine = 10;
-    if (!oled.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-        Serial.println("OLED initialization failed");
-        for(;;);
-    }
-    delay(2000);
-    oled.setup();
+    oled.init();
 }
 
 void loop() {
-    doSerialCommand();
+    //doSerialCommand();
 
-    updateCalc();
+    //updateCalc();
     //updateCon();
     //updateFine();
-    updateLoop();
+    //updateLoop();
     
     //leftwheel.stop();
     //rightwheel.stop();
