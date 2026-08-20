@@ -165,18 +165,21 @@ namespace DrivePolicy {
 
 namespace {
     void doSerialCommand(){
-        String command[COMMAND_MAXLENGTH];
+        char* command[COMMAND_MAXLENGTH] = {};
         if(!getSerialCommand(command)){
             return;
         }
-        if(command[0]=="SETSPEED"){
-            int ls = command[1].toInt();
-            int rs = command[2].toInt();
+        if(strcmp(command[0], "SETSPEED") == 0){
+            int ls = command[1] == nullptr ? 0 : static_cast<int>(strtol(command[1], nullptr, 10));
+            int rs = command[2] == nullptr ? 0 : static_cast<int>(strtol(command[2], nullptr, 10));
             DrivePolicy::force(ls, rs);
         }
-        else if(command[0]=="SETPID"){
-            leftwheel.setPID(command[1].toFloat(),command[2].toFloat(),command[3].toFloat());
-            rightwheel.setPID(command[1].toFloat(),command[2].toFloat(),command[3].toFloat());
+        else if(strcmp(command[0], "SETPID") == 0){
+            float p = command[1] == nullptr ? 0.0f : static_cast<float>(atof(command[1]));
+            float i = command[2] == nullptr ? 0.0f : static_cast<float>(atof(command[2]));
+            float d = command[3] == nullptr ? 0.0f : static_cast<float>(atof(command[3]));
+            leftwheel.setPID(p, i, d);
+            rightwheel.setPID(p, i, d);
         }
     }
 }
