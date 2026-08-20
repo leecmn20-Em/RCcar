@@ -11,10 +11,10 @@
 #pragma region Constants
 const byte Encoder_Left = 2;
 const byte Encoder_Right = 3;
-const byte Motor_Left1 = 5;
-const byte Motor_Left2 = 6;
-const byte Motor_Right1 = 11;
-const byte Motor_Right2 = 10;
+const byte Motor_Left1 = 6;
+const byte Motor_Left2 = 5;
+const byte Motor_Right1 = 10;
+const byte Motor_Right2 = 11;
 
 //const byte LineSensor::Obstacle_Sensor = -1;
 const byte LineSensor::Line_Sensor_Left = 4;
@@ -29,9 +29,9 @@ Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right);
 void ISRencoder_left();
 #line 30 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_right();
-#line 346 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 335 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void setup();
-#line 363 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 353 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void loop();
 #line 27 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left(){
@@ -51,16 +51,15 @@ namespace Update{
 
 namespace DrivePolicy {
     int drivemode = 0;
+
     int range = 0;
     bool onobstacle = false;
-    bool iolleft;
-    bool iolright;
-    bool iolcenter;
-    int lastline = 0;
-    uint32_t lastlineseen = 0;
-    int turning = 0;
-    uint32_t lastsideseen = 0;
-    uint32_t lastalligned = 0;
+
+    int tracePolicy = 0;
+    int lastIOL = 0;
+    bool IOLleft;
+    bool IOLright;
+    bool IOLcenter;
     
     const int RPM_base = 90;
     const int RPM_softturn_inner = 40;
@@ -78,62 +77,69 @@ namespace DrivePolicy {
         rightwheel.setTargetRPM(RPM_softturn_inner);
     }
 
-    void lineTrace(){
-        if(onobstacle){
-            leftwheel.stop();
-            rightwheel.stop();
-            return;
+    void updateTracePolicy(bool l, bool r, bool c){
+        IOLleft = l;
+        IOLright = r;
+        IOLcenter = c;
+
+        switch(tracePolicy){
+            case -1: // turn left
+                if(c){
+                    tracePolicy = 0;
+                }
+                else if(r){
+                    tracePolicy = 1;
+                }
+                break;
+            case 0: // go straight
+                if(l){
+                    tracePolicy = -1;
+                }
+                else if(r){
+                    tracePolicy = 1;
+                }
+                break;
+            case 1: // turn right
+                if(l){
+                    tracePolicy = -1;
+                }
+                else if(c){
+                    tracePolicy = 0;
+                }
+                break;
+            default:
+                break;
         }
 
-        bool sharpturn = turning!=0 && Update::cmillis-lastsideseen>=sharpturn_wait;
-        if(iolleft && iolright){
-            leftwheel.stop();
-            rightwheel.stop();
+        if(l){
+            lastIOL=-1;
         }
-        else if(iolleft){
-            if(iolcenter && !sharpturn){
-                leftwheel.setTargetRPM(RPM_softturn_inner);
-                rightwheel.setTargetRPM(RPM_softturn_outer);
-            }
-            else{
+        else if(r){
+            lastIOL=1;
+        }
+        else if(c){
+            lastIOL=0;
+        }
+    }
+
+    void lineTrace(){
+        switch(tracePolicy){
+            case -1: // turn left
                 leftwheel.setTargetRPM(RPM_sharpturn_inner);
                 rightwheel.setTargetRPM(RPM_sharpturn_outer);
-            }
-        }
-        else if(iolright){
-            if(iolcenter && !sharpturn){
-                leftwheel.setTargetRPM(RPM_softturn_outer);
-                rightwheel.setTargetRPM(RPM_softturn_inner);
-            }
-            else{
+                break;
+            case 0: // go straight
+                leftwheel.setTargetRPM(RPM_base);
+                rightwheel.setTargetRPM(RPM_base);
+                break;
+            case 1: // turn right
                 leftwheel.setTargetRPM(RPM_sharpturn_outer);
                 rightwheel.setTargetRPM(RPM_sharpturn_inner);
-            }
-        }
-        else if(iolcenter){
-            leftwheel.setTargetRPM(RPM_base);
-            rightwheel.setTargetRPM(RPM_base);
-        }
-        else if(Update::cmillis-lastlineseen<=linesearch_timeout){
-            if(lastline<0){
-                leftwheel.setTargetRPM(RPM_search_inner);
-                rightwheel.setTargetRPM(RPM_base);
-            }
-            else if(lastline>0){
-                leftwheel.setTargetRPM(RPM_base);
-                rightwheel.setTargetRPM(RPM_search_inner);
-            }
-            else{
-                leftwheel.setTargetRPM(RPM_base);
-                rightwheel.setTargetRPM(RPM_base);
-            }
-        }
-        else if(Update::cmillis-lastlineseen<=lost_timeout){
-            search();
-        }
-        else{
-            leftwheel.stop();
-            rightwheel.stop();
+                break;
+            default:
+                leftwheel.stop();
+                rightwheel.stop();
+                break;
         }
     }
 
@@ -230,24 +236,39 @@ namespace Update {
         Serial.print(leftwheel.getTargetDuty());
         Serial.print(F(" / cur_RPM "));
         Serial.println(leftwheel.getEstimatedRPM());
-        Serial.print(F("Right wheel duty: "));
+        Serial.print(F("Right wheel: cur_duty "));
         Serial.print(rightwheel.getCurrentDuty());
         Serial.print(F(" / tgt_duty "));
         Serial.print(rightwheel.getTargetDuty());
         Serial.print(F(" / cur_RPM "));
         Serial.println(rightwheel.getEstimatedRPM());
         Serial.print(F("on-line?: "));
-        Serial.print(DrivePolicy::iolleft? 'O':'X');
+        Serial.print(DrivePolicy::IOLleft? 'O':'X');
         Serial.print(F(" - "));
-        Serial.print(DrivePolicy::iolcenter? 'O':'X');
+        Serial.print(DrivePolicy::IOLcenter? 'O':'X');
         Serial.print(F(" - "));
-        Serial.println(DrivePolicy::iolright? 'O':'X');
+        Serial.println(DrivePolicy::IOLright? 'O':'X');
         Serial.print(F("Obstacle? "));
         if(DrivePolicy::onobstacle){
             Serial.println(F("yes"));
         }
         else{
             Serial.println(F("no"));
+        }
+        Serial.print(F("Current trace policy: "));
+        switch(DrivePolicy::tracePolicy){
+            case -1:
+                Serial.println(F("Turning left"));
+                break;
+            case 0:
+                Serial.println(F("Going straight"));
+                break;
+            case 1:
+                Serial.println(F("Turning right"));
+                break;
+            default:
+                Serial.println(F("Can't find the policy"));
+                break;
         }
     }
 
@@ -273,43 +294,11 @@ namespace Update {
 
     int updateFast(){
         if(cmillis-lastcalmillis_fast>=calperiod_fast){
-            DrivePolicy::iolleft = LineSensor::onLine_left();
-            DrivePolicy::iolright = LineSensor::onLine_right();
-            DrivePolicy::iolcenter = LineSensor::onLine_center();
+            bool l = LineSensor::onLine_left();
+            bool r = LineSensor::onLine_right();
+            bool c = LineSensor::onLine_center();
 
-            if(DrivePolicy::iolleft || DrivePolicy::iolright || DrivePolicy::iolcenter){
-                DrivePolicy::lastlineseen = cmillis;
-            }
-            int detected = 0;
-            if(DrivePolicy::iolleft && !DrivePolicy::iolright){
-                detected = -1;
-            }
-            else if(!DrivePolicy::iolleft && DrivePolicy::iolright){
-                detected = 1;
-            }
-            if(detected != 0){
-                DrivePolicy::lastline = detected;
-                if(DrivePolicy::turning != detected){
-                    DrivePolicy::turning = detected;
-                    DrivePolicy::lastsideseen = cmillis;
-                }
-            }
-            else{
-                DrivePolicy::turning = 0;
-                DrivePolicy::lastsideseen = 0;
-            }
-
-            if(!DrivePolicy::iolleft && !DrivePolicy::iolright && DrivePolicy::iolcenter){
-                if(DrivePolicy::lastalligned == 0){
-                    DrivePolicy::lastalligned = cmillis;
-                }
-                else if(cmillis-DrivePolicy::lastalligned >= DrivePolicy::allign_wait){
-                    DrivePolicy::lastline = 0;
-                }
-            }
-            else{
-                DrivePolicy::lastalligned = 0;
-            }
+            DrivePolicy::updateTracePolicy(l,r,c);
 
             lastcalmillis_fast = cmillis;
             return 1;
@@ -366,6 +355,7 @@ void setup() {
     Update::conperiod_fine = 10;
     //oled.init();
     //obsensor.init(100);
+    LineSensor::setupSensors();
     DrivePolicy::drivemode = 1;
     Serial.println(F("Arduino ONLINE"));
 }
