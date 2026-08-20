@@ -5,21 +5,27 @@
 class ObstacleSensor : public Adafruit_VL53L0X{
 public:
     using Adafruit_VL53L0X::Adafruit_VL53L0X;
-    void init(){
-        if(!Adafruit_VL53L0X::begin()){
+    void init(uint16_t period){
+        if(!begin()){
             Serial.println("Obstacle sensor initialize failed");
             for(;;);
         }
+        if(!startRangeContinuous(period)){
+            Serial.println("Obstacle sensor ranging failed");
+            for(;;);
+        }
     }
-    int getrange(){
-        rangingTest(&measure, false);
-        if(measure.RangeStatus!=4){
-            return measure.RangeMilliMeter;
+    bool pollRange(int& range){
+        if(!isRangeComplete()){
+            return false;
+        }
+        uint16_t result = readRangeResult();
+        if(result==0xFFFF || readRangeStatus()==4){
+            range = -1;
         }
         else{
-            return -1;
+            range = (int)result;
         }
+        return true;
     }
-private:
-    VL53L0X_RangingMeasurementData_t measure;
 };
