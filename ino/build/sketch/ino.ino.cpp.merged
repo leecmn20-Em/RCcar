@@ -6,7 +6,7 @@
 //#include "modules\Arms.h"
 #include "modules\Wheel.h"
 #include "modules\LineSensor.h"
-#include "modules\ObstacleSensor.h"
+//#include "modules\ObstacleSensor.h"
 
 #pragma region Constants
 const byte Encoder_Left = 2;
@@ -17,9 +17,9 @@ const byte Motor_Right1 = 11;
 const byte Motor_Right2 = 10;
 
 //const byte LineSensor::Obstacle_Sensor = -1;
-const byte LineSensor::Line_Sensor_Left = A0;
-const byte LineSensor::Line_Sensor_Right = A1;
-const byte LineSensor::Line_Sensor_Center = A2;
+const byte LineSensor::Line_Sensor_Left = 4;
+const byte LineSensor::Line_Sensor_Right = 7;
+const byte LineSensor::Line_Sensor_Center = 8;
 #pragma endregion
 
 #pragma region Object Declairation
@@ -33,7 +33,7 @@ void ISRencoder_right(){
 }
 
 //Displayer oled = Displayer();
-ObstacleSensor obsensor = ObstacleSensor();
+//ObstacleSensor obsensor = ObstacleSensor();
 #pragma endregion
 
 namespace Update{
@@ -43,7 +43,7 @@ namespace Update{
 namespace DrivePolicy {
     int drivemode = 0;
     int range = 0;
-    bool onobstacle;
+    bool onobstacle = false;
     bool iolleft;
     bool iolright;
     bool iolcenter;
@@ -247,14 +247,14 @@ namespace Update {
             leftwheel.estimateAverageRPM(cmillis-lastcalmillis);
             rightwheel.estimateAverageRPM(cmillis-lastcalmillis);
             
-            if(obsensor.pollRange(DrivePolicy::range)){
+            /*if(obsensor.pollRange(DrivePolicy::range)){
                 if(DrivePolicy::range>=0 && DrivePolicy::range<150){
                     DrivePolicy::onobstacle = true;
                 }
                 else{
                     DrivePolicy::onobstacle = false;
                 }
-            }
+            }*/
 
             lastcalmillis = cmillis;
             return 1;
@@ -356,7 +356,7 @@ void setup() {
     Update::conperiod = 20;
     Update::conperiod_fine = 10;
     //oled.init();
-    obsensor.init(100);
+    //obsensor.init(100);
     DrivePolicy::drivemode = 1;
     Serial.println(F("Arduino ONLINE"));
 }
@@ -372,4 +372,3 @@ void loop() {
     Update::updateLoop();
     Update::end();
 }
-

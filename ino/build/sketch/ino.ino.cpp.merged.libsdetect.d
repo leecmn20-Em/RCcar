@@ -13,16 +13,4 @@ ino.ino.cpp.o: \
  C:\Users\121\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.8\variants\standard/pins_arduino.h \
  C:\Users\121\Desktop\0727\RCcar\ino\build\sketch\modules\Commands.h \
  C:\Users\121\Desktop\0727\RCcar\ino\build\sketch\modules\Wheel.h \
- C:\Users\121\Desktop\0727\RCcar\ino\build\sketch\modules\LineSensor.h \
- C:\Users\121\Desktop\0727\RCcar\ino\build\sketch\modules\ObstacleSensor.h \
- c:\Users\121\Desktop\0727\dev\Arduino\libraries\Adafruit_VL53L0X\src/Adafruit_VL53L0X.h \
- C:\Users\121\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.8\libraries\Wire\src/Wire.h \
- C:\Users\121\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.8\cores\arduino/Stream.h \
- c:\Users\121\Desktop\0727\dev\Arduino\libraries\Adafruit_VL53L0X\src/vl53l0x_api.h \
- c:\Users\121\Desktop\0727\dev\Arduino\libraries\Adafruit_VL53L0X\src/vl53l0x_api_strings.h \
- c:\Users\121\Desktop\0727\dev\Arduino\libraries\Adafruit_VL53L0X\src/vl53l0x_def.h \
- c:\Users\121\Desktop\0727\dev\Arduino\libraries\Adafruit_VL53L0X\src/vl53l0x_device.h \
- c:\Users\121\Desktop\0727\dev\Arduino\libraries\Adafruit_VL53L0X\src/vl53l0x_types.h \
- c:\Users\121\Desktop\0727\dev\Arduino\libraries\Adafruit_VL53L0X\src/vl53l0x_platform.h \
- c:\Users\121\Desktop\0727\dev\Arduino\libraries\Adafruit_VL53L0X\src/vl53l0x_i2c_platform.h \
- c:\Users\121\Desktop\0727\dev\Arduino\libraries\Adafruit_VL53L0X\src/vl53l0x_platform_log.h
+ C:\Users\121\Desktop\0727\RCcar\ino\build\sketch\modules\LineSensor.h
