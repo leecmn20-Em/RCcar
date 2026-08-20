@@ -16,7 +16,10 @@ const byte Motor_Right1 = 11;
 const byte Motor_Right2 = 10;
 
 //const byte LineSensor::Obstacle_Sensor = -1;
+// The left/right sensors are mounted at the front of the car. The D12
+// sensor is mounted behind them, near the center of the chassis floor.
 const byte LineSensor::Line_Sensor_Left = A0;
+const byte LineSensor::Line_Sensor_BodyCenter = 12;
 const byte LineSensor::Line_Sensor_Right = A1;
 #pragma endregion
 
@@ -38,12 +41,23 @@ namespace DrivePolicy {
     int drivemode = 0;
     bool onobstacle;
     bool iolleft;
-    uint32_t iolleftbuffer;
+    bool iolbodycenter;
     bool iolright;
-    uint32_t iolrightbuffer;
+    int lastLineSide = 0; // -1: left, 1: right
+    int activeTurnSide = 0;
+    uint32_t lastLineSeenMillis = 0;
+    uint32_t sideDetectedSinceMillis = 0;
+    uint32_t bodyCenterSinceMillis = 0;
     
     const int BASE_RPM = 60;
-    const int TURN_RPM = 50;
+    const int SOFT_INNER_RPM = 40;
+    const int SOFT_OUTER_RPM = 60;
+    const int HARD_INNER_RPM = 0;
+    const int HARD_OUTER_RPM = 50;
+    const int SEARCH_OUTER_RPM = 35;
+    const uint16_t SHARP_TURN_CONFIRM_MS = 150;
+    const uint16_t ALIGNED_CONFIRM_MS = 500;
+    const uint16_t SEARCH_TIMEOUT_MS = 1200;
 
     void lineTrace(){
         if(onobstacle){
@@ -51,16 +65,52 @@ namespace DrivePolicy {
             rightwheel.stop();
             return;
         }
-        if(!iolleft && !iolright){
+
+        bool sharpTurnConfirmed = activeTurnSide != 0 &&
+                                  millis()-sideDetectedSinceMillis >= SHARP_TURN_CONFIRM_MS;
+
+        // Both front sensors usually mean a stop line, intersection, or a line
+        // that is too wide to determine a safe steering direction.
+        if(iolleft && iolright){
+            leftwheel.stop();
+            rightwheel.stop();
+        } else if(iolleft){
+            if(iolbodycenter && !sharpTurnConfirmed){
+                leftwheel.setTargetRPM(SOFT_INNER_RPM);
+                rightwheel.setTargetRPM(SOFT_OUTER_RPM);
+            }
+            else{
+                leftwheel.setTargetRPM(HARD_INNER_RPM);
+                rightwheel.setTargetRPM(HARD_OUTER_RPM);
+            }
+        } else if(iolright){
+            if(iolbodycenter && !sharpTurnConfirmed){
+                leftwheel.setTargetRPM(SOFT_OUTER_RPM);
+                rightwheel.setTargetRPM(SOFT_INNER_RPM);
+            }
+            else{
+                leftwheel.setTargetRPM(HARD_OUTER_RPM);
+                rightwheel.setTargetRPM(HARD_INNER_RPM);
+            }
+        } else if(iolbodycenter){
             leftwheel.setTargetRPM(BASE_RPM);
             rightwheel.setTargetRPM(BASE_RPM);
-        } else if(iolleft && !iolright){
-            leftwheel.setTargetRPM(BASE_RPM - TURN_RPM);
-            rightwheel.setTargetRPM(BASE_RPM);
-        } else if(!iolleft && iolright){
-            leftwheel.setTargetRPM(BASE_RPM);
-            rightwheel.setTargetRPM(BASE_RPM - TURN_RPM);
-        } else {
+        } else if(millis()-lastLineSeenMillis <= SEARCH_TIMEOUT_MS){
+            // All sensors are off: keep searching only toward the most recent
+            // side that saw the line. The timeout prevents endless wandering.
+            if(lastLineSide < 0){
+                leftwheel.setTargetRPM(HARD_INNER_RPM);
+                rightwheel.setTargetRPM(SEARCH_OUTER_RPM);
+            }
+            else if(lastLineSide > 0){
+                leftwheel.setTargetRPM(SEARCH_OUTER_RPM);
+                rightwheel.setTargetRPM(HARD_INNER_RPM);
+            }
+            else{
+                leftwheel.stop();
+                rightwheel.stop();
+            }
+        } else{
             leftwheel.stop();
             rightwheel.stop();
         }
@@ -165,6 +215,12 @@ namespace Update {
         else{
             Serial.println("left OFF-line");
         }
+        if(LineSensor::onLine_bodyCenter()){
+            Serial.println("body-center ON-line");
+        }
+        else{
+            Serial.println("body-center OFF-line");
+        }
         if(LineSensor::onLine_right()){
             Serial.println("right ON-line");
         }
@@ -201,21 +257,47 @@ namespace Update {
 
     int updateFast(){
         if(cmillis-lastcalmillis_fast>=calperiod_fast){
-            if(LineSensor::onLine_left()){
-                DrivePolicy::iolleft = true;
-                DrivePolicy::iolleftbuffer = cmillis;
-                DrivePolicy::iolrightbuffer -= 700;
+            LineSensor::update(cmillis);
+            DrivePolicy::iolleft = LineSensor::onLine_left();
+            DrivePolicy::iolbodycenter = LineSensor::onLine_bodyCenter();
+            DrivePolicy::iolright = LineSensor::onLine_right();
+
+            if(DrivePolicy::iolleft || DrivePolicy::iolbodycenter || DrivePolicy::iolright){
+                DrivePolicy::lastLineSeenMillis = cmillis;
             }
-            else if(cmillis-DrivePolicy::iolleftbuffer>=LineSensor::bufftime){
-                DrivePolicy::iolleft = false;
+
+            int detectedSide = 0;
+            if(DrivePolicy::iolleft && !DrivePolicy::iolright){
+                detectedSide = -1;
             }
-            if(LineSensor::onLine_right()){
-                DrivePolicy::iolright = true;
-                DrivePolicy::iolrightbuffer = cmillis;
-                DrivePolicy::iolleftbuffer -= 700;
+            else if(DrivePolicy::iolright && !DrivePolicy::iolleft){
+                detectedSide = 1;
             }
-            else if(cmillis-DrivePolicy::iolrightbuffer>=LineSensor::bufftime){
-                DrivePolicy::iolright = false;
+
+            if(detectedSide != 0){
+                DrivePolicy::lastLineSide = detectedSide;
+                if(DrivePolicy::activeTurnSide != detectedSide){
+                    DrivePolicy::activeTurnSide = detectedSide;
+                    DrivePolicy::sideDetectedSinceMillis = cmillis;
+                }
+            }
+            else{
+                DrivePolicy::activeTurnSide = 0;
+                DrivePolicy::sideDetectedSinceMillis = 0;
+            }
+
+            // The body-center sensor confirms that the chassis is aligned over
+            // the line. After a stable straight section, discard an old turn.
+            if(DrivePolicy::iolbodycenter && !DrivePolicy::iolleft && !DrivePolicy::iolright){
+                if(DrivePolicy::bodyCenterSinceMillis == 0){
+                    DrivePolicy::bodyCenterSinceMillis = cmillis;
+                }
+                else if(cmillis-DrivePolicy::bodyCenterSinceMillis >= DrivePolicy::ALIGNED_CONFIRM_MS){
+                    DrivePolicy::lastLineSide = 0;
+                }
+            }
+            else{
+                DrivePolicy::bodyCenterSinceMillis = 0;
             }
 
             lastcalmillis_fast = cmillis;
@@ -263,6 +345,7 @@ void setup() {
     Serial.println("Arduino Booting...");
     leftwheel.setup();
     rightwheel.setup();
+    LineSensor::setupSensors();
     attachInterrupt(digitalPinToInterrupt(leftwheel.getEncoder()), ISRencoder_left, FALLING);
     attachInterrupt(digitalPinToInterrupt(rightwheel.getEncoder()), ISRencoder_right, FALLING);
     Update::calperiod = 50;
