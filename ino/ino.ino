@@ -36,6 +36,7 @@ ObstacleSensor obsensor = ObstacleSensor();
 
 namespace DrivePolicy {
     int drivemode = 0;
+    int range =0;
     bool onobstacle;
     bool iolleft;
     uint32_t iolleftbuffer;
@@ -185,12 +186,13 @@ namespace Update {
             leftwheel.estimateRPM(cmillis-lastcalmillis);
             rightwheel.estimateRPM(cmillis-lastcalmillis);
             
-            int range = obsensor.getrange();
-            if(range!=-1 && range<150){
-                DrivePolicy::onobstacle = true;
-            }
-            else{
-                DrivePolicy::onobstacle = false;
+            if(obsensor.pollRange(DrivePolicy::range)){
+                if(DrivePolicy::range>=-1 && DrivePolicy::range<150){
+                    DrivePolicy::onobstacle = true;
+                }
+                else{
+                    DrivePolicy::onobstacle = false;
+                }
             }
 
             lastcalmillis = cmillis;
