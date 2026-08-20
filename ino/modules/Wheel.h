@@ -48,7 +48,11 @@ public:
     void onEncoderInterrupt(){
         uint32_t now = micros();
         if(lastencodedmicros!=0){
-            encoderPulseInterval = now - lastencodedmicros;
+            uint32_t inv = now - lastencodedmicros;
+            if(inv<MinEncoderPulseMicros){
+                return;
+            }
+            encoderPulseInterval = inv;
         }
         lastencodedmicros = now;
         enc_count++;
@@ -232,20 +236,21 @@ private:
     int duty_tgt;
 
     static const uint32_t insRPMTimeout = 1000000;
+    static const uint32_t MinEncoderPulseMicros = 10000;
 
-    float Kp = 0.45f;
-    float Kd = 0.0f;
-    float Ki = 0.25f;
+    float Kp = 0.55f;
+    float Kd = 0.1f;
+    float Ki = 0.35f;
     float err_prev;
     float duty_comp;
     float rpm_prev;
     float rpm_pp;
-    static const float D_MAX = 5.0f;
-    static const float D_MIN = -5.0f;
-    static const float I_MAX = 30.0f;
-    static const float I_MIN = -30.0f;
-    static const int comp_MAX = 50;
-    static const int comp_MIN = -50;
+    static const float D_MAX = 3.0f;
+    static const float D_MIN = -3.0f;
+    static const float I_MAX = 20.0f;
+    static const float I_MIN = -20.0f;
+    static const int comp_MAX = 40;
+    static const int comp_MIN = -40;
 
     static const int duty_Max = 255;
     static const int duty_Min = 0;

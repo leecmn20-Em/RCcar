@@ -62,12 +62,12 @@ namespace DrivePolicy {
     uint32_t lastsideseen = 0;
     uint32_t lastalligned = 0;
     
-    const int RPM_base = 60;
+    const int RPM_base = 90;
     const int RPM_softturn_inner = 40;
-    const int RPM_softturn_outer = 60;
+    const int RPM_softturn_outer = 90;
     const int RPM_sharpturn_inner = 0;
-    const int RPM_sharpturn_outer = 30;
-    const int RPM_search_inner = 40;
+    const int RPM_sharpturn_outer = 60;
+    const int RPM_search_inner = 60;
     const int linesearch_timeout = 3000;
     const int allign_wait = 500;
     const int sharpturn_wait = 150;
@@ -228,13 +228,13 @@ namespace Update {
         Serial.print(leftwheel.getCurrentDuty());
         Serial.print(F(" / tgt_duty "));
         Serial.print(leftwheel.getTargetDuty());
-        Serial.print(F(" / cur_RPM"));
+        Serial.print(F(" / cur_RPM "));
         Serial.println(leftwheel.getEstimatedRPM());
         Serial.print(F("Right wheel duty: "));
         Serial.print(rightwheel.getCurrentDuty());
         Serial.print(F(" / tgt_duty "));
         Serial.print(rightwheel.getTargetDuty());
-        Serial.print(F(" / cur_RPM"));
+        Serial.print(F(" / cur_RPM "));
         Serial.println(rightwheel.getEstimatedRPM());
         Serial.print(F("on-line?: "));
         Serial.print(DrivePolicy::iolleft? 'O':'X');
@@ -257,7 +257,7 @@ namespace Update {
             rightwheel.estimateAverageRPM(cmillis-lastcalmillis);
             
             if(obsensor.pollRange(DrivePolicy::range)){
-                if(DrivePolicy::range>=-1 && DrivePolicy::range<150){
+                if(DrivePolicy::range>=0 && DrivePolicy::range<150){
                     DrivePolicy::onobstacle = true;
                 }
                 else{
