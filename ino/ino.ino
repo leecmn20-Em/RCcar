@@ -226,18 +226,12 @@ namespace Update {
         Serial.print(rightwheel.getTargetDuty());
         Serial.print('/');
         Serial.println(rightwheel.getEstimatedRPM());
-        if(LineSensor::onLine_left()){
-            Serial.println(F("left ON-line"));
-        }
-        else{
-            Serial.println(F("left OFF-line"));
-        }
-        if(LineSensor::onLine_right()){
-            Serial.println(F("right ON-line"));
-        }
-        else{
-            Serial.println(F("right OFF-line"));
-        }
+        Serial.print(F("on-line?: "));
+        Serial.print(DrivePolicy::iolleft? 'O':'X');
+        Serial.print(F(" - "));
+        Serial.print(DrivePolicy::iolcenter? 'O':'X');
+        Serial.print(F(" - "));
+        Serial.println(DrivePolicy::iolright? 'O':'X');
         Serial.print(F("Obstacle? "));
         if(DrivePolicy::onobstacle){
             Serial.println(F("yes"));

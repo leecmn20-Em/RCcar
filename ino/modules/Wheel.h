@@ -179,19 +179,19 @@ private:
     int duty_cur;
     int duty_tgt;
 
-    float Kp = 0.25f;
+    float Kp = 0.65f;
     float Kd = 0.0f;
-    float Ki = 0.1f;
+    float Ki = 0.4f;
     float err_prev;
     float duty_comp;
     float rpm_prev;
     float rpm_pp;
     static const float D_MAX = 5.0f;
     static const float D_MIN = -5.0f;
-    static const float I_MAX = 20.0f;
-    static const float I_MIN = -20.0f;
-    static const int comp_MAX = 30;
-    static const int comp_MIN = -30;
+    static const float I_MAX = 30.0f;
+    static const float I_MIN = -30.0f;
+    static const int comp_MAX = 50;
+    static const int comp_MIN = -50;
 
     static const int duty_Max = 255;
     static const int duty_Min = 0;

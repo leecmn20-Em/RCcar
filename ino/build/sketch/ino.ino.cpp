@@ -29,9 +29,9 @@ Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right);
 void ISRencoder_left();
 #line 30 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_right();
-#line 350 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 344 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void setup();
-#line 367 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 361 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void loop();
 #line 27 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left(){
@@ -236,18 +236,12 @@ namespace Update {
         Serial.print(rightwheel.getTargetDuty());
         Serial.print('/');
         Serial.println(rightwheel.getEstimatedRPM());
-        if(LineSensor::onLine_left()){
-            Serial.println(F("left ON-line"));
-        }
-        else{
-            Serial.println(F("left OFF-line"));
-        }
-        if(LineSensor::onLine_right()){
-            Serial.println(F("right ON-line"));
-        }
-        else{
-            Serial.println(F("right OFF-line"));
-        }
+        Serial.print(F("on-line?: "));
+        Serial.print(DrivePolicy::iolleft? 'O':'X');
+        Serial.print(F(" - "));
+        Serial.print(DrivePolicy::iolcenter? 'O':'X');
+        Serial.print(F(" - "));
+        Serial.println(DrivePolicy::iolright? 'O':'X');
         Serial.print(F("Obstacle? "));
         if(DrivePolicy::onobstacle){
             Serial.println(F("yes"));
