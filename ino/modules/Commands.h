@@ -26,4 +26,5 @@ inline bool getSerialCommand(String command[]){
         splitCommand(input, ':', command, COMMAND_MAXLENGTH);
         return true;
     }
+    return false;
 }

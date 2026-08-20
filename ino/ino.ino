@@ -7,6 +7,7 @@
 #include "modules\LineSensor.h"
 #include "modules\ObstacleSensor.h"
 
+#pragma region Constants
 const byte Encoder_Left = 2;
 const byte Encoder_Right = 3;
 const byte Motor_Left1 = 5;
@@ -17,7 +18,9 @@ const byte Motor_Right2 = 10;
 //const byte LineSensor::Obstacle_Sensor = -1;
 const byte LineSensor::Line_Sensor_Left = A0;
 const byte LineSensor::Line_Sensor_Right = A1;
+#pragma endregion
 
+#pragma region Object Declairation
 Wheel leftwheel = Wheel(Motor_Left1,Motor_Left2,Encoder_Left,"LeftWheel");
 Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right,"RightWheel");
 void ISRencoder_left(){
@@ -29,14 +32,15 @@ void ISRencoder_right(){
 
 //Displayer oled = Displayer();
 ObstacleSensor obsensor = ObstacleSensor();
+#pragma endregion
 
 namespace DrivePolicy {
     int drivemode = 0;
     bool onobstacle;
     bool iolleft;
-    uint16_t iolleftbuffer;
+    uint32_t iolleftbuffer;
     bool iolright;
-    uint16_t iolrightbuffer;
+    uint32_t iolrightbuffer;
     
     const int BASE_RPM = 90;
     const int TURN_RPM = 50;
@@ -178,8 +182,8 @@ namespace Update {
 
     int updateCalc(){
         if(cmillis-lastcalmillis>=calperiod){
-            leftwheel.estimateRPM(calperiod);
-            rightwheel.estimateRPM(calperiod);
+            leftwheel.estimateRPM(cmillis-lastcalmillis);
+            rightwheel.estimateRPM(cmillis-lastcalmillis);
             
             int range = obsensor.getrange();
             if(range!=-1 && range<150){
