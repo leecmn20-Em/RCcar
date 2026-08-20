@@ -42,7 +42,7 @@ namespace DrivePolicy {
     bool iolright;
     uint32_t iolrightbuffer;
     
-    const int BASE_RPM = 90;
+    const int BASE_RPM = 60;
     const int TURN_RPM = 50;
 
     void lineTrace(){
@@ -204,6 +204,7 @@ namespace Update {
             if(LineSensor::onLine_left()){
                 DrivePolicy::iolleft = true;
                 DrivePolicy::iolleftbuffer = cmillis;
+                DrivePolicy::iolrightbuffer -= 700;
             }
             else if(cmillis-DrivePolicy::iolleftbuffer>=LineSensor::bufftime){
                 DrivePolicy::iolleft = false;
@@ -211,6 +212,7 @@ namespace Update {
             if(LineSensor::onLine_right()){
                 DrivePolicy::iolright = true;
                 DrivePolicy::iolrightbuffer = cmillis;
+                DrivePolicy::iolleftbuffer -= 700;
             }
             else if(cmillis-DrivePolicy::iolrightbuffer>=LineSensor::bufftime){
                 DrivePolicy::iolright = false;
@@ -263,9 +265,9 @@ void setup() {
     rightwheel.setup();
     attachInterrupt(digitalPinToInterrupt(leftwheel.getEncoder()), ISRencoder_left, FALLING);
     attachInterrupt(digitalPinToInterrupt(rightwheel.getEncoder()), ISRencoder_right, FALLING);
-    Update::calperiod = 100;
+    Update::calperiod = 50;
     Update::calperiod_fast = 10;
-    Update::conperiod = 100;
+    Update::conperiod = 50;
     Update::conperiod_fine = 10;
     //oled.init();
     Serial.println("1");

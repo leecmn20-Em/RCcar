@@ -11,7 +11,8 @@ public:
         enc = pinencoder;
         name = wheelname;
         enc_count = 0;
-        rpm_tgt = 0;
+        rpm_tgt = 0.0f;
+        rpm_est = 0.0f;
         duty_cur = 0;
         duty_tgt = 0;
         dir_tgt = 0;
@@ -43,9 +44,13 @@ public:
     void onEncoderInterrupt(){
         enc_count++;
     }
-    void estimateRPM(int timespan){
-        rpm_est = double(enc_count)/Encoder_Slots * double(60000)/timespan;
-        enc_count = 0;
+    void estimateRPM(uint32_t timespan){
+        uint32_t c;
+        noInterrupts();
+        c = enc_count;
+        enc_count =0;
+        interrupts();
+        rpm_est = double(c)/Encoder_Slots * double(60000)/timespan;
     }
     void setTargetRPM(double rpm){
         if(rpm>0){
@@ -79,14 +84,16 @@ public:
         setTargetRPM(0);
         analogWrite(in1, 0);
         analogWrite(in2, 0);
+        duty_cur=0;
+        duty_tgt=0;
     }
     void followRPM(){
         double rpm_err = rpm_tgt - rpm_est;
         if(rpm_err>0){
-            duty_tgt += min(10,Kp*rpm_err);
+            duty_tgt += min(5,Kp*rpm_err);
         }
         else if(rpm_err<0){
-            duty_tgt -= min(10,-(Kp*rpm_err));
+            duty_tgt -= min(5,-(Kp*rpm_err));
         }
         else;
         if(duty_tgt>duty_Max){
@@ -145,7 +152,7 @@ private:
     int duty_cur;
     int duty_tgt;
 
-    const float Kp = 0.5;
+    const float Kp = 0.25f;
 
     static const int duty_Max = 255;
     static const int duty_Min = 0;

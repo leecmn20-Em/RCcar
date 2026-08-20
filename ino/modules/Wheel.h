@@ -89,10 +89,10 @@ public:
     void followRPM(){
         double rpm_err = rpm_tgt - rpm_est;
         if(rpm_err>0){
-            duty_tgt += min(10,Kp*rpm_err);
+            duty_tgt += min(5,Kp*rpm_err);
         }
         else if(rpm_err<0){
-            duty_tgt -= min(10,-(Kp*rpm_err));
+            duty_tgt -= min(5,-(Kp*rpm_err));
         }
         else;
         if(duty_tgt>duty_Max){
@@ -151,7 +151,7 @@ private:
     int duty_cur;
     int duty_tgt;
 
-    const float Kp = 0.5;
+    const float Kp = 0.25f;
 
     static const int duty_Max = 255;
     static const int duty_Min = 0;

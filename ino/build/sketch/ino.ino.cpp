@@ -8,6 +8,7 @@
 #include "modules\LineSensor.h"
 #include "modules\ObstacleSensor.h"
 
+#pragma region Constants
 const byte Encoder_Left = 2;
 const byte Encoder_Right = 3;
 const byte Motor_Left1 = 5;
@@ -18,18 +19,20 @@ const byte Motor_Right2 = 10;
 //const byte LineSensor::Obstacle_Sensor = -1;
 const byte LineSensor::Line_Sensor_Left = A0;
 const byte LineSensor::Line_Sensor_Right = A1;
+#pragma endregion
 
+#pragma region Object Declairation
 Wheel leftwheel = Wheel(Motor_Left1,Motor_Left2,Encoder_Left,"LeftWheel");
 Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right,"RightWheel");
-#line 23 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
-void ISRencoder_left();
 #line 26 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+void ISRencoder_left();
+#line 29 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_right();
-#line 255 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 261 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void setup();
-#line 274 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 280 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void loop();
-#line 23 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 26 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left(){
     leftwheel.onEncoderInterrupt();
 }
@@ -39,16 +42,17 @@ void ISRencoder_right(){
 
 //Displayer oled = Displayer();
 ObstacleSensor obsensor = ObstacleSensor();
+#pragma endregion
 
 namespace DrivePolicy {
     int drivemode = 0;
     bool onobstacle;
     bool iolleft;
-    uint16_t iolleftbuffer;
+    uint32_t iolleftbuffer;
     bool iolright;
-    uint16_t iolrightbuffer;
+    uint32_t iolrightbuffer;
     
-    const int BASE_RPM = 90;
+    const int BASE_RPM = 60;
     const int TURN_RPM = 50;
 
     void lineTrace(){
@@ -188,8 +192,8 @@ namespace Update {
 
     int updateCalc(){
         if(cmillis-lastcalmillis>=calperiod){
-            leftwheel.estimateRPM(calperiod);
-            rightwheel.estimateRPM(calperiod);
+            leftwheel.estimateRPM(cmillis-lastcalmillis);
+            rightwheel.estimateRPM(cmillis-lastcalmillis);
             
             int range = obsensor.getrange();
             if(range!=-1 && range<150){
@@ -210,6 +214,7 @@ namespace Update {
             if(LineSensor::onLine_left()){
                 DrivePolicy::iolleft = true;
                 DrivePolicy::iolleftbuffer = cmillis;
+                DrivePolicy::iolrightbuffer -= 700;
             }
             else if(cmillis-DrivePolicy::iolleftbuffer>=LineSensor::bufftime){
                 DrivePolicy::iolleft = false;
@@ -217,6 +222,7 @@ namespace Update {
             if(LineSensor::onLine_right()){
                 DrivePolicy::iolright = true;
                 DrivePolicy::iolrightbuffer = cmillis;
+                DrivePolicy::iolleftbuffer -= 700;
             }
             else if(cmillis-DrivePolicy::iolrightbuffer>=LineSensor::bufftime){
                 DrivePolicy::iolright = false;
@@ -269,9 +275,9 @@ void setup() {
     rightwheel.setup();
     attachInterrupt(digitalPinToInterrupt(leftwheel.getEncoder()), ISRencoder_left, FALLING);
     attachInterrupt(digitalPinToInterrupt(rightwheel.getEncoder()), ISRencoder_right, FALLING);
-    Update::calperiod = 100;
+    Update::calperiod = 50;
     Update::calperiod_fast = 10;
-    Update::conperiod = 100;
+    Update::conperiod = 50;
     Update::conperiod_fine = 10;
     //oled.init();
     Serial.println("1");
