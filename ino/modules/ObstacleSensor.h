@@ -7,11 +7,11 @@ public:
     using Adafruit_VL53L0X::Adafruit_VL53L0X;
     void init(uint16_t period){
         if(!begin()){
-            Serial.println("Obstacle sensor initialize failed");
+            Serial.println(F("Obstacle sensor initialize failed"));
             for(;;);
         }
         if(!startRangeContinuous(period)){
-            Serial.println("Obstacle sensor ranging failed");
+            Serial.println(F("Obstacle sensor ranging failed"));
             for(;;);
         }
     }

@@ -9,7 +9,7 @@ public:
     using Adafruit_SSD1306::Adafruit_SSD1306;
     void init(){
         if (!Adafruit_SSD1306::begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-            Serial.println("OLED initialization failed");
+            Serial.println(F("OLED initialization failed"));
             for(;;);
         }
         delay(2000);
@@ -18,7 +18,7 @@ public:
     void setup(){
         setTextSize(1);
         setTextColor(WHITE);
-        singleline("Display initialized.");
+        singleline(F("Display initialized."));
     }
     void displayBitmap(const unsigned char* bitmap){
         clearDisplay();

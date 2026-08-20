@@ -47,54 +47,6 @@
     }
   },
   {
-    "missing_include_h": "Servo.h"
-  },
-  {
-    "added_include_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src"
-  },
-  {
-    "compile": {
-      "source_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged.libsdetect.d"
-    },
-    "compile_task": {
-      "args": [
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-flto",
-        "-w",
-        "-x",
-        "c++",
-        "-E",
-        "-CC",
-        "-mmcu=atmega328p",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_UNO",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged",
-        "-o",
-        "nul",
-        "-MMD",
-        "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged.libsdetect.d"
-      ]
-    }
-  },
-  {
     "missing_include_h": "Adafruit_VL53L0X.h"
   },
   {
@@ -132,7 +84,6 @@
         "-DARDUINO_ARCH_AVR",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged",
         "-o",
@@ -181,7 +132,6 @@
         "-DARDUINO_ARCH_AVR",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
         "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged",
@@ -190,523 +140,6 @@
         "-MMD",
         "-MF",
         "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\sketch\\ino.ino.cpp.merged.libsdetect.d"
-      ]
-    }
-  },
-  {
-    "missing_include_h": ""
-  },
-  {
-    "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\avr\\Servo.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\avr\\Servo.cpp.libsdetect.d"
-    },
-    "compile_task": {
-      "args": [
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-flto",
-        "-w",
-        "-x",
-        "c++",
-        "-E",
-        "-CC",
-        "-mmcu=atmega328p",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_UNO",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\avr\\Servo.cpp",
-        "-o",
-        "nul",
-        "-MMD",
-        "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\avr\\Servo.cpp.libsdetect.d"
-      ]
-    }
-  },
-  {
-    "missing_include_h": ""
-  },
-  {
-    "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\esp32\\Servo.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\esp32\\Servo.cpp.libsdetect.d"
-    },
-    "compile_task": {
-      "args": [
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-flto",
-        "-w",
-        "-x",
-        "c++",
-        "-E",
-        "-CC",
-        "-mmcu=atmega328p",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_UNO",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\esp32\\Servo.cpp",
-        "-o",
-        "nul",
-        "-MMD",
-        "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\esp32\\Servo.cpp.libsdetect.d"
-      ]
-    }
-  },
-  {
-    "missing_include_h": ""
-  },
-  {
-    "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\mbed\\Servo.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\mbed\\Servo.cpp.libsdetect.d"
-    },
-    "compile_task": {
-      "args": [
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-flto",
-        "-w",
-        "-x",
-        "c++",
-        "-E",
-        "-CC",
-        "-mmcu=atmega328p",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_UNO",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\mbed\\Servo.cpp",
-        "-o",
-        "nul",
-        "-MMD",
-        "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\mbed\\Servo.cpp.libsdetect.d"
-      ]
-    }
-  },
-  {
-    "missing_include_h": ""
-  },
-  {
-    "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\megaavr\\Servo.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\megaavr\\Servo.cpp.libsdetect.d"
-    },
-    "compile_task": {
-      "args": [
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-flto",
-        "-w",
-        "-x",
-        "c++",
-        "-E",
-        "-CC",
-        "-mmcu=atmega328p",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_UNO",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\megaavr\\Servo.cpp",
-        "-o",
-        "nul",
-        "-MMD",
-        "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\megaavr\\Servo.cpp.libsdetect.d"
-      ]
-    }
-  },
-  {
-    "missing_include_h": ""
-  },
-  {
-    "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\nrf52\\Servo.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\nrf52\\Servo.cpp.libsdetect.d"
-    },
-    "compile_task": {
-      "args": [
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-flto",
-        "-w",
-        "-x",
-        "c++",
-        "-E",
-        "-CC",
-        "-mmcu=atmega328p",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_UNO",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\nrf52\\Servo.cpp",
-        "-o",
-        "nul",
-        "-MMD",
-        "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\nrf52\\Servo.cpp.libsdetect.d"
-      ]
-    }
-  },
-  {
-    "missing_include_h": ""
-  },
-  {
-    "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\renesas\\Servo.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\renesas\\Servo.cpp.libsdetect.d"
-    },
-    "compile_task": {
-      "args": [
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-flto",
-        "-w",
-        "-x",
-        "c++",
-        "-E",
-        "-CC",
-        "-mmcu=atmega328p",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_UNO",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\renesas\\Servo.cpp",
-        "-o",
-        "nul",
-        "-MMD",
-        "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\renesas\\Servo.cpp.libsdetect.d"
-      ]
-    }
-  },
-  {
-    "missing_include_h": ""
-  },
-  {
-    "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\sam\\Servo.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\sam\\Servo.cpp.libsdetect.d"
-    },
-    "compile_task": {
-      "args": [
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-flto",
-        "-w",
-        "-x",
-        "c++",
-        "-E",
-        "-CC",
-        "-mmcu=atmega328p",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_UNO",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\sam\\Servo.cpp",
-        "-o",
-        "nul",
-        "-MMD",
-        "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\sam\\Servo.cpp.libsdetect.d"
-      ]
-    }
-  },
-  {
-    "missing_include_h": ""
-  },
-  {
-    "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\samd\\Servo.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\samd\\Servo.cpp.libsdetect.d"
-    },
-    "compile_task": {
-      "args": [
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-flto",
-        "-w",
-        "-x",
-        "c++",
-        "-E",
-        "-CC",
-        "-mmcu=atmega328p",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_UNO",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\samd\\Servo.cpp",
-        "-o",
-        "nul",
-        "-MMD",
-        "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\samd\\Servo.cpp.libsdetect.d"
-      ]
-    }
-  },
-  {
-    "missing_include_h": ""
-  },
-  {
-    "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\stm32f4\\Servo.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\stm32f4\\Servo.cpp.libsdetect.d"
-    },
-    "compile_task": {
-      "args": [
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-flto",
-        "-w",
-        "-x",
-        "c++",
-        "-E",
-        "-CC",
-        "-mmcu=atmega328p",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_UNO",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\stm32f4\\Servo.cpp",
-        "-o",
-        "nul",
-        "-MMD",
-        "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\stm32f4\\Servo.cpp.libsdetect.d"
-      ]
-    }
-  },
-  {
-    "missing_include_h": ""
-  },
-  {
-    "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\xmc\\Servo.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\xmc\\Servo.cpp.libsdetect.d"
-    },
-    "compile_task": {
-      "args": [
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-flto",
-        "-w",
-        "-x",
-        "c++",
-        "-E",
-        "-CC",
-        "-mmcu=atmega328p",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_UNO",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\xmc\\Servo.cpp",
-        "-o",
-        "nul",
-        "-MMD",
-        "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\xmc\\Servo.cpp.libsdetect.d"
-      ]
-    }
-  },
-  {
-    "missing_include_h": ""
-  },
-  {
-    "compile": {
-      "source_path": "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\zephyr\\Servo.cpp",
-      "depfile_path": "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\zephyr\\Servo.cpp.libsdetect.d"
-    },
-    "compile_task": {
-      "args": [
-        "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-        "-c",
-        "-g",
-        "-Os",
-        "-w",
-        "-std=gnu++11",
-        "-fpermissive",
-        "-fno-exceptions",
-        "-ffunction-sections",
-        "-fdata-sections",
-        "-fno-threadsafe-statics",
-        "-Wno-error=narrowing",
-        "-flto",
-        "-w",
-        "-x",
-        "c++",
-        "-E",
-        "-CC",
-        "-mmcu=atmega328p",
-        "-DF_CPU=16000000L",
-        "-DARDUINO=10607",
-        "-DARDUINO_AVR_UNO",
-        "-DARDUINO_ARCH_AVR",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
-        "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
-        "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src\\zephyr\\Servo.cpp",
-        "-o",
-        "nul",
-        "-MMD",
-        "-MF",
-        "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\build\\libraries\\Servo\\zephyr\\Servo.cpp.libsdetect.d"
       ]
     }
   },
@@ -745,7 +178,6 @@
         "-DARDUINO_ARCH_AVR",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\Adafruit_VL53L0X.cpp",
@@ -792,7 +224,6 @@
         "-DARDUINO_ARCH_AVR",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api.cpp",
@@ -839,7 +270,6 @@
         "-DARDUINO_ARCH_AVR",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api_calibration.cpp",
@@ -886,7 +316,6 @@
         "-DARDUINO_ARCH_AVR",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api_core.cpp",
@@ -933,7 +362,6 @@
         "-DARDUINO_ARCH_AVR",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api_ranging.cpp",
@@ -980,7 +408,6 @@
         "-DARDUINO_ARCH_AVR",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\core\\src\\vl53l0x_api_strings.cpp",
@@ -1027,7 +454,6 @@
         "-DARDUINO_ARCH_AVR",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\platform\\src\\vl53l0x_i2c_comms.cpp",
@@ -1074,7 +500,6 @@
         "-DARDUINO_ARCH_AVR",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
         "c:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src\\platform\\src\\vl53l0x_platform.cpp",
@@ -1121,7 +546,6 @@
         "-DARDUINO_ARCH_AVR",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
         "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src\\Wire.cpp",
@@ -1168,7 +592,6 @@
         "-DARDUINO_ARCH_AVR",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\cores\\arduino",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\variants\\standard",
-        "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Servo\\src",
         "-Ic:\\Users\\121\\Desktop\\0727\\dev\\Arduino\\libraries\\Adafruit_VL53L0X\\src",
         "-IC:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src",
         "C:\\Users\\121\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.8\\libraries\\Wire\\src\\utility\\twi.c",

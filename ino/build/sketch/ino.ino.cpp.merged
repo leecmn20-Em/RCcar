@@ -1,9 +1,9 @@
 #line 1 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 #include <Arduino.h>
 #include "modules\Commands.h"
-#include "modules\Servo1.h"
+//#include "modules\Servo1.h"
 //#include "modules\Displayer.h"
-#include "modules\Arms.h"
+//#include "modules\Arms.h"
 #include "modules\Wheel.h"
 #include "modules\LineSensor.h"
 #include "modules\ObstacleSensor.h"
@@ -23,8 +23,8 @@ const byte LineSensor::Line_Sensor_Center = A2;
 #pragma endregion
 
 #pragma region Object Declairation
-Wheel leftwheel = Wheel(Motor_Left1,Motor_Left2,Encoder_Left,"LeftWheel");
-Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right,"RightWheel");
+Wheel leftwheel = Wheel(Motor_Left1,Motor_Left2,Encoder_Left);
+Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right);
 void ISRencoder_left(){
     leftwheel.onEncoderInterrupt();
 }
@@ -59,9 +59,15 @@ namespace DrivePolicy {
     const int RPM_sharpturn_inner = 0;
     const int RPM_sharpturn_outer = 30;
     const int RPM_search_inner = 40;
-    const int linesearch_timeout = 1200;
+    const int linesearch_timeout = 3000;
     const int allign_wait = 500;
     const int sharpturn_wait = 150;
+    const int lost_timeout = 5000;
+
+    void search(){
+        leftwheel.setTargetRPM(RPM_softturn_outer);
+        rightwheel.setTargetRPM(RPM_softturn_inner);
+    }
 
     void lineTrace(){
         if(onobstacle){
@@ -109,10 +115,12 @@ namespace DrivePolicy {
                 rightwheel.setTargetRPM(RPM_search_inner);
             }
             else{
-                leftwheel.stop();
-                rightwheel.stop();
+                leftwheel.setTargetRPM(RPM_base);
+                rightwheel.setTargetRPM(RPM_base);
             }
-        
+        }
+        else if(Update::cmillis-lastlineseen<=lost_timeout){
+            search();
         }
         else{
             leftwheel.stop();
@@ -167,6 +175,10 @@ namespace {
             int rs = command[2].toInt();
             DrivePolicy::force(ls, rs);
         }
+        else if(command[0]=="SETPID"){
+            leftwheel.setPID(command[1].toFloat(),command[2].toFloat(),command[3].toFloat());
+            rightwheel.setPID(command[1].toFloat(),command[2].toFloat(),command[3].toFloat());
+        }
     }
 }
 
@@ -197,39 +209,39 @@ namespace Update {
     }
 
     void monitor(){
-        Serial.println("==========");
-        Serial.print("Drivemode: ");
+        Serial.println(F("=========="));
+        Serial.print(F("Drivemode: "));
         Serial.println(DrivePolicy::drivemode);
-        Serial.print("Left wheel duty: ");
+        Serial.print(F("Left wheel duty: "));
         Serial.print(leftwheel.getCurrentDuty());
         Serial.print('/');
         Serial.print(leftwheel.getTargetDuty());
         Serial.print('/');
         Serial.println(leftwheel.getEstimatedRPM());
-        Serial.print("Right wheel duty: ");
+        Serial.print(F("Right wheel duty: "));
         Serial.print(rightwheel.getCurrentDuty());
         Serial.print('/');
         Serial.print(rightwheel.getTargetDuty());
         Serial.print('/');
         Serial.println(rightwheel.getEstimatedRPM());
         if(LineSensor::onLine_left()){
-            Serial.println("left ON-line");
+            Serial.println(F("left ON-line"));
         }
         else{
-            Serial.println("left OFF-line");
+            Serial.println(F("left OFF-line"));
         }
         if(LineSensor::onLine_right()){
-            Serial.println("right ON-line");
+            Serial.println(F("right ON-line"));
         }
         else{
-            Serial.println("right OFF-line");
+            Serial.println(F("right OFF-line"));
         }
-        Serial.print("Obstacle? ");
+        Serial.print(F("Obstacle? "));
         if(DrivePolicy::onobstacle){
-            Serial.println("yes");
+            Serial.println(F("yes"));
         }
         else{
-            Serial.println("no");
+            Serial.println(F("no"));
         }
     }
 
@@ -302,8 +314,8 @@ namespace Update {
     int updateCon(){
         if(cmillis-lastconmillis>=conperiod){
             DrivePolicy::drive();
-            leftwheel.followRPM();
-            rightwheel.followRPM();
+            leftwheel.followRPM(cmillis-lastconmillis);
+            rightwheel.followRPM(cmillis-lastconmillis);
 
             lastconmillis = cmillis;
             return 1;
@@ -335,7 +347,7 @@ namespace Update {
 
 void setup() {
     Serial.begin(115200);
-    Serial.println("Arduino Booting...");
+    Serial.println(F("Arduino Booting..."));
     leftwheel.setup();
     rightwheel.setup();
     attachInterrupt(digitalPinToInterrupt(leftwheel.getEncoder()), ISRencoder_left, FALLING);
@@ -345,11 +357,9 @@ void setup() {
     Update::conperiod = 100;
     Update::conperiod_fine = 10;
     //oled.init();
-    Serial.println("1");
     obsensor.init(100);
-    Serial.println("2");
     DrivePolicy::drivemode = 1;
-    Serial.println("Arduino ONLINE");
+    Serial.println(F("Arduino ONLINE"));
 }
 
 void loop() {
