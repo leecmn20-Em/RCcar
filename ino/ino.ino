@@ -214,17 +214,17 @@ namespace Update {
         Serial.println(F("=========="));
         Serial.print(F("Drivemode: "));
         Serial.println(DrivePolicy::drivemode);
-        Serial.print(F("Left wheel duty: "));
+        Serial.print(F("Left wheel: cur_duty "));
         Serial.print(leftwheel.getCurrentDuty());
-        Serial.print('/');
+        Serial.print(F(" / tgt_duty "));
         Serial.print(leftwheel.getTargetDuty());
-        Serial.print('/');
+        Serial.print(F(" / cur_RPM"));
         Serial.println(leftwheel.getEstimatedRPM());
         Serial.print(F("Right wheel duty: "));
         Serial.print(rightwheel.getCurrentDuty());
-        Serial.print('/');
+        Serial.print(F(" / tgt_duty "));
         Serial.print(rightwheel.getTargetDuty());
-        Serial.print('/');
+        Serial.print(F(" / cur_RPM"));
         Serial.println(rightwheel.getEstimatedRPM());
         Serial.print(F("on-line?: "));
         Serial.print(DrivePolicy::iolleft? 'O':'X');
@@ -243,8 +243,8 @@ namespace Update {
 
     int updateCalc(){
         if(cmillis-lastcalmillis>=calperiod){
-            leftwheel.estimateRPM(cmillis-lastcalmillis);
-            rightwheel.estimateRPM(cmillis-lastcalmillis);
+            leftwheel.estimateAverageRPM(cmillis-lastcalmillis);
+            rightwheel.estimateAverageRPM(cmillis-lastcalmillis);
             
             if(obsensor.pollRange(DrivePolicy::range)){
                 if(DrivePolicy::range>=-1 && DrivePolicy::range<150){
@@ -310,6 +310,8 @@ namespace Update {
     int updateCon(){
         if(cmillis-lastconmillis>=conperiod){
             DrivePolicy::drive();
+            leftwheel.updateRPM();
+            rightwheel.updateRPM();
             leftwheel.followRPM(cmillis-lastconmillis);
             rightwheel.followRPM(cmillis-lastconmillis);
 
@@ -349,8 +351,8 @@ void setup() {
     attachInterrupt(digitalPinToInterrupt(leftwheel.getEncoder()), ISRencoder_left, FALLING);
     attachInterrupt(digitalPinToInterrupt(rightwheel.getEncoder()), ISRencoder_right, FALLING);
     Update::calperiod = 100;
-    Update::calperiod_fast = 10;
-    Update::conperiod = 100;
+    Update::calperiod_fast = 5;
+    Update::conperiod = 20;
     Update::conperiod_fine = 10;
     //oled.init();
     obsensor.init(100);

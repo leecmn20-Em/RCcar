@@ -12,6 +12,8 @@ public:
         enc_count = 0;
         rpm_tgt = 0.0f;
         rpm_est = 0.0f;
+        rpm_avr = 0.0f;
+        rpm_ins = -1.0f;
         duty_cur = 0;
         duty_tgt = 0;
         dir_tgt = 0;
@@ -20,6 +22,9 @@ public:
         rpm_pp = 0.0f;
         err_prev = 0.0f;
         duty_comp = 0.0f;
+        lastencodedmicros = 0;
+        encoderPulseInterval = 0;
+        lastRPMprocessed = 0;
     }
     void setup(){
         pinMode(in1, OUTPUT);
@@ -42,9 +47,14 @@ public:
         return rpm_est;
     }
     void onEncoderInterrupt(){
+        uint32_t now = micros();
+        if(lastencodedmicros!=0){
+            encoderPulseInterval = now - lastencodedmicros;
+        }
+        lastencodedmicros = now;
         enc_count++;
     }
-    void estimateRPM(uint32_t timespan){
+    void estimateAverageRPM(uint32_t timespan){
         if(timespan==0){
             return;
         }
@@ -53,9 +63,46 @@ public:
         c = enc_count;
         enc_count =0;
         interrupts();
+        rpm_avr = float(c)/Encoder_Slots * float(60000)/timespan;
+    }
+    void estimateInstantRPM(){
+        uint32_t period;
+        uint32_t last;
+        noInterrupts();
+        period = encoderPulseInterval;
+        last = lastencodedmicros;
+        interrupts();
+
+        if(period==0 || last==0 || last==lastRPMprocessed){
+            return;
+        }
+
+        lastRPMprocessed = last;
+
+        if(period>insRPMTimeout){
+            rpm_ins = -1.0f;
+            return;
+        }
+
+        rpm_ins = 60000000.0f / (Encoder_Slots*float(period));
+    }
+    void updateRPM(){
+        estimateInstantRPM();
+
         rpm_pp = rpm_prev;
         rpm_prev = rpm_est;
-        rpm_est = float(c)/Encoder_Slots * float(60000)/timespan;
+
+        uint32_t last;
+        noInterrupts();
+        last = lastencodedmicros;
+        interrupts();
+
+        if(rpm_ins<0 || (micros()-last)>insRPMTimeout){
+            rpm_est = rpm_avr;
+        }
+        else{
+            rpm_est = rpm_ins;
+        }
     }
     void setTargetRPM(float rpm){
         if(rpm>0){
@@ -173,16 +220,23 @@ private:
     byte in2;
     byte enc;
     volatile uint32_t enc_count;
+    volatile uint32_t lastencodedmicros;
+    volatile uint32_t encoderPulseInterval;
+    uint32_t lastRPMprocessed;
     float rpm_est;
+    float rpm_avr;
+    float rpm_ins;
     float rpm_tgt;
     int dir_tgt;
     int dir_est;
     int duty_cur;
     int duty_tgt;
 
-    float Kp = 0.65f;
+    static const uint32_t insRPMTimeout = 1000000;
+
+    float Kp = 0.45f;
     float Kd = 0.0f;
-    float Ki = 0.4f;
+    float Ki = 0.25f;
     float err_prev;
     float duty_comp;
     float rpm_prev;
