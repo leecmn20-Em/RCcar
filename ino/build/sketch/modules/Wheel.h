@@ -25,6 +25,11 @@ public:
         lastencodedmicros = 0;
         encoderPulseInterval = 0;
         lastRPMprocessed = 0;
+        fullyStopped = true;
+        stopTimerRunning = false;
+        startupPulseActive = false;
+        zeroRpmStartedMs = 0;
+        startupPulseStartedMs = 0;
     }
     void setup(){
         pinMode(in1, OUTPUT);
@@ -107,11 +112,23 @@ public:
         else{
             rpm_est = rpm_ins;
         }
+
+        updateStopState();
     }
     void setTargetRPM(float rpm){
+        bool startRequested = rpm_tgt == 0.0f && rpm > 0.0f;
+
         if(rpm>0){
             rpm_tgt = rpm;
             dir_tgt = 1;
+
+            if(startRequested && fullyStopped){
+                startupPulseActive = true;
+                startupPulseStartedMs = millis();
+                fullyStopped = false;
+                stopTimerRunning = false;
+                resetController();
+            }
         }
         else if(rpm<0){
             rpm_tgt = -rpm;
@@ -120,6 +137,7 @@ public:
         else{
             rpm_tgt = 0;
             dir_tgt = 0;
+            startupPulseActive = false;
         }
     }
     void setMotorPower(int s){
@@ -151,6 +169,9 @@ public:
         if(dtmillis == 0){
             return;
         }
+        if(startupPulseActive){
+            return;
+        }
         if(rpm_tgt == 0.0f){
             duty_tgt = 0;
             return;
@@ -177,13 +198,26 @@ public:
         err_prev = err;
     }
     void updateMotor(){
+        if(startupPulseActive){
+            if(millis()-startupPulseStartedMs<startupPulseMs){
+                duty_cur = startupDuty;
+                setMotorPower(startupDuty*dir_tgt);
+                return;
+            }
+
+            startupPulseActive = false;
+            duty_cur = runningMinimumDuty;
+            duty_tgt = runningMinimumDuty;
+            duty_comp = runningMinimumDuty;
+        }
+
         if(dir_tgt == dir_est){
             int duty_err = duty_tgt - duty_cur;
             if(duty_err>0){
-                duty_cur += min(10,duty_err);
+                duty_cur += min(RampUpRate,duty_err);
             }
             else if(duty_err<0){
-                duty_cur -= min(10,-duty_err);
+                duty_cur -= min(RampDownRate,-duty_err);
             }
             setMotorPower(duty_cur*dir_tgt);
         }
@@ -192,11 +226,8 @@ public:
                 setMotorPower(duty_cur*dir_tgt);
             }
             else{
-                if(duty_cur>10){
-                    duty_cur -= 10;
-                }
-                else{
-                    duty_cur -= 1;
+                if(duty_cur>0){
+                    duty_cur -= min(RampDownRate,duty_cur);
                 }
                 if(duty_cur<duty_Min){
                     duty_cur=duty_Min;
@@ -220,6 +251,26 @@ public:
         return Kp, Ki, Kd;
     }
 private:
+    void updateStopState(){
+        if(startupPulseActive){
+            return;
+        }
+
+        if(rpm_est<=stopRpmThreshold){
+            if(!stopTimerRunning){
+                stopTimerRunning = true;
+                zeroRpmStartedMs = millis();
+            }
+            else if(millis()-zeroRpmStartedMs>=fullStopWaitMs){
+                fullyStopped = true;
+            }
+        }
+        else{
+            stopTimerRunning = false;
+            fullyStopped = false;
+        }
+    }
+
     byte in1;
     byte in2;
     byte enc;
@@ -236,22 +287,36 @@ private:
     int duty_cur;
     int duty_tgt;
 
+    static const uint8_t RampUpRate = 15;
+    static const uint8_t RampDownRate = 75;
+
+    bool fullyStopped;
+    bool stopTimerRunning;
+    bool startupPulseActive;
+    uint32_t zeroRpmStartedMs;
+    uint32_t startupPulseStartedMs;
+
     static const uint32_t insRPMTimeout = 1000000;
     static const uint32_t MinEncoderPulseMicros = 10000;
+    static const uint16_t fullStopWaitMs = 200;
+    static const uint16_t startupPulseMs = 150;
+    static const int startupDuty = 200;
+    static const int runningMinimumDuty = 120;
+    static const float stopRpmThreshold = 1.0f;
 
     float Kp = 0.55f;
     float Kd = 0.1f;
-    float Ki = 0.35f;
+    float Ki = 3.0f;
     float err_prev;
     float duty_comp;
     float rpm_prev;
     float rpm_pp;
     static const float D_MAX = 3.0f;
     static const float D_MIN = -3.0f;
-    static const float I_MAX = 20.0f;
-    static const float I_MIN = -20.0f;
-    static const int comp_MAX = 40;
-    static const int comp_MIN = -40;
+    static const float I_MAX = 40.0f;
+    static const float I_MIN = -40.0f;
+    static const int comp_MAX = 100;
+    static const int comp_MIN = -100;
 
     static const int duty_Max = 255;
     static const int duty_Min = 0;
