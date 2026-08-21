@@ -29,9 +29,9 @@ Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right);
 void ISRencoder_left();
 #line 30 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_right();
-#line 335 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 322 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void setup();
-#line 353 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 340 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void loop();
 #line 27 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left(){
@@ -55,11 +55,8 @@ namespace DrivePolicy {
     int range = 0;
     bool onobstacle = false;
 
-    int tracePolicy = 0;
-    int lastIOL = 0;
-    bool IOLleft;
-    bool IOLright;
-    bool IOLcenter;
+    uint8_t tracePolicy = 0;
+    uint8_t lastIOL = 0;
     
     const int RPM_base = 90;
     const int RPM_softturn_inner = 40;
@@ -77,33 +74,29 @@ namespace DrivePolicy {
         rightwheel.setTargetRPM(RPM_softturn_inner);
     }
 
-    void updateTracePolicy(bool l, bool r, bool c){
-        IOLleft = l;
-        IOLright = r;
-        IOLcenter = c;
-
+    void updateTracePolicy(uint8_t state){
         switch(tracePolicy){
-            case -1: // turn left
-                if(c){
+            case 1: // turn left
+                if(state & 0b010){
                     tracePolicy = 0;
                 }
-                else if(r){
-                    tracePolicy = 1;
+                else if(state & 0b001){
+                    tracePolicy = 2;
                 }
                 break;
             case 0: // go straight
-                if(l){
-                    tracePolicy = -1;
-                }
-                else if(r){
+                if(state & 0b100){
                     tracePolicy = 1;
                 }
-                break;
-            case 1: // turn right
-                if(l){
-                    tracePolicy = -1;
+                else if(state & 0b001){
+                    tracePolicy = 2;
                 }
-                else if(c){
+                break;
+            case 2: // turn right
+                if(state & 0b100){
+                    tracePolicy = 1;
+                }
+                else if(state & 0b010){
                     tracePolicy = 0;
                 }
                 break;
@@ -111,20 +104,12 @@ namespace DrivePolicy {
                 break;
         }
 
-        if(l){
-            lastIOL=-1;
-        }
-        else if(r){
-            lastIOL=1;
-        }
-        else if(c){
-            lastIOL=0;
-        }
+        lastIOL = state;
     }
 
     void lineTrace(){
         switch(tracePolicy){
-            case -1: // turn left
+            case 1: // turn left
                 leftwheel.setTargetRPM(RPM_sharpturn_inner);
                 rightwheel.setTargetRPM(RPM_sharpturn_outer);
                 break;
@@ -132,7 +117,7 @@ namespace DrivePolicy {
                 leftwheel.setTargetRPM(RPM_base);
                 rightwheel.setTargetRPM(RPM_base);
                 break;
-            case 1: // turn right
+            case 2: // turn right
                 leftwheel.setTargetRPM(RPM_sharpturn_outer);
                 rightwheel.setTargetRPM(RPM_sharpturn_inner);
                 break;
@@ -243,11 +228,11 @@ namespace Update {
         Serial.print(F(" / cur_RPM "));
         Serial.println(rightwheel.getEstimatedRPM());
         Serial.print(F("on-line?: "));
-        Serial.print(DrivePolicy::IOLleft? 'O':'X');
+        Serial.print(DrivePolicy::lastIOL & 0b100? 'O':'X');
         Serial.print(F(" - "));
-        Serial.print(DrivePolicy::IOLcenter? 'O':'X');
+        Serial.print(DrivePolicy::lastIOL & 0b010? 'O':'X');
         Serial.print(F(" - "));
-        Serial.println(DrivePolicy::IOLright? 'O':'X');
+        Serial.println(DrivePolicy::lastIOL & 0b001? 'O':'X');
         Serial.print(F("Obstacle? "));
         if(DrivePolicy::onobstacle){
             Serial.println(F("yes"));
@@ -257,13 +242,13 @@ namespace Update {
         }
         Serial.print(F("Current trace policy: "));
         switch(DrivePolicy::tracePolicy){
-            case -1:
+            case 1:
                 Serial.println(F("Turning left"));
                 break;
             case 0:
                 Serial.println(F("Going straight"));
                 break;
-            case 1:
+            case 2:
                 Serial.println(F("Turning right"));
                 break;
             default:
@@ -294,11 +279,13 @@ namespace Update {
 
     int updateFast(){
         if(cmillis-lastcalmillis_fast>=calperiod_fast){
-            bool l = LineSensor::onLine_left();
-            bool r = LineSensor::onLine_right();
-            bool c = LineSensor::onLine_center();
+            uint8_t state = ( 
+                LineSensor::onLine_left() << 2 |
+                LineSensor::onLine_center() << 1 |
+                LineSensor::onLine_right() << 0
+            );
 
-            DrivePolicy::updateTracePolicy(l,r,c);
+            DrivePolicy::updateTracePolicy(state);
 
             lastcalmillis_fast = cmillis;
             return 1;
