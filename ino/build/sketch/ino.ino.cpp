@@ -6,7 +6,7 @@
 //#include "modules\Arms.h"
 #include "modules\Wheel.h"
 #include "modules\LineSensor.h"
-//#include "modules\ObstacleSensor.h"
+#include "modules\ObstacleSensor.h"
 
 #pragma region Constants
 const byte Encoder_Left = 2;
@@ -17,23 +17,26 @@ const byte Motor_Right1 = 10;
 const byte Motor_Right2 = 11;
 
 //const byte LineSensor::Obstacle_Sensor = -1;
-const byte LineSensor::Line_Sensor_Left = 4;
-const byte LineSensor::Line_Sensor_Right = 7;
+const byte LineSensor::Line_Sensor_Left = 7;
+const byte LineSensor::Line_Sensor_Right = 4;
 const byte LineSensor::Line_Sensor_Center = 8;
+
+const byte HCSR04::trigPin = 13;
+const byte HCSR04::echoPin = 12;
 #pragma endregion
 
 #pragma region Object Declairation
 Wheel leftwheel = Wheel(Motor_Left1,Motor_Left2,Encoder_Left);
 Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right);
-#line 27 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
-void ISRencoder_left();
 #line 30 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+void ISRencoder_left();
+#line 33 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_right();
-#line 322 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 380 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void setup();
-#line 340 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 399 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void loop();
-#line 27 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 30 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left(){
     leftwheel.onEncoderInterrupt();
 }
@@ -52,10 +55,20 @@ namespace Update{
 namespace DrivePolicy {
     int drivemode = 0;
 
-    int range = 0;
+    int range = -1; // millimeters
     bool onobstacle = false;
 
-    uint8_t tracePolicy = 0;
+    const int obstacleStopDistanceMm = 200;
+
+    enum TracePolicy : uint8_t {
+        TRACE_STRAIGHT = 0,
+        TRACE_TURN_LEFT = 1,
+        TRACE_TURN_RIGHT = 2,
+        TRACE_TURN_LEFT_SOFT = 3,
+        TRACE_TURN_RIGHT_SOFT = 4
+    };
+
+    TracePolicy tracePolicy = TRACE_STRAIGHT;
     uint8_t lastIOL = 0;
     
     const int RPM_base = 90;
@@ -75,29 +88,40 @@ namespace DrivePolicy {
     }
 
     void updateTracePolicy(uint8_t state){
+        bool IRchanged = state!=lastIOL;
+
+        if(!IRchanged){
+            return;
+        }
+
+        Serial.print(F("IRCHANGED:"));
+        Serial.print(lastIOL);
+        Serial.print(':');
+        Serial.println(state);
+
         switch(tracePolicy){
-            case 1: // turn left
+            case TRACE_STRAIGHT:
+                if(state & 0b100){
+                    tracePolicy = TRACE_TURN_LEFT;
+                }
+                else if(state & 0b001){
+                    tracePolicy = TRACE_TURN_RIGHT;
+                }
+                break;
+            case TRACE_TURN_LEFT:
                 if(state & 0b010){
-                    tracePolicy = 0;
+                    tracePolicy = TRACE_STRAIGHT;
                 }
                 else if(state & 0b001){
-                    tracePolicy = 2;
+                    tracePolicy = TRACE_TURN_RIGHT;
                 }
                 break;
-            case 0: // go straight
+            case TRACE_TURN_RIGHT:
                 if(state & 0b100){
-                    tracePolicy = 1;
-                }
-                else if(state & 0b001){
-                    tracePolicy = 2;
-                }
-                break;
-            case 2: // turn right
-                if(state & 0b100){
-                    tracePolicy = 1;
+                    tracePolicy = TRACE_TURN_LEFT;
                 }
                 else if(state & 0b010){
-                    tracePolicy = 0;
+                    tracePolicy = TRACE_STRAIGHT;
                 }
                 break;
             default:
@@ -108,18 +132,32 @@ namespace DrivePolicy {
     }
 
     void lineTrace(){
+        if(onobstacle){
+            leftwheel.stop();
+            rightwheel.stop();
+            return;
+        }
+
         switch(tracePolicy){
-            case 1: // turn left
-                leftwheel.setTargetRPM(RPM_sharpturn_inner);
-                rightwheel.setTargetRPM(RPM_sharpturn_outer);
-                break;
-            case 0: // go straight
+            case TRACE_STRAIGHT:
                 leftwheel.setTargetRPM(RPM_base);
                 rightwheel.setTargetRPM(RPM_base);
                 break;
-            case 2: // turn right
+            case TRACE_TURN_LEFT:
+                leftwheel.setTargetRPM(RPM_sharpturn_inner);
+                rightwheel.setTargetRPM(RPM_sharpturn_outer);
+                break;
+            case TRACE_TURN_RIGHT:
                 leftwheel.setTargetRPM(RPM_sharpturn_outer);
                 rightwheel.setTargetRPM(RPM_sharpturn_inner);
+                break;
+            case TRACE_TURN_LEFT_SOFT:
+                leftwheel.setTargetRPM(RPM_softturn_inner);
+                rightwheel.setTargetRPM(RPM_softturn_outer);
+                break;
+            case TRACE_TURN_RIGHT_SOFT:
+                leftwheel.setTargetRPM(RPM_softturn_outer);
+                rightwheel.setTargetRPM(RPM_softturn_inner);
                 break;
             default:
                 leftwheel.stop();
@@ -142,6 +180,7 @@ namespace DrivePolicy {
         drivemode = -1;
         leftwheel.stop();
         rightwheel.stop();
+        Serial.println(F("EMERGENCYSTOPPED"));
     }
 
     void drive(){
@@ -164,7 +203,7 @@ namespace DrivePolicy {
     }
 }
 
-namespace {
+namespace IOstream{
     void doSerialCommand(){
         char* command[COMMAND_MAXLENGTH] = {};
         if(!getSerialCommand(command)){
@@ -182,6 +221,10 @@ namespace {
             leftwheel.setPID(p, i, d);
             rightwheel.setPID(p, i, d);
         }
+    }
+    void reportDriveMode(){
+        Serial.print(F("DRIVEMODE:"));
+        Serial.println(DrivePolicy::drivemode);
     }
 }
 
@@ -242,14 +285,20 @@ namespace Update {
         }
         Serial.print(F("Current trace policy: "));
         switch(DrivePolicy::tracePolicy){
-            case 1:
-                Serial.println(F("Turning left"));
-                break;
-            case 0:
+            case DrivePolicy::TRACE_STRAIGHT:
                 Serial.println(F("Going straight"));
                 break;
-            case 2:
+            case DrivePolicy::TRACE_TURN_LEFT:
+                Serial.println(F("Turning left"));
+                break;
+            case DrivePolicy::TRACE_TURN_RIGHT:
                 Serial.println(F("Turning right"));
+                break;
+            case DrivePolicy::TRACE_TURN_LEFT_SOFT:
+                Serial.println(F("Turning left softly"));
+                break;
+            case DrivePolicy::TRACE_TURN_RIGHT_SOFT:
+                Serial.println(F("Turning right softly"));
                 break;
             default:
                 Serial.println(F("Can't find the policy"));
@@ -263,11 +312,9 @@ namespace Update {
             rightwheel.estimateAverageRPM(cmillis-lastcalmillis);
             
             /*if(obsensor.pollRange(DrivePolicy::range)){
-                if(DrivePolicy::range>=0 && DrivePolicy::range<150){
-                    DrivePolicy::onobstacle = true;
-                }
-                else{
-                    DrivePolicy::onobstacle = false;
+                if(DrivePolicy::range>=0){
+                    DrivePolicy::onobstacle =
+                        DrivePolicy::range<DrivePolicy::obstacleStopDistanceMm;
                 }
             }*/
 
@@ -279,6 +326,13 @@ namespace Update {
 
     int updateFast(){
         if(cmillis-lastcalmillis_fast>=calperiod_fast){
+            if(HCSR04::readDistance(DrivePolicy::range)){
+                if(DrivePolicy::range>=0){
+                    DrivePolicy::onobstacle =
+                        DrivePolicy::range<DrivePolicy::obstacleStopDistanceMm;
+                }
+            }
+
             uint8_t state = ( 
                 LineSensor::onLine_left() << 2 |
                 LineSensor::onLine_center() << 1 |
@@ -327,6 +381,10 @@ namespace Update {
         }
         return 0;
     }
+
+    void updateInstant(){
+        HCSR04::updateMeasurement();
+    }
 }
 
 void setup() {
@@ -342,13 +400,14 @@ void setup() {
     Update::conperiod_fine = 10;
     //oled.init();
     //obsensor.init(100);
+    HCSR04::setup();
     LineSensor::setupSensors();
     DrivePolicy::drivemode = 1;
     Serial.println(F("Arduino ONLINE"));
 }
 
 void loop() {
-    doSerialCommand();
+    IOstream::doSerialCommand();
 
     Update::ready();
     Update::updateCalc();
@@ -356,5 +415,7 @@ void loop() {
     Update::updateCon();
     Update::updateFine();
     Update::updateLoop();
+    Update::updateInstant();
     Update::end();
 }
+
