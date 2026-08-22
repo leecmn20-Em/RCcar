@@ -50,21 +50,27 @@ tests/
   test_parser.py
   test_database.py
   test_backend_integration.py
+firmware/
+  archive/arms_20260819_original.ino  Git 이력에서 복원한 원본 보존본
+  robot_arm_esp32/robot_arm_esp32.ino Servo + SoftAP/TCP 통합 firmware
 robotArm_tcp.py        기존 실행명을 보존한 GUI 호환 launcher
 softAP_tcp.cpp         기존 SoftAP 흐름 + typed ARM ACK 응답
 ```
 
 ## 실제 Servo firmware 주의
 
-이 저장소의 `softAP_tcp.cpp`에는 Servo/PWM 제어 코드가 없습니다. 현재 파일은 SoftAP 생성, TCP 한 줄 수신, Serial 출력, `ARM_ACK,OK` 응답만 수행하므로 이 파일만 flash하면 ACK는 오지만 실제 Robot Arm은 움직이지 않습니다.
+Git 이력의 `0c65aea` 커밋에서 삭제 전 `ino/arms.ino`를 찾아 `firmware/archive/arms_20260819_original.ino`로 소스 내용을 복원했습니다. 이 코드는 4축 Servo와 Home `90,90,90,90`을 포함하지만, colon 구분 Serial 명령을 사용하고 매 loop마다 Shoulder를 70도로 강제하는 시험 코드도 남아 있어 그대로 flash하면 안 됩니다.
 
-실제 장비에 사용했던 Servo 제어 firmware가 별도로 있다면 그 코드를 기준으로 다음 변경만 병합해야 합니다.
+과거 핀은 `base=3`, `shoulder=5`, `forearm=6`, `upperarm=9`였습니다. 현재 AGV 코드는 Arduino Uno 대상으로 설정되어 있고, classic ESP32에서는 GPIO 6과 9가 flash에 연결되는 경우가 많으므로 이 핀 배치를 실제 ESP32 배선으로 간주하지 않습니다.
 
-```cpp
-client.println("ARM_ACK,OK");
-```
+`firmware/robot_arm_esp32/robot_arm_esp32.ino`에는 다음 동작을 통합했습니다.
 
-Servo pin, 초기화, angle parsing 및 구동 로직을 삭제하거나 이 샘플 파일로 대체하지 마세요.
+- SoftAP `RobotArm_Team3` / TCP 5000
+- `base,shoulder,upper,forearm\n` 네 각도의 엄격한 0..180 검증
+- 네 Servo target 적용 후 명령당 정확히 한 번 `ARM_ACK,OK`
+- 잘못된 형식, 범위 또는 과대 frame에는 `ARM_ACK,ERROR`
+
+안전을 위해 통합 firmware의 네 `ROBOT_ARM_*_PIN`은 `-1`로 두었고 핀 확정 전에는 compile이 중단됩니다. 실제 배선과 Servo 별 안전 각도 범위를 확인한 후 설정해야 합니다. `softAP_tcp.cpp`는 Servo/PWM 제어가 없는 네트워크 참고 코드로 유지합니다.
 
 ## 설치
 
@@ -78,15 +84,16 @@ Python 표준 라이브러리 외 GUI에서 PyQt5를 사용합니다.
 
 ## 실제 장비 실행 순서
 
-1. 실제 Servo 제어가 포함된 ESP32 firmware에 typed ACK 변경을 병합합니다. 저장소의 `softAP_tcp.cpp`만으로는 Servo가 움직이지 않습니다.
-2. PC를 ESP32 SoftAP Wi-Fi에 연결합니다.
-3. 터미널 1에서 Backend를 실행합니다.
+1. `firmware/robot_arm_esp32/robot_arm_esp32.ino`의 네 Servo pin을 실제 배선에 맞게 설정하고 compile/flash합니다.
+2. 전원을 인가하기 전에 네 Servo의 90도 Home 위치가 기구적으로 안전한지 확인합니다.
+3. PC를 ESP32 SoftAP Wi-Fi에 연결합니다.
+4. 터미널 1에서 Backend를 실행합니다.
 
 ```powershell
 python backend/robot_backend.py
 ```
 
-4. 터미널 2에서 GUI를 실행합니다.
+5. 터미널 2에서 GUI를 실행합니다.
 
 ```powershell
 python gui/robot_gui.py
@@ -220,16 +227,16 @@ python -m unittest discover -s tests -v
 
 자동 테스트는 실제 Servo 구동을 검증할 수 없습니다. 3차 작업 전에 다음을 장비에서 확인해야 합니다.
 
-1. Servo 제어가 포함된 실제 ESP32 firmware에 `ARM_ACK,OK` 변경 병합
-2. ESP32 flash 및 Serial boot log 확인
-3. PC를 ESP32 SoftAP에 연결
-4. Backend와 GUI 실행
-5. GUI에서 ESP32 연결
-6. 안전한 4축 각도 한 세트 전송
-7. 실제 네 Servo의 방향과 움직임 확인
-8. Backend/GUI에서 `ARM_ACK,OK` 성공 확인
-9. Mission Start 후 Arm 명령 실행
-10. `arm_log`에 같은 Mission ID와 `ack=1` row가 생성되는지 확인
+1. 실제 보드 모델, 네 Servo signal pin, 별도 Servo 전원과 공통 GND 확인
+2. `firmware/robot_arm_esp32/robot_arm_esp32.ino`의 네 pin 설정
+3. 90도 Home 위치가 기구적으로 안전한 상태에서 ESP32 flash
+4. Serial boot log에서 SoftAP IP와 TCP port 확인
+5. PC를 ESP32 SoftAP에 연결
+6. Backend와 GUI 실행 후 GUI에서 ESP32 연결
+7. 안전한 4축 각도 한 세트 전송
+8. 실제 네 Servo의 방향과 움직임 확인
+9. Backend/GUI에서 `ARM_ACK,OK` 성공 확인
+10. Mission Start 후 Arm 명령을 실행하고 `arm_log`에 같은 Mission ID와 `ack=1` row가 생성되는지 확인
 
 ## 향후 3차 작업
 
