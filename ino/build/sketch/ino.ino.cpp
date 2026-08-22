@@ -32,9 +32,9 @@ Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right);
 void ISRencoder_left();
 #line 33 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_right();
-#line 380 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 401 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void setup();
-#line 399 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 420 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void loop();
 #line 30 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left(){
@@ -55,10 +55,9 @@ namespace Update{
 namespace DrivePolicy {
     int drivemode = 0;
 
-    int range = -1; // millimeters
+    int range = -1;
     bool onobstacle = false;
-
-    const int obstacleStopDistanceMm = 200;
+    const int obstacleStopDistanceMm = 120;
 
     enum TracePolicy : uint8_t {
         TRACE_STRAIGHT = 0,
@@ -71,16 +70,16 @@ namespace DrivePolicy {
     TracePolicy tracePolicy = TRACE_STRAIGHT;
     uint8_t lastIOL = 0;
     
-    const int RPM_base = 90;
-    const int RPM_softturn_inner = 40;
-    const int RPM_softturn_outer = 90;
+    const int RPM_base = 180;
+    const int RPM_softturn_inner = 10;
+    const int RPM_softturn_outer = 180;
     const int RPM_sharpturn_inner = 0;
-    const int RPM_sharpturn_outer = 60;
-    const int RPM_search_inner = 60;
-    const int linesearch_timeout = 3000;
-    const int allign_wait = 500;
-    const int sharpturn_wait = 150;
-    const int lost_timeout = 5000;
+    const int RPM_sharpturn_outer = 180;
+    const uint32_t WaitForsharpTurn = 600;
+    uint32_t sinceSoftTurn = 0;
+
+    const uint32_t lostTimeOut = 5000;
+    uint32_t lastIOLTime = 0;
 
     void search(){
         leftwheel.setTargetRPM(RPM_softturn_outer);
@@ -91,44 +90,66 @@ namespace DrivePolicy {
         bool IRchanged = state!=lastIOL;
 
         if(!IRchanged){
-            return;
+            if(!(state & 0b010)){
+                switch(tracePolicy){
+                    case TRACE_TURN_LEFT_SOFT:
+                        if(Update::cmillis-sinceSoftTurn>=WaitForsharpTurn){
+                            tracePolicy = TRACE_TURN_LEFT;
+                        }
+                        break;
+                    case TRACE_TURN_RIGHT_SOFT:
+                        if(Update::cmillis-sinceSoftTurn>=WaitForsharpTurn){
+                            tracePolicy = TRACE_TURN_RIGHT;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
+        else{
+            Serial.print(F("IRCHANGED:"));
+            Serial.print(lastIOL);
+            Serial.print(':');
+            Serial.println(state);
 
-        Serial.print(F("IRCHANGED:"));
-        Serial.print(lastIOL);
-        Serial.print(':');
-        Serial.println(state);
+            switch(tracePolicy){
+                case TRACE_STRAIGHT:
+                    if(state & 0b100){
+                        tracePolicy = TRACE_TURN_LEFT_SOFT;
+                        sinceSoftTurn = Update::cmillis;
+                    }
+                    else if(state & 0b001){
+                        tracePolicy = TRACE_TURN_RIGHT_SOFT;
+                        sinceSoftTurn = Update::cmillis;
+                    }
+                    break;
+                case TRACE_TURN_LEFT:
+                case TRACE_TURN_LEFT_SOFT:
+                    if(state & 0b010){
+                        tracePolicy = TRACE_STRAIGHT;
+                    }
+                    else if(state & 0b001){
+                        tracePolicy = TRACE_TURN_RIGHT_SOFT;
+                        sinceSoftTurn = Update::cmillis;
+                    }
+                    break;
+                case TRACE_TURN_RIGHT:
+                case TRACE_TURN_RIGHT_SOFT:
+                    if(state & 0b100){
+                        tracePolicy = TRACE_TURN_LEFT_SOFT;
+                        sinceSoftTurn = Update::cmillis;
+                    }
+                    else if(state & 0b010){
+                        tracePolicy = TRACE_STRAIGHT;
+                    }
+                    break;
+                default:
+                    break;
+            }
 
-        switch(tracePolicy){
-            case TRACE_STRAIGHT:
-                if(state & 0b100){
-                    tracePolicy = TRACE_TURN_LEFT;
-                }
-                else if(state & 0b001){
-                    tracePolicy = TRACE_TURN_RIGHT;
-                }
-                break;
-            case TRACE_TURN_LEFT:
-                if(state & 0b010){
-                    tracePolicy = TRACE_STRAIGHT;
-                }
-                else if(state & 0b001){
-                    tracePolicy = TRACE_TURN_RIGHT;
-                }
-                break;
-            case TRACE_TURN_RIGHT:
-                if(state & 0b100){
-                    tracePolicy = TRACE_TURN_LEFT;
-                }
-                else if(state & 0b010){
-                    tracePolicy = TRACE_STRAIGHT;
-                }
-                break;
-            default:
-                break;
+            lastIOL = state;
         }
-
-        lastIOL = state;
     }
 
     void lineTrace(){

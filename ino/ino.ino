@@ -1,8 +1,5 @@
 #include <Arduino.h>
 #include "modules\Commands.h"
-//#include "modules\Servo1.h"
-//#include "modules\Displayer.h"
-//#include "modules\Arms.h"
 #include "modules\Wheel.h"
 #include "modules\LineSensor.h"
 #include "modules\ObstacleSensor.h"
@@ -15,7 +12,6 @@ const byte Motor_Left2 = 5;
 const byte Motor_Right1 = 10;
 const byte Motor_Right2 = 11;
 
-//const byte LineSensor::Obstacle_Sensor = -1;
 const byte LineSensor::Line_Sensor_Left = 7;
 const byte LineSensor::Line_Sensor_Right = 4;
 const byte LineSensor::Line_Sensor_Center = 8;
@@ -33,9 +29,6 @@ void ISRencoder_left(){
 void ISRencoder_right(){
     rightwheel.onEncoderInterrupt();
 }
-
-//Displayer oled = Displayer();
-//ObstacleSensor obsensor = ObstacleSensor();
 #pragma endregion
 
 namespace Update{
@@ -45,10 +38,9 @@ namespace Update{
 namespace DrivePolicy {
     int drivemode = 0;
 
-    int range = -1; // millimeters
+    int range = -1;
     bool onobstacle = false;
-
-    const int obstacleStopDistanceMm = 200;
+    const int obstacleStopDistanceMm = 120;
 
     enum TracePolicy : uint8_t {
         TRACE_STRAIGHT = 0,
@@ -61,64 +53,81 @@ namespace DrivePolicy {
     TracePolicy tracePolicy = TRACE_STRAIGHT;
     uint8_t lastIOL = 0;
     
-    const int RPM_base = 90;
-    const int RPM_softturn_inner = 40;
-    const int RPM_softturn_outer = 90;
+    const int RPM_base = 120;
+    const int RPM_softturn_inner = 10;
+    const int RPM_softturn_outer = 120;
     const int RPM_sharpturn_inner = 0;
-    const int RPM_sharpturn_outer = 60;
-    const int RPM_search_inner = 60;
-    const int linesearch_timeout = 3000;
-    const int allign_wait = 500;
-    const int sharpturn_wait = 150;
-    const int lost_timeout = 5000;
+    const int RPM_sharpturn_outer = 120;
+    const uint32_t WaitForsharpTurn = 600;
+    uint32_t sinceSoftTurn = 0;
 
-    void search(){
-        leftwheel.setTargetRPM(RPM_softturn_outer);
-        rightwheel.setTargetRPM(RPM_softturn_inner);
-    }
+    const uint32_t lostTimeOut = 5000;
+    uint32_t lastIOLTime = 0;
 
     void updateTracePolicy(uint8_t state){
         bool IRchanged = state!=lastIOL;
 
         if(!IRchanged){
-            return;
+            if(!(state & 0b010)){
+                switch(tracePolicy){
+                    case TRACE_TURN_LEFT_SOFT:
+                        if(Update::cmillis-sinceSoftTurn>=WaitForsharpTurn){
+                            tracePolicy = TRACE_TURN_LEFT;
+                        }
+                        break;
+                    case TRACE_TURN_RIGHT_SOFT:
+                        if(Update::cmillis-sinceSoftTurn>=WaitForsharpTurn){
+                            tracePolicy = TRACE_TURN_RIGHT;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
+        else{
+            Serial.print(F("IRCHANGED:"));
+            Serial.print(lastIOL);
+            Serial.print(':');
+            Serial.println(state);
 
-        Serial.print(F("IRCHANGED:"));
-        Serial.print(lastIOL);
-        Serial.print(':');
-        Serial.println(state);
+            switch(tracePolicy){
+                case TRACE_STRAIGHT:
+                    if(state & 0b100){
+                        tracePolicy = TRACE_TURN_LEFT_SOFT;
+                        sinceSoftTurn = Update::cmillis;
+                    }
+                    else if(state & 0b001){
+                        tracePolicy = TRACE_TURN_RIGHT_SOFT;
+                        sinceSoftTurn = Update::cmillis;
+                    }
+                    break;
+                case TRACE_TURN_LEFT:
+                case TRACE_TURN_LEFT_SOFT:
+                    if(state & 0b010){
+                        tracePolicy = TRACE_STRAIGHT;
+                    }
+                    else if(state & 0b001){
+                        tracePolicy = TRACE_TURN_RIGHT_SOFT;
+                        sinceSoftTurn = Update::cmillis;
+                    }
+                    break;
+                case TRACE_TURN_RIGHT:
+                case TRACE_TURN_RIGHT_SOFT:
+                    if(state & 0b100){
+                        tracePolicy = TRACE_TURN_LEFT_SOFT;
+                        sinceSoftTurn = Update::cmillis;
+                    }
+                    else if(state & 0b010){
+                        tracePolicy = TRACE_STRAIGHT;
+                    }
+                    break;
+                default:
+                    break;
+            }
 
-        switch(tracePolicy){
-            case TRACE_STRAIGHT:
-                if(state & 0b100){
-                    tracePolicy = TRACE_TURN_LEFT;
-                }
-                else if(state & 0b001){
-                    tracePolicy = TRACE_TURN_RIGHT;
-                }
-                break;
-            case TRACE_TURN_LEFT:
-                if(state & 0b010){
-                    tracePolicy = TRACE_STRAIGHT;
-                }
-                else if(state & 0b001){
-                    tracePolicy = TRACE_TURN_RIGHT;
-                }
-                break;
-            case TRACE_TURN_RIGHT:
-                if(state & 0b100){
-                    tracePolicy = TRACE_TURN_LEFT;
-                }
-                else if(state & 0b010){
-                    tracePolicy = TRACE_STRAIGHT;
-                }
-                break;
-            default:
-                break;
+            lastIOL = state;
         }
-
-        lastIOL = state;
     }
 
     void lineTrace(){
@@ -300,13 +309,6 @@ namespace Update {
         if(cmillis-lastcalmillis>=calperiod){
             leftwheel.estimateAverageRPM(cmillis-lastcalmillis);
             rightwheel.estimateAverageRPM(cmillis-lastcalmillis);
-            
-            /*if(obsensor.pollRange(DrivePolicy::range)){
-                if(DrivePolicy::range>=0){
-                    DrivePolicy::onobstacle =
-                        DrivePolicy::range<DrivePolicy::obstacleStopDistanceMm;
-                }
-            }*/
 
             lastcalmillis = cmillis;
             return 1;
@@ -388,8 +390,6 @@ void setup() {
     Update::calperiod_fast = 5;
     Update::conperiod = 20;
     Update::conperiod_fine = 10;
-    //oled.init();
-    //obsensor.init(100);
     HCSR04::setup();
     LineSensor::setupSensors();
     DrivePolicy::drivemode = 1;
