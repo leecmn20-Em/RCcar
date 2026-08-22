@@ -22,7 +22,7 @@ Python Backend
     ▼
 ESP32 SoftAP / TCP Server
     │
-    │ 향후 UART
+    │ UART2 115200 bps (GPIO16 RX / GPIO17 TX)
     ▼
 Arduino Uno / AGV
 ```
@@ -52,7 +52,10 @@ tests/
   test_backend_integration.py
 firmware/
   archive/arms_20260819_original.ino  Git 이력에서 복원한 원본 보존본
-  robot_arm_esp32/robot_arm_esp32.ino Servo + SoftAP/TCP 통합 firmware
+  robot_arm_esp32/robot_arm_esp32.ino Servo + SoftAP/TCP + AGV UART relay
+ino/
+  ino.ino             기존 AGV 제어 + 200ms telemetry/obstacle protocol
+  modules/DebugLog.h  Uno UART debug 출력의 compile-time switch
 robotArm_tcp.py        기존 실행명을 보존한 GUI 호환 launcher
 softAP_tcp.cpp         기존 SoftAP 흐름 + typed ARM ACK 응답
 ```
@@ -69,8 +72,9 @@ Git 이력의 `0c65aea` 커밋에서 삭제 전 `ino/arms.ino`를 찾아 `firmwa
 - `base,shoulder,upper,forearm\n` 네 각도의 엄격한 0..180 검증
 - 네 Servo target 적용 후 명령당 정확히 한 번 `ARM_ACK,OK`
 - 잘못된 형식, 범위 또는 과대 frame에는 `ARM_ACK,ERROR`
+- UART2의 Uno `AGV,...\n` frame을 해석하거나 변경하지 않고 TCP로 relay
 
-ESP32 DevKit V1(ESP-WROOM-32) 기준 핀 계획은 다음과 같이 확정했습니다. GPIO 16/17은 3차 Uno UART2 연결을 위해 Servo에 사용하지 않습니다.
+ESP32 DevKit V1(ESP-WROOM-32) 기준 핀 계획은 다음과 같습니다. GPIO 16/17은 Uno UART2 연결에 사용하므로 Servo에 사용하지 않습니다.
 
 | 역할 | ESP32 GPIO |
 | --- | ---: |
@@ -78,8 +82,8 @@ ESP32 DevKit V1(ESP-WROOM-32) 기준 핀 계획은 다음과 같이 확정했습
 | Shoulder Servo signal | 26 |
 | Upper Servo signal | 27 |
 | Forearm Servo signal | 32 |
-| Uno → ESP32 UART2 RX (예약) | 16 |
-| ESP32 → Uno UART2 TX (예약) | 17 |
+| Uno → ESP32 UART2 RX | 16 |
+| ESP32 → Uno UART2 TX | 17 |
 
 Servo 네 개는 ESP32 보드의 USB/5V 핀에서 직접 급전하지 않고 별도 5V 전원에 연결합니다. 권장 용량은 최소 4A, 가능하면 5A이며, 외부 전원 GND와 ESP32 GND는 반드시 공통으로 연결합니다. `softAP_tcp.cpp`는 Servo/PWM 제어가 없는 네트워크 참고 코드로 유지합니다.
 
@@ -175,13 +179,15 @@ ESP32 → Backend protocol:
 ```text
 ARM_ACK,OK
 ARM_ACK,ERROR
-AGV,TELEMETRY,54.2,0,1,0,180,180
-AGV,OBSTACLE,14.1,0,1,0,0,0
-AGV,STOP,14.1,0,1,0,0,0
-AGV,DEST
+AGV,TELEMETRY,450,0,1,0,125,127
+AGV,OBSTACLE,110,0,1,0,0,0
 ```
 
-모든 frame은 `\n`으로 끝납니다. 이전 firmware의 `OK\n`도 과도기 호환 ACK로 인정하지만 새 firmware는 `ARM_ACK,OK\n`을 반환합니다. `AGV,DEST`에는 존재하지 않는 sensor 값을 만들지 않고 `None`으로 routing합니다.
+모든 frame은 `\n`으로 끝납니다. AGV 필드는 `event,distance_mm,left_ir,center_ir,right_ir,left_motor_duty,right_motor_duty` 순서입니다. Uno는 `AGV,TELEMETRY`를 200ms 주기(5Hz)로 보내고 초음파 거리가 120mm 미만으로 처음 바뀌는 순간 `AGV,OBSTACLE`을 한 번 보냅니다. 장애물이 유지되는 동안 같은 `OBSTACLE`을 반복하지 않으며 주기 telemetry는 계속됩니다.
+
+Uno의 `Serial`은 기본적으로 기계 protocol 전용입니다. `ENABLE_AGV_DEBUG`의 기본값은 `0`이며, 사람이 보는 boot/IR/motor log는 이 값이 활성화된 개발 build에서만 출력됩니다. 운영 중 debug를 켜면 ESP32가 해당 문자열도 그대로 relay하므로 Backend diagnostic이 발생할 수 있습니다.
+
+Backend parser는 기존 `AGV,STOP`과 `AGV,DEST`도 계속 인식하지만, 현재 Uno firmware는 정지 원인 및 목적지 판정 조건이 확정되지 않았으므로 두 event를 생성하지 않습니다. 이전 firmware의 `OK\n`도 과도기 호환 ACK로 인정하지만 새 firmware는 `ARM_ACK,OK\n`을 반환합니다.
 
 Wire protocol에 request ID가 없으므로 Arm 명령은 한 번에 하나만 pending 상태가 됩니다. ACK timeout이면 해당 TCP 연결을 닫습니다. 따라서 이전 연결의 늦은 ACK가 다음 명령을 완료할 수 없으며, ESP32 재연결 후 새 명령을 보내야 합니다.
 
@@ -249,20 +255,22 @@ python -m unittest discover -s tests -v
 9. Backend/GUI에서 `ARM_ACK,OK` 성공 확인
 10. Mission Start 후 Arm 명령을 실행하고 `arm_log`에 같은 Mission ID와 `ack=1` row가 생성되는지 확인
 
-## 향후 3차 작업
+## 3차 AGV UART relay
 
-Backend의 multiplexed receiver, AGV parser, Mission DB routing은 준비되었습니다. 다음 단계에서는 실제 protocol이 확정된 뒤 아래 입력 구간만 연결합니다.
+기존 라인트레이싱 센서·모터 제어 주기는 변경하지 않고 Uno protocol 출력과 ESP32 relay 구간을 연결했습니다.
 
 ```text
 Arduino Uno
-    │ UART (3차에서 구현)
+    │ UART 115200 bps, AGV frame
     ▼
 ESP32
-    │ 현재 multiplexed TCP
+    │ UART2 bytes를 현재 multiplexed TCP로 그대로 relay
     ▼
 Backend Receiver → Parser → agv_log / GUI agv_event
 ```
 
-이번 단계에서는 Uno firmware, UART 수신, IR/초음파 값 생성, AGV motor 제어 및 GUI dashboard를 구현하지 않았습니다.
+Uno는 `DrivePolicy::range`의 mm 거리, Left/Center/Right IR, 두 Wheel의 `getCurrentDuty()`를 사용합니다. 센서 5ms, motor 10ms, 제어 20ms 주기는 유지하고 DB용 telemetry만 200ms 주기로 추가했습니다. `false → true` 장애물 transition만 `OBSTACLE` event로 내보냅니다.
 
-Uno UART protocol의 권장 기준은 Uno가 완성된 `AGV,...\n` frame을 만들고 ESP32가 parsing 없이 TCP client로 그대로 relay하는 방식입니다. UART2는 ESP32 GPIO 16(RX2)과 GPIO 17(TX2)을 사용하도록 예약했습니다. Uno D1 TX의 5V logic은 ESP32 GPIO 16에 직접 연결하지 않고 전압 분배기 또는 level shifter를 거쳐야 합니다. 반대 방향은 ESP32 GPIO 17 TX2에서 Uno D0 RX로 연결하며, 공통 GND와 baud rate는 3차 구현 전에 확정합니다.
+UART2는 ESP32 GPIO 16(RX2)과 GPIO 17(TX2), 115200 bps를 사용합니다. Uno D1 TX의 5V logic은 ESP32 GPIO 16에 직접 연결하지 않고 전압 분배기 또는 level shifter를 거쳐야 합니다. 반대 방향은 ESP32 GPIO 17 TX2에서 Uno D0 RX로 연결하며 두 보드의 GND를 공통으로 연결합니다. 현재 ESP32 → Uno 명령은 구현하지 않았습니다.
+
+남은 3차 작업은 실제 장비에서 UART/TCP/DB 연속 경로를 검증하고 GUI dashboard를 구현하는 것입니다. `STOP`은 명시적 정지 조건을, `DEST`는 실제 목적지 판정 조건을 정한 뒤 추가합니다.

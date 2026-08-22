@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "modules\DebugLog.h"
 #include "modules\Commands.h"
 #include "modules\Wheel.h"
 #include "modules\LineSensor.h"
@@ -86,10 +87,10 @@ namespace DrivePolicy {
             }
         }
         else{
-            Serial.print(F("IRCHANGED:"));
-            Serial.print(lastIOL);
-            Serial.print(':');
-            Serial.println(state);
+            AGV_DEBUG_PRINT(F("IRCHANGED:"));
+            AGV_DEBUG_PRINT(lastIOL);
+            AGV_DEBUG_PRINT(':');
+            AGV_DEBUG_PRINTLN(state);
 
             switch(tracePolicy){
                 case TRACE_STRAIGHT:
@@ -169,17 +170,17 @@ namespace DrivePolicy {
         drivemode = 2;
         leftwheel.setTargetRPM(ls);
         rightwheel.setTargetRPM(rs);
-        Serial.print("left wheel RPM set to: ");
-        Serial.println(ls);
-        Serial.print("right wheel RPM set to: ");
-        Serial.println(rs);
+        AGV_DEBUG_PRINT(F("left wheel RPM set to: "));
+        AGV_DEBUG_PRINTLN(ls);
+        AGV_DEBUG_PRINT(F("right wheel RPM set to: "));
+        AGV_DEBUG_PRINTLN(rs);
     }
 
     void emergencystop(){
         drivemode = -1;
         leftwheel.stop();
         rightwheel.stop();
-        Serial.println(F("EMERGENCYSTOPPED"));
+        AGV_DEBUG_PRINTLN(F("EMERGENCYSTOPPED"));
     }
 
     void drive(){
@@ -222,8 +223,50 @@ namespace IOstream{
         }
     }
     void reportDriveMode(){
-        Serial.print(F("DRIVEMODE:"));
-        Serial.println(DrivePolicy::drivemode);
+        AGV_DEBUG_PRINT(F("DRIVEMODE:"));
+        AGV_DEBUG_PRINTLN(DrivePolicy::drivemode);
+    }
+}
+
+namespace AGVProtocol {
+    const uint32_t telemetryPeriodMs = 200;
+    uint32_t lastTelemetryMillis = 0;
+    bool previousObstacle = false;
+
+    void sendFrame(const __FlashStringHelper* event){
+        const uint8_t lineState = DrivePolicy::lastIOL;
+
+        Serial.print(F("AGV,"));
+        Serial.print(event);
+        Serial.print(',');
+        Serial.print(DrivePolicy::range);
+        Serial.print(',');
+        Serial.print((lineState >> 2) & 0x01);
+        Serial.print(',');
+        Serial.print((lineState >> 1) & 0x01);
+        Serial.print(',');
+        Serial.print(lineState & 0x01);
+        Serial.print(',');
+        Serial.print(leftwheel.getCurrentDuty());
+        Serial.print(',');
+        Serial.println(rightwheel.getCurrentDuty());
+    }
+
+    void update(){
+        const bool enteredObstacle =
+            DrivePolicy::onobstacle && !previousObstacle;
+        previousObstacle = DrivePolicy::onobstacle;
+
+        if(enteredObstacle){
+            sendFrame(F("OBSTACLE"));
+            lastTelemetryMillis = Update::cmillis;
+            return;
+        }
+
+        if(Update::cmillis-lastTelemetryMillis>=telemetryPeriodMs){
+            sendFrame(F("TELEMETRY"));
+            lastTelemetryMillis = Update::cmillis;
+        }
     }
 }
 
@@ -254,6 +297,7 @@ namespace Update {
     }
 
     void monitor(){
+#if ENABLE_AGV_DEBUG
         Serial.println(F("=========="));
         Serial.print(F("Drivemode: "));
         Serial.println(DrivePolicy::drivemode);
@@ -303,6 +347,7 @@ namespace Update {
                 Serial.println(F("Can't find the policy"));
                 break;
         }
+#endif
     }
 
     int updateCalc(){
@@ -381,7 +426,7 @@ namespace Update {
 
 void setup() {
     Serial.begin(115200);
-    Serial.println(F("Arduino Booting..."));
+    AGV_DEBUG_PRINTLN(F("Arduino Booting..."));
     leftwheel.setup();
     rightwheel.setup();
     attachInterrupt(digitalPinToInterrupt(leftwheel.getEncoder()), ISRencoder_left, FALLING);
@@ -393,7 +438,7 @@ void setup() {
     HCSR04::setup();
     LineSensor::setupSensors();
     DrivePolicy::drivemode = 1;
-    Serial.println(F("Arduino ONLINE"));
+    AGV_DEBUG_PRINTLN(F("Arduino ONLINE"));
 }
 
 void loop() {
@@ -404,6 +449,7 @@ void loop() {
     Update::updateFast();
     Update::updateCon();
     Update::updateFine();
+    AGVProtocol::update();
     Update::updateLoop();
     Update::updateInstant();
     Update::end();

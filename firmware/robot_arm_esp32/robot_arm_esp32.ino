@@ -3,7 +3,7 @@
 #include <WiFi.h>
 
 // ESP32 DevKit V1 (ESP-WROOM-32) Robot Arm Servo signal pins.
-// GPIO 16/17 remain reserved for the later Uno UART2 connection.
+// GPIO 16/17 are dedicated to the Uno UART2 connection.
 constexpr int ROBOT_ARM_BASE_PIN = 25;
 constexpr int ROBOT_ARM_SHOULDER_PIN = 26;
 constexpr int ROBOT_ARM_UPPER_PIN = 27;
@@ -28,9 +28,13 @@ constexpr char kPassword[] = "robot1234";
 constexpr uint16_t kPort = 5000;
 constexpr int kHomeAngle = 90;
 constexpr size_t kCommandBufferSize = 64;
+constexpr uint32_t kAgvBaud = 115200;
+constexpr int kAgvRxPin = 16;
+constexpr int kAgvTxPin = 17;
 }  // namespace Config
 
 WiFiServer server(Config::kPort);
+HardwareSerial& agvUart = Serial2;
 
 Servo baseServo;
 Servo shoulderServo;
@@ -124,6 +128,25 @@ void consumeClientBytes(WiFiClient& client) {
     }
 }
 
+void relayAgvBytes(WiFiClient& client) {
+    // Uno owns the AGV line protocol. ESP32 relays UART2 bytes unchanged so
+    // newline framing is preserved for the Backend's multiplexed receiver.
+    while (agvUart.available() > 0) {
+        const int value = agvUart.read();
+        if (value >= 0) {
+            client.write(static_cast<uint8_t>(value));
+        }
+    }
+}
+
+void discardAgvBytes() {
+    // Telemetry has no consumer while Backend is disconnected. Drop stale
+    // bytes instead of replaying an old partial frame on the next connection.
+    while (agvUart.available() > 0) {
+        agvUart.read();
+    }
+}
+
 void attachServosAtHome() {
     baseServo.attach(ROBOT_ARM_BASE_PIN);
     shoulderServo.attach(ROBOT_ARM_SHOULDER_PIN);
@@ -142,6 +165,12 @@ void attachServosAtHome() {
 
 void setup() {
     Serial.begin(115200);
+    agvUart.begin(
+        Config::kAgvBaud,
+        SERIAL_8N1,
+        Config::kAgvRxPin,
+        Config::kAgvTxPin
+    );
     attachServosAtHome();
 
     if (!WiFi.softAP(Config::kSsid, Config::kPassword)) {
@@ -160,6 +189,7 @@ void setup() {
 void loop() {
     WiFiClient client = server.available();
     if (!client) {
+        discardAgvBytes();
         delay(1);
         return;
     }
@@ -170,6 +200,7 @@ void loop() {
 
     while (client.connected()) {
         consumeClientBytes(client);
+        relayAgvBytes(client);
         delay(1);
     }
 
