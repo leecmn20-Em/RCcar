@@ -2,26 +2,12 @@
 #include <Servo.h>
 #include <WiFi.h>
 
-// Set these four values from the actual ESP32 wiring before compiling.
-// The historical prototype used 3/5/9/6, but 6 and 9 are commonly connected
-// to flash on classic ESP32 modules and are deliberately not used as defaults.
-#ifndef ROBOT_ARM_BASE_PIN
-#define ROBOT_ARM_BASE_PIN -1
-#endif
-#ifndef ROBOT_ARM_SHOULDER_PIN
-#define ROBOT_ARM_SHOULDER_PIN -1
-#endif
-#ifndef ROBOT_ARM_UPPER_PIN
-#define ROBOT_ARM_UPPER_PIN -1
-#endif
-#ifndef ROBOT_ARM_FOREARM_PIN
-#define ROBOT_ARM_FOREARM_PIN -1
-#endif
-
-#if ROBOT_ARM_BASE_PIN < 0 || ROBOT_ARM_SHOULDER_PIN < 0 || \
-    ROBOT_ARM_UPPER_PIN < 0 || ROBOT_ARM_FOREARM_PIN < 0
-#error "Set all ROBOT_ARM_*_PIN values from the actual ESP32 wiring before compiling"
-#endif
+// ESP32 DevKit V1 (ESP-WROOM-32) Robot Arm Servo signal pins.
+// GPIO 16/17 remain reserved for the later Uno UART2 connection.
+constexpr int ROBOT_ARM_BASE_PIN = 25;
+constexpr int ROBOT_ARM_SHOULDER_PIN = 26;
+constexpr int ROBOT_ARM_UPPER_PIN = 27;
+constexpr int ROBOT_ARM_FOREARM_PIN = 32;
 
 static_assert(ROBOT_ARM_BASE_PIN != ROBOT_ARM_SHOULDER_PIN,
               "Servo pins must be unique");

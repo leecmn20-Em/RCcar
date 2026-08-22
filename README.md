@@ -70,7 +70,18 @@ Git 이력의 `0c65aea` 커밋에서 삭제 전 `ino/arms.ino`를 찾아 `firmwa
 - 네 Servo target 적용 후 명령당 정확히 한 번 `ARM_ACK,OK`
 - 잘못된 형식, 범위 또는 과대 frame에는 `ARM_ACK,ERROR`
 
-안전을 위해 통합 firmware의 네 `ROBOT_ARM_*_PIN`은 `-1`로 두었고 핀 확정 전에는 compile이 중단됩니다. 실제 배선과 Servo 별 안전 각도 범위를 확인한 후 설정해야 합니다. `softAP_tcp.cpp`는 Servo/PWM 제어가 없는 네트워크 참고 코드로 유지합니다.
+ESP32 DevKit V1(ESP-WROOM-32) 기준 핀 계획은 다음과 같이 확정했습니다. GPIO 16/17은 3차 Uno UART2 연결을 위해 Servo에 사용하지 않습니다.
+
+| 역할 | ESP32 GPIO |
+| --- | ---: |
+| Base Servo signal | 25 |
+| Shoulder Servo signal | 26 |
+| Upper Servo signal | 27 |
+| Forearm Servo signal | 32 |
+| Uno → ESP32 UART2 RX (예약) | 16 |
+| ESP32 → Uno UART2 TX (예약) | 17 |
+
+Servo 네 개는 ESP32 보드의 USB/5V 핀에서 직접 급전하지 않고 별도 5V 전원에 연결합니다. 권장 용량은 최소 4A, 가능하면 5A이며, 외부 전원 GND와 ESP32 GND는 반드시 공통으로 연결합니다. `softAP_tcp.cpp`는 Servo/PWM 제어가 없는 네트워크 참고 코드로 유지합니다.
 
 ## 설치
 
@@ -227,14 +238,14 @@ python -m unittest discover -s tests -v
 
 자동 테스트는 실제 Servo 구동을 검증할 수 없습니다. 3차 작업 전에 다음을 장비에서 확인해야 합니다.
 
-1. 실제 보드 모델, 네 Servo signal pin, 별도 Servo 전원과 공통 GND 확인
-2. `firmware/robot_arm_esp32/robot_arm_esp32.ino`의 네 pin 설정
+1. ESP32 DevKit V1의 Servo signal 배선이 GPIO 25/26/27/32 순서와 일치하는지 확인
+2. 별도 5V 4A 이상 Servo 전원과 ESP32의 공통 GND 확인
 3. 90도 Home 위치가 기구적으로 안전한 상태에서 ESP32 flash
 4. Serial boot log에서 SoftAP IP와 TCP port 확인
 5. PC를 ESP32 SoftAP에 연결
 6. Backend와 GUI 실행 후 GUI에서 ESP32 연결
-7. 안전한 4축 각도 한 세트 전송
-8. 실제 네 Servo의 방향과 움직임 확인
+7. Home `90,90,90,90`을 확인한 뒤 각 축을 하나씩만 `80`과 `100`으로 움직임
+8. GPIO/관절 순서, 회전 방향, 기구 끝단 간섭을 확인하고 특히 Shoulder 부하를 주의
 9. Backend/GUI에서 `ARM_ACK,OK` 성공 확인
 10. Mission Start 후 Arm 명령을 실행하고 `arm_log`에 같은 Mission ID와 `ack=1` row가 생성되는지 확인
 
@@ -254,4 +265,4 @@ Backend Receiver → Parser → agv_log / GUI agv_event
 
 이번 단계에서는 Uno firmware, UART 수신, IR/초음파 값 생성, AGV motor 제어 및 GUI dashboard를 구현하지 않았습니다.
 
-Uno UART protocol의 권장 기준은 Uno가 완성된 `AGV,...\n` frame을 만들고 ESP32가 parsing 없이 TCP client로 그대로 relay하는 방식입니다. 3차 구현 전에 UART baud rate, 배선, 공통 GND 및 Uno TX에서 ESP32 RX로 들어가는 신호 전압 조건을 실제 보드 구성에 맞게 확정해야 합니다.
+Uno UART protocol의 권장 기준은 Uno가 완성된 `AGV,...\n` frame을 만들고 ESP32가 parsing 없이 TCP client로 그대로 relay하는 방식입니다. UART2는 ESP32 GPIO 16(RX2)과 GPIO 17(TX2)을 사용하도록 예약했습니다. Uno D1 TX의 5V logic은 ESP32 GPIO 16에 직접 연결하지 않고 전압 분배기 또는 level shifter를 거쳐야 합니다. 반대 방향은 ESP32 GPIO 17 TX2에서 Uno D0 RX로 연결하며, 공통 GND와 baud rate는 3차 구현 전에 확정합니다.
