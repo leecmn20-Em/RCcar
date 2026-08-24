@@ -4,10 +4,10 @@
 
 // ESP32 DevKit V1 (ESP-WROOM-32) Robot Arm Servo signal pins.
 // GPIO 16/17 are dedicated to the Uno UART2 connection.
-constexpr int ROBOT_ARM_BASE_PIN = 25;
-constexpr int ROBOT_ARM_SHOULDER_PIN = 26;
-constexpr int ROBOT_ARM_UPPER_PIN = 27;
-constexpr int ROBOT_ARM_FOREARM_PIN = 32;
+constexpr int ROBOT_ARM_BASE_PIN = 18;
+constexpr int ROBOT_ARM_SHOULDER_PIN = 19;
+constexpr int ROBOT_ARM_UPPER_PIN = 21;
+constexpr int ROBOT_ARM_FOREARM_PIN = 22;
 
 static_assert(ROBOT_ARM_BASE_PIN != ROBOT_ARM_SHOULDER_PIN,
               "Servo pins must be unique");

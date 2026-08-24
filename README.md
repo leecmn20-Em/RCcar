@@ -78,10 +78,10 @@ ESP32 DevKit V1(ESP-WROOM-32) 기준 핀 계획은 다음과 같습니다. GPIO 
 
 | 역할 | ESP32 GPIO |
 | --- | ---: |
-| Base Servo signal | 25 |
-| Shoulder Servo signal | 26 |
-| Upper Servo signal | 27 |
-| Forearm Servo signal | 32 |
+| Base Servo signal | 18 |
+| Shoulder Servo signal | 19 |
+| Upper Servo signal | 21 |
+| Forearm Servo signal | 22 |
 | Uno → ESP32 UART2 RX | 16 |
 | ESP32 → Uno UART2 TX | 17 |
 
