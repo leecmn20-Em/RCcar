@@ -200,6 +200,53 @@ namespace DrivePolicy {
 }
 
 namespace IOstream{
+    constexpr float STOP_ENTER_RPM = 3.0f;
+    constexpr float STOP_EXIT_RPM = 5.0f;
+    constexpr uint32_t STOP_ENTER_CONFIRM_MS = 400;
+    constexpr uint32_t STOP_EXIT_CONFIRM_MS = 400;
+
+    bool stopCandidateActive = false;
+    bool moveCandidateActive = false;
+    bool stopConfirmed = false;
+    uint32_t stopCandidateStartedMs = 0;
+    uint32_t moveCandidateStartedMs = 0;
+
+    bool updateMotionStopState(float leftRpm, float rightRpm, uint32_t nowMs){
+        if(stopConfirmed){
+            if(leftRpm>=STOP_EXIT_RPM || rightRpm>=STOP_EXIT_RPM){
+                if(!moveCandidateActive){
+                    moveCandidateActive = true;
+                    moveCandidateStartedMs = nowMs;
+                }
+                else if(nowMs-moveCandidateStartedMs>=STOP_EXIT_CONFIRM_MS){
+                    stopConfirmed = false;
+                    moveCandidateActive = false;
+                }
+            }
+            else{
+                moveCandidateActive = false;
+            }
+            return stopConfirmed;
+        }
+
+        moveCandidateActive = false;
+        if(leftRpm<=STOP_ENTER_RPM && rightRpm<=STOP_ENTER_RPM){
+            if(!stopCandidateActive){
+                stopCandidateActive = true;
+                stopCandidateStartedMs = nowMs;
+            }
+            else if(nowMs-stopCandidateStartedMs>=STOP_ENTER_CONFIRM_MS){
+                stopConfirmed = true;
+                stopCandidateActive = false;
+            }
+        }
+        else{
+            stopCandidateActive = false;
+        }
+
+        return stopConfirmed;
+    }
+
     void doSerialCommand(){
         char* command[COMMAND_MAXLENGTH] = {};
         if(!getSerialCommand(command)){
@@ -233,7 +280,14 @@ namespace IOstream{
             DrivePolicy::onobstacle && !previousObstacle;
         previousObstacle = DrivePolicy::onobstacle;
 
-        const char* event = enteredObstacle ? "OBSTACLE" : "TELEMETRY";
+        const float leftRpm = leftwheel.getEstimatedRPM();
+        const float rightRpm = rightwheel.getEstimatedRPM();
+        const bool stopped =
+            updateMotionStopState(leftRpm, rightRpm, Update::cmillis);
+
+        const char* event = enteredObstacle
+            ? "OBSTACLE"
+            : stopped ? "STOP" : "TRACING";
         Serial.print(F("AGV,"));
         Serial.print(event);
         Serial.print(',');
@@ -245,9 +299,9 @@ namespace IOstream{
         Serial.print(',');
         Serial.print(DrivePolicy::lastIOL & 0x01);
         Serial.print(',');
-        Serial.print(leftwheel.getEstimatedRPM(), 2);
+        Serial.print(leftRpm, 2);
         Serial.print(',');
-        Serial.println(rightwheel.getEstimatedRPM(), 2);
+        Serial.println(rightRpm, 2);
     }
 }
 

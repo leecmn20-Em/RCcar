@@ -54,7 +54,7 @@ firmware/
   archive/arms_20260819_original.ino  Git 이력에서 복원한 원본 보존본
   robot_arm_esp32/robot_arm_esp32.ino Servo + SoftAP/TCP + AGV UART relay
 ino/
-  ino.ino             기존 AGV 제어 + 200ms telemetry/obstacle protocol
+  ino.ino             기존 AGV 제어 + 200ms tracing/obstacle/stop protocol
   modules/DebugLog.h  Uno UART debug 출력의 compile-time switch
 robotArm_tcp.py        기존 실행명을 보존한 GUI 호환 launcher
 softAP_tcp.cpp         기존 SoftAP 흐름 + typed ARM ACK 응답
@@ -179,17 +179,20 @@ ESP32 → Backend protocol:
 ```text
 ARM_ACK,OK
 ARM_ACK,ERROR
-AGV,TELEMETRY,450,0,1,0,95.25,97.50
+AGV,TRACING,450,0,1,0,95.25,97.50
 AGV,OBSTACLE,110,0,1,0,0.00,0.00
+AGV,STOP,110,0,1,0,2.10,1.85
 ```
 
-모든 frame은 `\n`으로 끝납니다. AGV 필드는 `event,distance_mm,left_ir,center_ir,right_ir,left_rpm,right_rpm` 순서이며 마지막 두 값은 실수형 RPM입니다. Uno는 `AGV,TELEMETRY`를 200ms 주기(5Hz)로 보내고 초음파 거리가 120mm 미만으로 처음 바뀌는 순간 `AGV,OBSTACLE`을 한 번 보냅니다. 장애물이 유지되는 동안 같은 `OBSTACLE`을 반복하지 않으며 주기 telemetry는 계속됩니다. PWM duty는 더 이상 wire protocol로 전송하거나 신규 DB row에 저장하지 않습니다.
+모든 frame은 `\n`으로 끝납니다. AGV 필드는 `event,distance_mm,left_ir,center_ir,right_ir,left_rpm,right_rpm` 순서이며 마지막 두 값은 실수형 measured RPM입니다. Uno는 200ms 주기(5Hz)로 AGV frame을 보냅니다. 초음파 장애물 상태가 `false → true`로 바뀐 첫 frame은 다른 상태보다 우선하여 `AGV,OBSTACLE`을 한 번 보냅니다. 이후 양쪽 measured RPM이 모두 `3.0` 이하인 상태가 400ms 연속 유지되면 장애물 여부와 관계없이 정지를 확정하고, 확정 정지 중에는 매 주기 `AGV,STOP`을 계속 보냅니다. 정지 해제도 즉시 처리하지 않고, 한쪽 RPM이라도 `5.0` 이상인 상태가 400ms 연속 유지되어야 moving 상태로 복귀합니다. 정지 중 한 frame에서만 `30 RPM`처럼 값이 튀면 해당 raw RPM은 frame과 DB에 그대로 남지만 event는 `STOP`을 유지하며, 다음 frame에서 해제 조건이 끊기면 확인 시간을 처음부터 다시 계산합니다. 두 임계값 사이에서는 직전 상태를 유지하여 측정값 경계에서 event가 반복 전환되는 것을 막으며, 위 조건에 해당하지 않는 정상 주행 frame은 `AGV,TRACING`입니다. PWM duty는 더 이상 wire protocol로 전송하거나 DB에 저장하지 않습니다.
 
-마지막 두 필드의 개수는 이전 protocol과 같아서 구 firmware의 duty 값도 숫자로 parsing될 수 있지만, 그 경우 Backend가 duty를 RPM으로 잘못 해석합니다. 따라서 RPM protocol을 사용하는 Uno firmware와 Backend는 반드시 함께 배포해야 합니다.
+현재 Wheel RPM 추정기는 마지막 encoder pulse를 최대 1초 동안 유지합니다. 따라서 물리적으로 멈춘 시점부터 `STOP`이 처음 전송되기까지 실제 장비에서는 약 1.4~1.6초 지연될 수 있으며, 이 값은 실장 테스트에서 encoder 특성에 맞춰 조정해야 합니다.
+
+구형 Uno firmware도 마지막 두 숫자 필드를 전송하지만 그 값은 RPM이 아니라 duty입니다. Backend는 이를 구분할 수 없으므로 RPM protocol이 적용된 최신 Uno firmware와 함께 사용해야 합니다.
 
 Uno의 `Serial`은 기본적으로 기계 protocol 전용입니다. `ENABLE_AGV_DEBUG`의 기본값은 `0`이며, 사람이 보는 boot/IR/motor log는 이 값이 활성화된 개발 build에서만 출력됩니다. 운영 중 debug를 켜면 ESP32가 해당 문자열도 그대로 relay하므로 Backend diagnostic이 발생할 수 있습니다.
 
-Backend parser는 기존 `AGV,STOP`과 `AGV,DEST`도 계속 인식하지만, 현재 Uno firmware는 정지 원인 및 목적지 판정 조건이 확정되지 않았으므로 두 event를 생성하지 않습니다. 이전 firmware의 `OK\n`도 과도기 호환 ACK로 인정하지만 새 firmware는 `ARM_ACK,OK\n`을 반환합니다.
+Backend parser는 `AGV,TRACING`, `AGV,OBSTACLE`, `AGV,STOP`, `AGV,DEST`를 인식합니다. 현재 Uno firmware는 measured RPM 기반으로 `STOP`을 생성하지만, 실제 목적지 판정 조건이 아직 없으므로 `DEST`는 생성하지 않습니다. 이전 firmware의 `OK\n`도 과도기 호환 ACK로 인정하지만 새 firmware는 `ARM_ACK,OK\n`을 반환합니다.
 
 Wire protocol에 request ID가 없으므로 Arm 명령은 한 번에 하나만 pending 상태가 됩니다. ACK timeout이면 해당 TCP 연결을 닫습니다. 따라서 이전 연결의 늦은 ACK가 다음 명령을 완료할 수 없으며, ESP32 재연결 후 새 명령을 보내야 합니다.
 
@@ -217,11 +220,10 @@ mission(mission_id PK, start_time, end_time, result)
 arm_log(id PK, mission_id FK, timestamp, command,
         base, shoulder, upper, forearm, ack)
 agv_log(id PK, mission_id FK, timestamp, event, distance,
-        left_ir, center_ir, right_ir,
-        motor_left, motor_right, left_rpm, right_rpm)
+        left_ir, center_ir, right_ir, left_rpm, right_rpm)
 ```
 
-`motor_left`, `motor_right`는 기존 duty 기록을 보존하기 위한 legacy 컬럼입니다. 기존 DB에는 시작 시 `left_rpm`, `right_rpm` 컬럼을 비파괴 방식으로 추가하며, 신규 AGV row는 RPM 컬럼만 기록하고 legacy motor 컬럼은 `NULL`로 둡니다. `arm_log(mission_id, timestamp)`와 `agv_log(mission_id, timestamp)` index도 생성됩니다.
+`agv_log`는 센서 값과 실측 RPM만 저장하는 RPM-only 구조입니다. 기존 DB에 duty 컬럼이 있으면 Backend 시작 시 `agv_log`를 새 구조로 migration합니다. 이 과정에서 mission ID, 시각, event, 거리, IR 센서, RPM 값은 보존하고 duty 컬럼은 제거합니다. `arm_log(mission_id, timestamp)`와 `agv_log(mission_id, timestamp)` index도 생성됩니다.
 
 ## 장비 없이 실행/테스트
 
@@ -272,8 +274,8 @@ ESP32
 Backend Receiver → Parser → agv_log / GUI agv_event
 ```
 
-Uno는 `DrivePolicy::range`의 mm 거리, Left/Center/Right IR, 두 Wheel의 `getEstimatedRPM()`을 사용합니다. RPM은 `Serial.print(value, 2)`로 소수점 둘째 자리까지 전송합니다. 센서 5ms, motor 10ms, 제어 20ms 주기는 유지하고 DB용 telemetry만 200ms 주기로 추가했습니다. `false → true` 장애물 transition만 `OBSTACLE` event로 내보냅니다.
+Uno는 `DrivePolicy::range`의 mm 거리, Left/Center/Right IR, 두 Wheel의 `getEstimatedRPM()`을 사용합니다. RPM은 `Serial.print(value, 2)`로 소수점 둘째 자리까지 전송합니다. 센서 5ms, motor 10ms, 제어 20ms 주기는 유지하고 DB용 AGV frame만 200ms 주기로 추가했습니다. Event 우선순위는 장애물 `false → true` transition의 1회 `OBSTACLE`, 확정 정지 상태의 `STOP`, 그 외 정상 주행 상태의 `TRACING` 순서입니다. 양쪽 measured RPM이 모두 `3.0` 이하인 상태가 400ms 연속 유지되면 정지를 확정합니다. 정지 후에는 한쪽 RPM이라도 `5.0` 이상인 상태가 400ms 연속 유지되어야 moving으로 복귀하므로, 엔코더의 단발성 RPM spike는 `STOP`을 해제하지 않습니다. 확정 정지 중에는 장애물 여부와 관계없이 매 200ms마다 `STOP`을 전송합니다.
 
 UART2는 ESP32 GPIO 16(RX2)과 GPIO 17(TX2), 115200 bps를 사용합니다. Uno D1 TX의 5V logic은 ESP32 GPIO 16에 직접 연결하지 않고 전압 분배기 또는 level shifter를 거쳐야 합니다. 반대 방향은 ESP32 GPIO 17 TX2에서 Uno D0 RX로 연결하며 두 보드의 GND를 공통으로 연결합니다. 현재 ESP32 → Uno 명령은 구현하지 않았습니다.
 
-남은 3차 작업은 실제 장비에서 UART/TCP/DB 연속 경로를 검증하고 GUI dashboard를 구현하는 것입니다. `STOP`은 명시적 정지 조건을, `DEST`는 실제 목적지 판정 조건을 정한 뒤 추가합니다.
+남은 3차 작업은 실제 장비에서 UART/TCP/DB 연속 경로와 RPM 기반 `STOP` 판정을 검증하고 GUI dashboard를 구현하는 것입니다. `DEST`는 실제 목적지 판정 조건을 정한 뒤 추가합니다.

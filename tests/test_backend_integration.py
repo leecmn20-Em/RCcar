@@ -126,7 +126,7 @@ class BackendIntegrationTests(unittest.TestCase):
         self.fake_esp32.set_command_scripts(
             [
                 [
-                    "AGV,TELEMETRY,54.2,0,1,0,95.25,97.5",
+                    "AGV,TRACING,54.2,0,1,0,95.25,97.5",
                     (0.5, "ARM_ACK,OK"),
                 ]
             ]
@@ -141,7 +141,7 @@ class BackendIntegrationTests(unittest.TestCase):
                 "request_id": "agv-before",
             }
         )
-        agv = self._receive_agv("TELEMETRY", 54.2, timeout=0.35)
+        agv = self._receive_agv("TRACING", 54.2, timeout=0.35)
         agv_elapsed = time.monotonic() - started_at
         result = self._receive_type("arm_result", "agv-before", timeout=1.0)
 
@@ -205,17 +205,17 @@ class BackendIntegrationTests(unittest.TestCase):
         self.fake_esp32.set_command_scripts(
             [
                 [
-                    "AGV,TELEMETRY,54.2,0,1,0,95.25,97.5",
-                    "AGV,TELEMETRY,53.0,0,1,0,94.75,96.25",
+                    "AGV,TRACING,54.2,0,1,0,95.25,97.5",
+                    "AGV,TRACING,53.0,0,1,0,94.75,96.25",
                     "ARM_ACK,OK",
-                    "AGV,TELEMETRY,51.7,0,1,0,93.5,95.0",
+                    "AGV,TRACING,51.7,0,1,0,93.5,95.0",
                 ]
             ]
         )
         self._connect_esp32()
         result = self._send_arm("sandwich")
         distances = [
-            self._receive_agv("TELEMETRY", distance)["distance"]
+            self._receive_agv("TRACING", distance)["distance"]
             for distance in (54.2, 53.0, 51.7)
         ]
 
@@ -286,7 +286,7 @@ class BackendIntegrationTests(unittest.TestCase):
             [
                 ["AGV,STOP,20.0,0,1,0,0,0", "ARM_ACK,OK"],
                 [
-                    "AGV,TELEMETRY,54.2,0,1,0,95.25,97.5",
+                    "AGV,TRACING,54.2,0,1,0,95.25,97.5",
                     "AGV,OBSTACLE,14.1,0,1,0,0,0",
                     "ARM_ACK,OK",
                 ],
@@ -304,11 +304,11 @@ class BackendIntegrationTests(unittest.TestCase):
         mission_id = started["mission_id"]
 
         arm = self._send_arm("mission-arm", command="MOVE")
-        telemetry = self._receive_agv("TELEMETRY", 54.2)
+        tracing = self._receive_agv("TRACING", 54.2)
         obstacle = self._receive_agv("OBSTACLE", 14.1)
         self.assertTrue(arm["ack"])
         self.assertTrue(arm["logged"])
-        self.assertTrue(telemetry["logged"])
+        self.assertTrue(tracing["logged"])
         self.assertTrue(obstacle["logged"])
 
         self._send(
@@ -326,16 +326,78 @@ class BackendIntegrationTests(unittest.TestCase):
         self.assertEqual(mission["result"], "SUCCESS")
         self.assertEqual(len(arm_logs), 1)
         self.assertEqual(arm_logs[0]["ack"], 1)
-        self.assertEqual([row["event"] for row in agv_logs], ["TELEMETRY", "OBSTACLE"])
+        self.assertEqual([row["event"] for row in agv_logs], ["TRACING", "OBSTACLE"])
         self.assertEqual(
             [(row["left_rpm"], row["right_rpm"]) for row in agv_logs],
             [(95.25, 97.5), (0.0, 0.0)],
         )
-        self.assertTrue(
-            all(
-                row["motor_left"] is None and row["motor_right"] is None
-                for row in agv_logs
-            )
+        self.assertTrue(all("motor_left" not in row.keys() for row in agv_logs))
+        self.assertTrue(all("motor_right" not in row.keys() for row in agv_logs))
+
+    def test_mission_preserves_debounced_stop_and_resume_event_sequence(self):
+        self.fake_esp32.set_command_scripts(
+            [
+                [
+                    "AGV,OBSTACLE,110.0,0,1,0,25.0,24.0",
+                    "AGV,TRACING,108.0,0,1,0,2.8,2.7",
+                    "AGV,TRACING,107.0,0,1,0,2.2,2.1",
+                    "AGV,STOP,106.0,0,1,0,0.0,0.0",
+                    "AGV,STOP,106.0,0,1,0,30.0,0.0",
+                    "AGV,STOP,106.0,0,1,0,0.0,0.0",
+                    "AGV,STOP,150.0,0,1,0,5.25,0.0",
+                    "AGV,STOP,152.0,0,1,0,5.5,0.0",
+                    "AGV,TRACING,154.0,0,1,0,6.0,0.0",
+                    "ARM_ACK,OK",
+                ]
+            ]
+        )
+        self._connect_esp32()
+        self._send({"type": "mission_start", "request_id": "state-mission"})
+        mission_id = self._receive_type(
+            "mission_started", "state-mission"
+        )["mission_id"]
+
+        result = self._send_arm("state-sequence")
+        agv_events = [self._receive_type("agv_event") for _ in range(9)]
+
+        self.assertTrue(result["ack"])
+        self.assertEqual(
+            [event["event"] for event in agv_events],
+            [
+                "OBSTACLE",
+                "TRACING",
+                "TRACING",
+                "STOP",
+                "STOP",
+                "STOP",
+                "STOP",
+                "STOP",
+                "TRACING",
+            ],
+        )
+        self.assertEqual(
+            [(event["left_rpm"], event["right_rpm"]) for event in agv_events],
+            [
+                (25.0, 24.0),
+                (2.8, 2.7),
+                (2.2, 2.1),
+                (0.0, 0.0),
+                (30.0, 0.0),
+                (0.0, 0.0),
+                (5.25, 0.0),
+                (5.5, 0.0),
+                (6.0, 0.0),
+            ],
+        )
+
+        agv_logs = self.backend.database.get_agv_logs(mission_id)
+        self.assertEqual(
+            [row["event"] for row in agv_logs],
+            [event["event"] for event in agv_events],
+        )
+        self.assertEqual(
+            [(row["left_rpm"], row["right_rpm"]) for row in agv_logs],
+            [(event["left_rpm"], event["right_rpm"]) for event in agv_events],
         )
 
     def test_bad_json_and_invalid_angles_return_errors(self):

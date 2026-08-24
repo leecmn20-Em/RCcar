@@ -39,9 +39,6 @@ CREATE TABLE IF NOT EXISTS agv_log (
     left_ir INTEGER,
     center_ir INTEGER,
     right_ir INTEGER,
-    -- Legacy duty columns are retained so existing mission data is preserved.
-    motor_left INTEGER,
-    motor_right INTEGER,
     left_rpm REAL,
     right_rpm REAL,
     FOREIGN KEY(mission_id) REFERENCES mission(mission_id)
@@ -65,14 +62,13 @@ class DatabaseManager:
             str(self.path), check_same_thread=False, timeout=5.0
         )
         self._connection.row_factory = sqlite3.Row
-        with self._lock:
+        with self._lock, self._connection:
             self._connection.execute("PRAGMA foreign_keys = ON")
             self._connection.executescript(SCHEMA_SQL)
-            self._ensure_agv_rpm_columns()
-            self._connection.commit()
+            self._migrate_agv_log_to_rpm_only()
 
-    def _ensure_agv_rpm_columns(self) -> None:
-        """Add RPM columns to legacy databases without rewriting duty history."""
+    def _migrate_agv_log_to_rpm_only(self) -> None:
+        """Add RPM fields when needed and remove obsolete duty columns."""
         columns = {
             str(row["name"])
             for row in self._connection.execute("PRAGMA table_info(agv_log)")
@@ -82,6 +78,14 @@ class DatabaseManager:
                 self._connection.execute(
                     f"ALTER TABLE agv_log ADD COLUMN {column} REAL"
                 )
+                columns.add(column)
+
+        for column in ("motor_left", "motor_right"):
+            if column in columns:
+                self._connection.execute(
+                    f"ALTER TABLE agv_log DROP COLUMN {column}"
+                )
+                columns.remove(column)
 
     @staticmethod
     def timestamp() -> str:

@@ -24,14 +24,14 @@ MODE_SCRIPTS: dict[str, list[ScheduledFrame]] = {
     "ack": ["ARM_ACK,OK"],
     "legacy": ["OK"],
     "agv-before-ack": [
-        "AGV,TELEMETRY,54.2,0,1,0,95.25,97.50",
+        "AGV,TRACING,54.2,0,1,0,95.25,97.50",
         "ARM_ACK,OK",
     ],
     "sandwich": [
-        "AGV,TELEMETRY,54.2,0,1,0,95.25,97.50",
-        "AGV,TELEMETRY,53.0,0,1,0,96.10,96.85",
+        "AGV,TRACING,54.2,0,1,0,95.25,97.50",
+        "AGV,TRACING,53.0,0,1,0,96.10,96.85",
         "ARM_ACK,OK",
-        "AGV,TELEMETRY,51.7,0,1,0,94.75,98.20",
+        "AGV,TRACING,51.7,0,1,0,94.75,98.20",
     ],
     "error": ["ARM_ACK,ERROR"],
     "timeout": [],

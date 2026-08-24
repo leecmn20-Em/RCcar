@@ -28,13 +28,13 @@ class ParserTests(unittest.TestCase):
             {"system": "ARM", "type": "ACK", "ok": False},
         )
 
-    def test_agv_telemetry(self):
-        parsed = parse_esp32_line("AGV,TELEMETRY,54.2,0,1,0,95.25,97.5")
+    def test_agv_tracing(self):
+        parsed = parse_esp32_line("AGV,TRACING,54.2,0,1,0,95.25,97.5")
         self.assertEqual(
             parsed,
             {
                 "system": "AGV",
-                "event": "TELEMETRY",
+                "event": "TRACING",
                 "distance": 54.2,
                 "left_ir": 0,
                 "center_ir": 1,
@@ -46,7 +46,7 @@ class ParserTests(unittest.TestCase):
 
     def test_agv_wrong_field_count(self):
         with self.assertRaises(ProtocolError):
-            parse_esp32_line("AGV,TELEMETRY,54.2,0,1")
+            parse_esp32_line("AGV,TRACING,54.2,0,1")
 
     def test_agv_obstacle_and_stop(self):
         for event in ("OBSTACLE", "STOP"):
@@ -77,7 +77,7 @@ class ParserTests(unittest.TestCase):
 
     def test_agv_numeric_conversion_error(self):
         with self.assertRaisesRegex(ProtocolError, "numeric"):
-            parse_esp32_line("AGV,TELEMETRY,far,0,1,0,95.25,97.5")
+            parse_esp32_line("AGV,TRACING,far,0,1,0,95.25,97.5")
 
     def test_agv_rpm_must_be_finite_and_nonnegative(self):
         invalid_pairs = (
@@ -91,7 +91,7 @@ class ParserTests(unittest.TestCase):
             with self.subTest(left_rpm=left_rpm, right_rpm=right_rpm):
                 with self.assertRaises(ProtocolError):
                     parse_esp32_line(
-                        "AGV,TELEMETRY,54.2,0,1,0,"
+                        "AGV,TRACING,54.2,0,1,0,"
                         f"{left_rpm},{right_rpm}"
                     )
 
@@ -108,6 +108,10 @@ class ParserTests(unittest.TestCase):
     def test_unknown_agv_event(self):
         with self.assertRaises(ProtocolError):
             parse_esp32_line("AGV,UNKNOWN,1,0,0,0,0,0")
+
+    def test_legacy_agv_telemetry_event_is_rejected(self):
+        with self.assertRaisesRegex(ProtocolError, "unsupported AGV event"):
+            parse_esp32_line("AGV,TELEMETRY,54.2,0,1,0,95.25,97.5")
 
     def test_ndjson_round_trip(self):
         message = {"type": "arm_command", "angles": [90, 120, 80, 100]}

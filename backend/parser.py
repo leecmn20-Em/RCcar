@@ -109,7 +109,7 @@ def parse_esp32_line(line: bytes | bytearray | str) -> dict[str, Any]:
             "right_rpm": None,
         }
 
-    supported_events = {"TELEMETRY", "OBSTACLE", "STOP"}
+    supported_events = {"TRACING", "OBSTACLE", "STOP"}
     if event not in supported_events:
         raise ProtocolError(f"unsupported AGV event: {event!r}")
     if len(fields) != 8:
