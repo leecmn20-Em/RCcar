@@ -29,7 +29,7 @@ class ParserTests(unittest.TestCase):
         )
 
     def test_agv_telemetry(self):
-        parsed = parse_esp32_line("AGV,TELEMETRY,54.2,0,1,0,180,180")
+        parsed = parse_esp32_line("AGV,TELEMETRY,54.2,0,1,0,95.25,97.5")
         self.assertEqual(
             parsed,
             {
@@ -39,8 +39,8 @@ class ParserTests(unittest.TestCase):
                 "left_ir": 0,
                 "center_ir": 1,
                 "right_ir": 0,
-                "motor_left": 180,
-                "motor_right": 180,
+                "left_rpm": 95.25,
+                "right_rpm": 97.5,
             },
         )
 
@@ -51,10 +51,14 @@ class ParserTests(unittest.TestCase):
     def test_agv_obstacle_and_stop(self):
         for event in ("OBSTACLE", "STOP"):
             with self.subTest(event=event):
-                parsed = parse_esp32_line(f"AGV,{event},14.1,0,1,0,0,0")
+                parsed = parse_esp32_line(
+                    f"AGV,{event},14.1,0,1,0,12.34,56.78"
+                )
                 self.assertEqual(parsed["system"], "AGV")
                 self.assertEqual(parsed["event"], event)
                 self.assertEqual(parsed["distance"], 14.1)
+                self.assertEqual(parsed["left_rpm"], 12.34)
+                self.assertEqual(parsed["right_rpm"], 56.78)
 
     def test_agv_destination_has_no_invented_sensor_values(self):
         self.assertEqual(
@@ -66,14 +70,30 @@ class ParserTests(unittest.TestCase):
                 "left_ir": None,
                 "center_ir": None,
                 "right_ir": None,
-                "motor_left": None,
-                "motor_right": None,
+                "left_rpm": None,
+                "right_rpm": None,
             },
         )
 
     def test_agv_numeric_conversion_error(self):
         with self.assertRaisesRegex(ProtocolError, "numeric"):
-            parse_esp32_line("AGV,TELEMETRY,far,0,1,0,180,180")
+            parse_esp32_line("AGV,TELEMETRY,far,0,1,0,95.25,97.5")
+
+    def test_agv_rpm_must_be_finite_and_nonnegative(self):
+        invalid_pairs = (
+            ("-0.01", "10.0"),
+            ("10.0", "-0.01"),
+            ("nan", "10.0"),
+            ("10.0", "inf"),
+            ("10.0", "-inf"),
+        )
+        for left_rpm, right_rpm in invalid_pairs:
+            with self.subTest(left_rpm=left_rpm, right_rpm=right_rpm):
+                with self.assertRaises(ProtocolError):
+                    parse_esp32_line(
+                        "AGV,TELEMETRY,54.2,0,1,0,"
+                        f"{left_rpm},{right_rpm}"
+                    )
 
     def test_unknown_esp32_message(self):
         for message in ("", "AGV", "MAYBE"):

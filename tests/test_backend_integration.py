@@ -126,7 +126,7 @@ class BackendIntegrationTests(unittest.TestCase):
         self.fake_esp32.set_command_scripts(
             [
                 [
-                    "AGV,TELEMETRY,54.2,0,1,0,180,180",
+                    "AGV,TELEMETRY,54.2,0,1,0,95.25,97.5",
                     (0.5, "ARM_ACK,OK"),
                 ]
             ]
@@ -147,7 +147,10 @@ class BackendIntegrationTests(unittest.TestCase):
 
         self.assertTrue(result["ack"])
         self.assertFalse(agv["logged"])
-        self.assertEqual(agv["motor_left"], 180)
+        self.assertEqual(agv["left_rpm"], 95.25)
+        self.assertEqual(agv["right_rpm"], 97.5)
+        self.assertNotIn("motor_left", agv)
+        self.assertNotIn("motor_right", agv)
         self.assertLess(agv_elapsed, 0.4)
 
     def test_pending_command_disconnect_releases_wait_immediately(self):
@@ -202,10 +205,10 @@ class BackendIntegrationTests(unittest.TestCase):
         self.fake_esp32.set_command_scripts(
             [
                 [
-                    "AGV,TELEMETRY,54.2,0,1,0,180,180",
-                    "AGV,TELEMETRY,53.0,0,1,0,180,180",
+                    "AGV,TELEMETRY,54.2,0,1,0,95.25,97.5",
+                    "AGV,TELEMETRY,53.0,0,1,0,94.75,96.25",
                     "ARM_ACK,OK",
-                    "AGV,TELEMETRY,51.7,0,1,0,180,180",
+                    "AGV,TELEMETRY,51.7,0,1,0,93.5,95.0",
                 ]
             ]
         )
@@ -283,7 +286,7 @@ class BackendIntegrationTests(unittest.TestCase):
             [
                 ["AGV,STOP,20.0,0,1,0,0,0", "ARM_ACK,OK"],
                 [
-                    "AGV,TELEMETRY,54.2,0,1,0,180,180",
+                    "AGV,TELEMETRY,54.2,0,1,0,95.25,97.5",
                     "AGV,OBSTACLE,14.1,0,1,0,0,0",
                     "ARM_ACK,OK",
                 ],
@@ -324,6 +327,16 @@ class BackendIntegrationTests(unittest.TestCase):
         self.assertEqual(len(arm_logs), 1)
         self.assertEqual(arm_logs[0]["ack"], 1)
         self.assertEqual([row["event"] for row in agv_logs], ["TELEMETRY", "OBSTACLE"])
+        self.assertEqual(
+            [(row["left_rpm"], row["right_rpm"]) for row in agv_logs],
+            [(95.25, 97.5), (0.0, 0.0)],
+        )
+        self.assertTrue(
+            all(
+                row["motor_left"] is None and row["motor_right"] is None
+                for row in agv_logs
+            )
+        )
 
     def test_bad_json_and_invalid_angles_return_errors(self):
         self.client.sendall(b"not-json\n")

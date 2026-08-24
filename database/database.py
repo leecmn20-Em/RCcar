@@ -39,8 +39,11 @@ CREATE TABLE IF NOT EXISTS agv_log (
     left_ir INTEGER,
     center_ir INTEGER,
     right_ir INTEGER,
+    -- Legacy duty columns are retained so existing mission data is preserved.
     motor_left INTEGER,
     motor_right INTEGER,
+    left_rpm REAL,
+    right_rpm REAL,
     FOREIGN KEY(mission_id) REFERENCES mission(mission_id)
 );
 
@@ -65,7 +68,20 @@ class DatabaseManager:
         with self._lock:
             self._connection.execute("PRAGMA foreign_keys = ON")
             self._connection.executescript(SCHEMA_SQL)
+            self._ensure_agv_rpm_columns()
             self._connection.commit()
+
+    def _ensure_agv_rpm_columns(self) -> None:
+        """Add RPM columns to legacy databases without rewriting duty history."""
+        columns = {
+            str(row["name"])
+            for row in self._connection.execute("PRAGMA table_info(agv_log)")
+        }
+        for column in ("left_rpm", "right_rpm"):
+            if column not in columns:
+                self._connection.execute(
+                    f"ALTER TABLE agv_log ADD COLUMN {column} REAL"
+                )
 
     @staticmethod
     def timestamp() -> str:
@@ -128,7 +144,7 @@ class DatabaseManager:
                 """
                 INSERT INTO agv_log(
                     mission_id, timestamp, event, distance,
-                    left_ir, center_ir, right_ir, motor_left, motor_right
+                    left_ir, center_ir, right_ir, left_rpm, right_rpm
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
@@ -139,8 +155,8 @@ class DatabaseManager:
                     event.get("left_ir"),
                     event.get("center_ir"),
                     event.get("right_ir"),
-                    event.get("motor_left"),
-                    event.get("motor_right"),
+                    event.get("left_rpm"),
+                    event.get("right_rpm"),
                 ),
             )
             return int(cursor.lastrowid)

@@ -179,11 +179,13 @@ ESP32 → Backend protocol:
 ```text
 ARM_ACK,OK
 ARM_ACK,ERROR
-AGV,TELEMETRY,450,0,1,0,125,127
-AGV,OBSTACLE,110,0,1,0,0,0
+AGV,TELEMETRY,450,0,1,0,95.25,97.50
+AGV,OBSTACLE,110,0,1,0,0.00,0.00
 ```
 
-모든 frame은 `\n`으로 끝납니다. AGV 필드는 `event,distance_mm,left_ir,center_ir,right_ir,left_motor_duty,right_motor_duty` 순서입니다. Uno는 `AGV,TELEMETRY`를 200ms 주기(5Hz)로 보내고 초음파 거리가 120mm 미만으로 처음 바뀌는 순간 `AGV,OBSTACLE`을 한 번 보냅니다. 장애물이 유지되는 동안 같은 `OBSTACLE`을 반복하지 않으며 주기 telemetry는 계속됩니다.
+모든 frame은 `\n`으로 끝납니다. AGV 필드는 `event,distance_mm,left_ir,center_ir,right_ir,left_rpm,right_rpm` 순서이며 마지막 두 값은 실수형 RPM입니다. Uno는 `AGV,TELEMETRY`를 200ms 주기(5Hz)로 보내고 초음파 거리가 120mm 미만으로 처음 바뀌는 순간 `AGV,OBSTACLE`을 한 번 보냅니다. 장애물이 유지되는 동안 같은 `OBSTACLE`을 반복하지 않으며 주기 telemetry는 계속됩니다. PWM duty는 더 이상 wire protocol로 전송하거나 신규 DB row에 저장하지 않습니다.
+
+마지막 두 필드의 개수는 이전 protocol과 같아서 구 firmware의 duty 값도 숫자로 parsing될 수 있지만, 그 경우 Backend가 duty를 RPM으로 잘못 해석합니다. 따라서 RPM protocol을 사용하는 Uno firmware와 Backend는 반드시 함께 배포해야 합니다.
 
 Uno의 `Serial`은 기본적으로 기계 protocol 전용입니다. `ENABLE_AGV_DEBUG`의 기본값은 `0`이며, 사람이 보는 boot/IR/motor log는 이 값이 활성화된 개발 build에서만 출력됩니다. 운영 중 debug를 켜면 ESP32가 해당 문자열도 그대로 relay하므로 Backend diagnostic이 발생할 수 있습니다.
 
@@ -215,10 +217,11 @@ mission(mission_id PK, start_time, end_time, result)
 arm_log(id PK, mission_id FK, timestamp, command,
         base, shoulder, upper, forearm, ack)
 agv_log(id PK, mission_id FK, timestamp, event, distance,
-        left_ir, center_ir, right_ir, motor_left, motor_right)
+        left_ir, center_ir, right_ir,
+        motor_left, motor_right, left_rpm, right_rpm)
 ```
 
-`arm_log(mission_id, timestamp)`와 `agv_log(mission_id, timestamp)` index도 생성됩니다. DB schema는 2차 작업에서 변경하지 않았습니다.
+`motor_left`, `motor_right`는 기존 duty 기록을 보존하기 위한 legacy 컬럼입니다. 기존 DB에는 시작 시 `left_rpm`, `right_rpm` 컬럼을 비파괴 방식으로 추가하며, 신규 AGV row는 RPM 컬럼만 기록하고 legacy motor 컬럼은 `NULL`로 둡니다. `arm_log(mission_id, timestamp)`와 `agv_log(mission_id, timestamp)` index도 생성됩니다.
 
 ## 장비 없이 실행/테스트
 
@@ -269,7 +272,7 @@ ESP32
 Backend Receiver → Parser → agv_log / GUI agv_event
 ```
 
-Uno는 `DrivePolicy::range`의 mm 거리, Left/Center/Right IR, 두 Wheel의 `getCurrentDuty()`를 사용합니다. 센서 5ms, motor 10ms, 제어 20ms 주기는 유지하고 DB용 telemetry만 200ms 주기로 추가했습니다. `false → true` 장애물 transition만 `OBSTACLE` event로 내보냅니다.
+Uno는 `DrivePolicy::range`의 mm 거리, Left/Center/Right IR, 두 Wheel의 `getEstimatedRPM()`을 사용합니다. RPM은 `Serial.print(value, 2)`로 소수점 둘째 자리까지 전송합니다. 센서 5ms, motor 10ms, 제어 20ms 주기는 유지하고 DB용 telemetry만 200ms 주기로 추가했습니다. `false → true` 장애물 transition만 `OBSTACLE` event로 내보냅니다.
 
 UART2는 ESP32 GPIO 16(RX2)과 GPIO 17(TX2), 115200 bps를 사용합니다. Uno D1 TX의 5V logic은 ESP32 GPIO 16에 직접 연결하지 않고 전압 분배기 또는 level shifter를 거쳐야 합니다. 반대 방향은 ESP32 GPIO 17 TX2에서 Uno D0 RX로 연결하며 두 보드의 GND를 공통으로 연결합니다. 현재 ESP32 → Uno 명령은 구현하지 않았습니다.
 

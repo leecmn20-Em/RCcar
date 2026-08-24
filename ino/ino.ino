@@ -234,17 +234,20 @@ namespace IOstream{
         previousObstacle = DrivePolicy::onobstacle;
 
         const char* event = enteredObstacle ? "OBSTACLE" : "TELEMETRY";
-        char message[64];
-        snprintf(message, sizeof(message), "AGV,%s,%d,%d,%d,%d,%d,%d",
-            event,
-            DrivePolicy::range,
-            DrivePolicy::lastIOL & 0b100? 1 : 0,
-            DrivePolicy::lastIOL & 0b010? 1 : 0,
-            DrivePolicy::lastIOL & 0b001? 1 : 0,
-            leftwheel.getCurrentDuty(),
-            rightwheel.getCurrentDuty()
-        );
-        Serial.println(message);
+        Serial.print(F("AGV,"));
+        Serial.print(event);
+        Serial.print(',');
+        Serial.print(DrivePolicy::range);
+        Serial.print(',');
+        Serial.print((DrivePolicy::lastIOL >> 2) & 0x01);
+        Serial.print(',');
+        Serial.print((DrivePolicy::lastIOL >> 1) & 0x01);
+        Serial.print(',');
+        Serial.print(DrivePolicy::lastIOL & 0x01);
+        Serial.print(',');
+        Serial.print(leftwheel.getEstimatedRPM(), 2);
+        Serial.print(',');
+        Serial.println(rightwheel.getEstimatedRPM(), 2);
     }
 }
 

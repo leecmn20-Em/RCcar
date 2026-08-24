@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 from typing import Any
 
 
@@ -62,8 +63,9 @@ def parse_esp32_line(line: bytes | bytearray | str) -> dict[str, Any]:
     """Classify one newline-framed message received from the ESP32.
 
     ``OK`` remains a transitional alias for ``ARM_ACK,OK``.  AGV events with
-    sensor fields use eight CSV columns, while ``AGV,DEST`` intentionally has
-    no invented sensor values and is represented with ``None`` fields.
+    sensor fields use eight CSV columns ending in left/right RPM values, while
+    ``AGV,DEST`` intentionally has no invented sensor values and is represented
+    with ``None`` fields.
     """
     if isinstance(line, (bytes, bytearray)):
         try:
@@ -103,8 +105,8 @@ def parse_esp32_line(line: bytes | bytearray | str) -> dict[str, Any]:
             "left_ir": None,
             "center_ir": None,
             "right_ir": None,
-            "motor_left": None,
-            "motor_right": None,
+            "left_rpm": None,
+            "right_rpm": None,
         }
 
     supported_events = {"TELEMETRY", "OBSTACLE", "STOP"}
@@ -120,10 +122,17 @@ def parse_esp32_line(line: bytes | bytearray | str) -> dict[str, Any]:
         left_ir = int(fields[3])
         center_ir = int(fields[4])
         right_ir = int(fields[5])
-        motor_left = int(fields[6])
-        motor_right = int(fields[7])
+        left_rpm = float(fields[6])
+        right_rpm = float(fields[7])
     except ValueError as error:
         raise ProtocolError("AGV numeric field conversion failed") from error
+
+    if not math.isfinite(distance):
+        raise ProtocolError("AGV distance must be finite")
+    if not math.isfinite(left_rpm) or not math.isfinite(right_rpm):
+        raise ProtocolError("AGV RPM values must be finite")
+    if left_rpm < 0 or right_rpm < 0:
+        raise ProtocolError("AGV RPM values must not be negative")
 
     return {
         "system": "AGV",
@@ -132,6 +141,6 @@ def parse_esp32_line(line: bytes | bytearray | str) -> dict[str, Any]:
         "left_ir": left_ir,
         "center_ir": center_ir,
         "right_ir": right_ir,
-        "motor_left": motor_left,
-        "motor_right": motor_right,
+        "left_rpm": left_rpm,
+        "right_rpm": right_rpm,
     }

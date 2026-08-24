@@ -366,8 +366,8 @@ class RobotBackendServer:
                 "left_ir": event.get("left_ir"),
                 "center_ir": event.get("center_ir"),
                 "right_ir": event.get("right_ir"),
-                "motor_left": event.get("motor_left"),
-                "motor_right": event.get("motor_right"),
+                "left_rpm": event.get("left_rpm"),
+                "right_rpm": event.get("right_rpm"),
                 "mission_id": mission_id,
                 "logged": mission_id is not None,
             }
