@@ -172,7 +172,7 @@ namespace DrivePolicy {
         Serial.println(ls);
         Serial.print("right wheel RPM set to: ");
         Serial.println(rs);
-        drivestate = "FORCEDRUN"
+        drivestate = "FORCEDRUN";
     }
 
     void emergencystop(){

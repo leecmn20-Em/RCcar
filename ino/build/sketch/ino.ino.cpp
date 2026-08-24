@@ -28,9 +28,9 @@ Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right);
 void ISRencoder_left();
 #line 29 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_right();
-#line 403 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 410 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void setup();
-#line 421 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 428 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void loop();
 #line 26 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left(){
@@ -73,6 +73,8 @@ namespace DrivePolicy {
 
     const uint32_t lostTimeOut = 5000;
     uint32_t lastIOLTime = 0;
+
+    String drivestate;
 
     void updateTracePolicy(uint8_t state){
         bool IRchanged = state!=lastIOL;
@@ -140,6 +142,7 @@ namespace DrivePolicy {
             leftwheel.stop();
             rightwheel.stop();
             lastIOLTime = 0;
+            drivestate = "OBSTACLE";
             return;
         }
 
@@ -179,6 +182,7 @@ namespace DrivePolicy {
         Serial.println(ls);
         Serial.print("right wheel RPM set to: ");
         Serial.println(rs);
+        drivestate = "FORCEDRUN";
     }
 
     void emergencystop(){
@@ -186,6 +190,7 @@ namespace DrivePolicy {
         leftwheel.stop();
         rightwheel.stop();
         Serial.println(F("EMERGENCYSTOPPED"));
+        drivestate = "EMERGENCYSTOPPED";
     }
 
     void drive(){
@@ -193,8 +198,10 @@ namespace DrivePolicy {
             case 0: //stop
                 leftwheel.setTargetRPM(0);
                 rightwheel.setTargetRPM(0);
+                drivestate = "STOP";
                 break;
             case 1: //free trace
+                drivestate = "TRACING";
                 lineTrace();
                 break;
             default:
@@ -237,13 +244,13 @@ namespace IOstream{
         }
     }
     void reportStatus(){
-        char message[35];
+        char message[50];
         char leftrpm[7];
         char rightrpm[7];
         bool willRun = leftwheel.getTargetRPM()!=0 || rightwheel.getTargetRPM()!=0;
         dtostrf(leftwheel.getEstimatedRPM(), 1, 2, leftrpm);
         dtostrf(rightwheel.getEstimatedRPM(), 1, 2, rightrpm);
-        snprintf(message, sizeof(message), "%d,%d,%d,%d,%d,%s,%s",
+        snprintf(message, sizeof(message), "AGV,%s,%d,%d,%d,%d,%s,%s",
             willRun? 1 : 0,
             DrivePolicy::range,
             DrivePolicy::lastIOL & 0b100? 1 : 0,
