@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "DebugLog.h"
-
 namespace IOstream{
     const uint8_t COMMAND_MAXLENGTH = 5;
     const uint8_t COMMAND_BUFFER_SIZE = 64;
@@ -84,8 +82,8 @@ namespace IOstream{
             return false;
         }
 
-        AGV_DEBUG_PRINT(F("Command received: "));
-        AGV_DEBUG_PRINTLN(input);
+        Serial.print(F("Command received: "));
+        Serial.println(input);
 
         splitCommand(input, ':', command, COMMAND_MAXLENGTH);
         return true;

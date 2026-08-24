@@ -104,15 +104,42 @@ public:
         rpm_prev = rpm_est;
 
         uint32_t last;
+        uint32_t period;
         noInterrupts();
         last = lastencodedmicros;
+        period = encoderPulseInterval;
         interrupts();
 
-        if(rpm_ins<0 || (micros()-last)>insRPMTimeout){
+        if(rpm_ins<0 || last==0){
             rpm_est = rpm_avr;
         }
         else{
-            rpm_est = rpm_ins;
+            uint32_t elapsed = micros()-last;
+            uint32_t periodBasedTimeout;
+
+            if(period>insRPMTimeout/noPulseTimeoutPeriods){
+                periodBasedTimeout = insRPMTimeout;
+            }
+            else{
+                periodBasedTimeout = period*noPulseTimeoutPeriods;
+            }
+
+            uint32_t adaptiveTimeout =
+                periodBasedTimeout>noPulseTimeoutMinUs ?
+                periodBasedTimeout : noPulseTimeoutMinUs;
+
+            if(elapsed>adaptiveTimeout){
+                rpm_ins = -1.0f;
+                rpm_est = 0.0f;
+            }
+            else if(elapsed>noPulseDecayStartUs){
+                float noPulseUpperRPM =
+                    60000000.0f/(Encoder_Slots*float(elapsed));
+                rpm_est = min(rpm_ins,noPulseUpperRPM);
+            }
+            else{
+                rpm_est = rpm_ins;
+            }
         }
 
         updateStopState();
@@ -299,16 +326,19 @@ private:
     uint32_t startupPulseStartedMs;
 
     static const uint32_t insRPMTimeout = 1000000;
+    static const uint32_t noPulseDecayStartUs = 100000;
+    static const uint32_t noPulseTimeoutMinUs = 300000;
+    static const uint8_t noPulseTimeoutPeriods = 2;
     static const uint32_t MinEncoderPulseMicros = 10000;
     static const uint16_t fullStopWaitMs = 200;
-    static const uint16_t startupPulseMs = 150;
-    static const int startupDuty = 200;
-    static const int runningMinimumDuty = 120;
+    static const uint16_t startupPulseMs = 120;
+    static const int startupDuty = 100;
+    static const int runningMinimumDuty = 40;
     static const float stopRpmThreshold = 1.0f;
 
     float Kp = 0.55f;
     float Kd = 0.1f;
-    float Ki = 3.0f;
+    float Ki = 2.5f;
     float err_prev;
     float duty_comp;
     float rpm_prev;

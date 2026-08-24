@@ -54,11 +54,11 @@ namespace DrivePolicy {
     TracePolicy tracePolicy = TRACE_STRAIGHT;
     uint8_t lastIOL = 0;
     
-    const int RPM_base = 120;
+    const int RPM_base = 90;
     const int RPM_softturn_inner = 10;
-    const int RPM_softturn_outer = 120;
+    const int RPM_softturn_outer = 90;
     const int RPM_sharpturn_inner = 0;
-    const int RPM_sharpturn_outer = 120;
+    const int RPM_sharpturn_outer = 60;
     const uint32_t WaitForsharpTurn = 600;
     uint32_t sinceSoftTurn = 0;
 
@@ -242,8 +242,8 @@ namespace IOstream{
             DrivePolicy::lastIOL & 0b100? 1 : 0,
             DrivePolicy::lastIOL & 0b010? 1 : 0,
             DrivePolicy::lastIOL & 0b001? 1 : 0,
-            (int)leftwheel.getTargetRPM(),
-            (int)rightwheel.getTargetRPM()
+            (int)leftwheel.getEstimatedRPM(),
+            (int)rightwheel.getEstimatedRPM()
         );
         Serial.println(message);
     }
@@ -416,7 +416,7 @@ void setup() {
     Update::calperiod_fast = 5;
     Update::conperiod = 20;
     Update::conperiod_fine = 10;
-    Update::serialperiod = 1000;
+    Update::serialperiod = 200;
     HCSR04::setup();
     LineSensor::setupSensors();
     DrivePolicy::drivemode = 1;
