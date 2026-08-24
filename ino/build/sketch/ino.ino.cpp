@@ -28,9 +28,9 @@ Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right);
 void ISRencoder_left();
 #line 29 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_right();
-#line 402 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 403 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void setup();
-#line 420 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 421 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void loop();
 #line 26 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left(){
@@ -139,6 +139,7 @@ namespace DrivePolicy {
         if(onobstacle){
             leftwheel.stop();
             rightwheel.stop();
+            lastIOLTime = 0;
             return;
         }
 
