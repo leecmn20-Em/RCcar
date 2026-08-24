@@ -86,11 +86,6 @@ namespace DrivePolicy {
             }
         }
         else{
-            Serial.print(F("IRCHANGED:"));
-            Serial.print(lastIOL);
-            Serial.print(':');
-            Serial.println(state);
-
             switch(tracePolicy){
                 case TRACE_STRAIGHT:
                     if(state & 0b100){
@@ -220,27 +215,51 @@ namespace IOstream{
             leftwheel.setPID(p, i, d);
             rightwheel.setPID(p, i, d);
         }
+        else if(strcmp(command[0], "EMERGENCYSTOP") == 0){
+            DrivePolicy::emergencystop();
+        }
+        else if(strcmp(command[0], "LINETRACE") == 0){
+            DrivePolicy::drivemode = 1;
+        }
+        else if(strcmp(command[0], "STOP") == 0){
+            DrivePolicy::drivemode = 0;
+        }
     }
-    void reportDriveMode(){
-        Serial.print(F("DRIVEMODE:"));
-        Serial.println(DrivePolicy::drivemode);
+    void reportStatus(){
+        char message[35];
+        char leftrpm[7];
+        char rightrpm[7];
+        bool willRun = leftwheel.getTargetRPM()!=0 || rightwheel.getTargetRPM()!=0;
+        dtostrf(leftwheel.getEstimatedRPM(), 1, 2, leftrpm);
+        dtostrf(rightwheel.getEstimatedRPM(), 1, 2, rightrpm);
+        snprintf(message, sizeof(message), "%d,%d,%d,%d,%d,%s,%s",
+            willRun? 1 : 0,
+            DrivePolicy::range,
+            DrivePolicy::lastIOL & 0b100? 1 : 0,
+            DrivePolicy::lastIOL & 0b010? 1 : 0,
+            DrivePolicy::lastIOL & 0b001? 1 : 0,
+            leftrpm,
+            rightrpm);
+        Serial.println(message);
     }
 }
 
 namespace Update {
-    uint32_t lastloopmillis = 0;
     uint32_t lastcalmillis = 0;
     uint32_t lastcalmillis_fast = 0;
     uint32_t lastconmillis = 0;
     uint32_t lastconmillis_fine = 0;
+    uint32_t lastserialmillis = 0;
     uint32_t calperiod = 1000;
     uint32_t calperiod_fast = 1000;
     uint32_t conperiod = 1000;
     uint32_t conperiod_fine = 1000;
+    uint32_t serialperiod = 1000;
 
     void init(){
-        lastloopmillis = 0;
+        lastserialmillis = 0;
         lastcalmillis = 0;
+        lastcalmillis_fast = 0;
         lastconmillis = 0;
         lastconmillis_fine = 0;
     }
@@ -364,11 +383,12 @@ namespace Update {
         return 0;
     }
 
-    int updateLoop(){
-        if(cmillis-lastloopmillis>=1000){
-            monitor();
+    int updateSerial(){
+        if(cmillis-lastserialmillis>=serialperiod){
+            //monitor();
+            IOstream::reportStatus();
 
-            lastloopmillis = cmillis;
+            lastserialmillis = cmillis;
             return 1;
         }
         return 0;
@@ -390,6 +410,7 @@ void setup() {
     Update::calperiod_fast = 5;
     Update::conperiod = 20;
     Update::conperiod_fine = 10;
+    Update::serialperiod = 1000;
     HCSR04::setup();
     LineSensor::setupSensors();
     DrivePolicy::drivemode = 1;
@@ -404,7 +425,7 @@ void loop() {
     Update::updateFast();
     Update::updateCon();
     Update::updateFine();
-    Update::updateLoop();
+    Update::updateSerial();
     Update::updateInstant();
     Update::end();
 }

@@ -48,8 +48,11 @@ public:
     uint32_t getEncoderCount(){
         return enc_count;
     }
-    double getEstimatedRPM(){
+    float getEstimatedRPM(){
         return rpm_est;
+    }
+    float getTargetRPM(){
+        return rpm_tgt;
     }
     void onEncoderInterrupt(){
         uint32_t now = micros();
@@ -315,8 +318,8 @@ private:
     static const float D_MIN = -3.0f;
     static const float I_MAX = 40.0f;
     static const float I_MIN = -40.0f;
-    static const int comp_MAX = 100;
-    static const int comp_MIN = -100;
+    static const int comp_MAX = 60;
+    static const int comp_MIN = -60;
 
     static const int duty_Max = 255;
     static const int duty_Min = 0;
