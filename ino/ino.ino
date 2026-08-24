@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include "modules\DebugLog.h"
 #include "modules\Commands.h"
 #include "modules\Wheel.h"
 #include "modules\LineSensor.h"
@@ -87,11 +86,6 @@ namespace DrivePolicy {
             }
         }
         else{
-            AGV_DEBUG_PRINT(F("IRCHANGED:"));
-            AGV_DEBUG_PRINT(lastIOL);
-            AGV_DEBUG_PRINT(':');
-            AGV_DEBUG_PRINTLN(state);
-
             switch(tracePolicy){
                 case TRACE_STRAIGHT:
                     if(state & 0b100){
@@ -170,17 +164,17 @@ namespace DrivePolicy {
         drivemode = 2;
         leftwheel.setTargetRPM(ls);
         rightwheel.setTargetRPM(rs);
-        AGV_DEBUG_PRINT(F("left wheel RPM set to: "));
-        AGV_DEBUG_PRINTLN(ls);
-        AGV_DEBUG_PRINT(F("right wheel RPM set to: "));
-        AGV_DEBUG_PRINTLN(rs);
+        Serial.print("left wheel RPM set to: ");
+        Serial.println(ls);
+        Serial.print("right wheel RPM set to: ");
+        Serial.println(rs);
     }
 
     void emergencystop(){
         drivemode = -1;
         leftwheel.stop();
         rightwheel.stop();
-        AGV_DEBUG_PRINTLN(F("EMERGENCYSTOPPED"));
+        Serial.println(F("EMERGENCYSTOPPED"));
     }
 
     void drive(){
@@ -221,69 +215,51 @@ namespace IOstream{
             leftwheel.setPID(p, i, d);
             rightwheel.setPID(p, i, d);
         }
-    }
-    void reportDriveMode(){
-        AGV_DEBUG_PRINT(F("DRIVEMODE:"));
-        AGV_DEBUG_PRINTLN(DrivePolicy::drivemode);
-    }
-}
-
-namespace AGVProtocol {
-    const uint32_t telemetryPeriodMs = 200;
-    uint32_t lastTelemetryMillis = 0;
-    bool previousObstacle = false;
-
-    void sendFrame(const __FlashStringHelper* event){
-        const uint8_t lineState = DrivePolicy::lastIOL;
-
-        Serial.print(F("AGV,"));
-        Serial.print(event);
-        Serial.print(',');
-        Serial.print(DrivePolicy::range);
-        Serial.print(',');
-        Serial.print((lineState >> 2) & 0x01);
-        Serial.print(',');
-        Serial.print((lineState >> 1) & 0x01);
-        Serial.print(',');
-        Serial.print(lineState & 0x01);
-        Serial.print(',');
-        Serial.print(leftwheel.getCurrentDuty());
-        Serial.print(',');
-        Serial.println(rightwheel.getCurrentDuty());
-    }
-
-    void update(){
-        const bool enteredObstacle =
-            DrivePolicy::onobstacle && !previousObstacle;
-        previousObstacle = DrivePolicy::onobstacle;
-
-        if(enteredObstacle){
-            sendFrame(F("OBSTACLE"));
-            lastTelemetryMillis = Update::cmillis;
-            return;
+        else if(strcmp(command[0], "EMERGENCYSTOP") == 0){
+            DrivePolicy::emergencystop();
         }
-
-        if(Update::cmillis-lastTelemetryMillis>=telemetryPeriodMs){
-            sendFrame(F("TELEMETRY"));
-            lastTelemetryMillis = Update::cmillis;
+        else if(strcmp(command[0], "LINETRACE") == 0){
+            DrivePolicy::drivemode = 1;
         }
+        else if(strcmp(command[0], "STOP") == 0){
+            DrivePolicy::drivemode = 0;
+        }
+    }
+    void reportStatus(){
+        char message[35];
+        char leftrpm[7];
+        char rightrpm[7];
+        bool willRun = leftwheel.getTargetRPM()!=0 || rightwheel.getTargetRPM()!=0;
+        dtostrf(leftwheel.getEstimatedRPM(), 1, 2, leftrpm);
+        dtostrf(rightwheel.getEstimatedRPM(), 1, 2, rightrpm);
+        snprintf(message, sizeof(message), "%d,%d,%d,%d,%d,%s,%s",
+            willRun? 1 : 0,
+            DrivePolicy::range,
+            DrivePolicy::lastIOL & 0b100? 1 : 0,
+            DrivePolicy::lastIOL & 0b010? 1 : 0,
+            DrivePolicy::lastIOL & 0b001? 1 : 0,
+            leftrpm,
+            rightrpm);
+        Serial.println(message);
     }
 }
 
 namespace Update {
-    uint32_t lastloopmillis = 0;
     uint32_t lastcalmillis = 0;
     uint32_t lastcalmillis_fast = 0;
     uint32_t lastconmillis = 0;
     uint32_t lastconmillis_fine = 0;
+    uint32_t lastserialmillis = 0;
     uint32_t calperiod = 1000;
     uint32_t calperiod_fast = 1000;
     uint32_t conperiod = 1000;
     uint32_t conperiod_fine = 1000;
+    uint32_t serialperiod = 1000;
 
     void init(){
-        lastloopmillis = 0;
+        lastserialmillis = 0;
         lastcalmillis = 0;
+        lastcalmillis_fast = 0;
         lastconmillis = 0;
         lastconmillis_fine = 0;
     }
@@ -297,7 +273,6 @@ namespace Update {
     }
 
     void monitor(){
-#if ENABLE_AGV_DEBUG
         Serial.println(F("=========="));
         Serial.print(F("Drivemode: "));
         Serial.println(DrivePolicy::drivemode);
@@ -347,7 +322,6 @@ namespace Update {
                 Serial.println(F("Can't find the policy"));
                 break;
         }
-#endif
     }
 
     int updateCalc(){
@@ -409,11 +383,12 @@ namespace Update {
         return 0;
     }
 
-    int updateLoop(){
-        if(cmillis-lastloopmillis>=1000){
-            monitor();
+    int updateSerial(){
+        if(cmillis-lastserialmillis>=serialperiod){
+            //monitor();
+            IOstream::reportStatus();
 
-            lastloopmillis = cmillis;
+            lastserialmillis = cmillis;
             return 1;
         }
         return 0;
@@ -426,7 +401,7 @@ namespace Update {
 
 void setup() {
     Serial.begin(115200);
-    AGV_DEBUG_PRINTLN(F("Arduino Booting..."));
+    Serial.println(F("Arduino Booting..."));
     leftwheel.setup();
     rightwheel.setup();
     attachInterrupt(digitalPinToInterrupt(leftwheel.getEncoder()), ISRencoder_left, FALLING);
@@ -435,10 +410,11 @@ void setup() {
     Update::calperiod_fast = 5;
     Update::conperiod = 20;
     Update::conperiod_fine = 10;
+    Update::serialperiod = 1000;
     HCSR04::setup();
     LineSensor::setupSensors();
     DrivePolicy::drivemode = 1;
-    AGV_DEBUG_PRINTLN(F("Arduino ONLINE"));
+    Serial.println(F("Arduino ONLINE"));
 }
 
 void loop() {
@@ -449,8 +425,7 @@ void loop() {
     Update::updateFast();
     Update::updateCon();
     Update::updateFine();
-    AGVProtocol::update();
-    Update::updateLoop();
+    Update::updateSerial();
     Update::updateInstant();
     Update::end();
 }

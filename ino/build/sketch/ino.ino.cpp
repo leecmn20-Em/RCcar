@@ -1,9 +1,6 @@
 #line 1 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 #include <Arduino.h>
 #include "modules\Commands.h"
-//#include "modules\Servo1.h"
-//#include "modules\Displayer.h"
-//#include "modules\Arms.h"
 #include "modules\Wheel.h"
 #include "modules\LineSensor.h"
 #include "modules\ObstacleSensor.h"
@@ -16,7 +13,6 @@ const byte Motor_Left2 = 5;
 const byte Motor_Right1 = 10;
 const byte Motor_Right2 = 11;
 
-//const byte LineSensor::Obstacle_Sensor = -1;
 const byte LineSensor::Line_Sensor_Left = 7;
 const byte LineSensor::Line_Sensor_Right = 4;
 const byte LineSensor::Line_Sensor_Center = 8;
@@ -28,24 +24,21 @@ const byte HCSR04::echoPin = 12;
 #pragma region Object Declairation
 Wheel leftwheel = Wheel(Motor_Left1,Motor_Left2,Encoder_Left);
 Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right);
-#line 30 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 26 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left();
-#line 33 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 29 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_right();
-#line 401 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 402 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void setup();
 #line 420 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void loop();
-#line 30 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 26 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left(){
     leftwheel.onEncoderInterrupt();
 }
 void ISRencoder_right(){
     rightwheel.onEncoderInterrupt();
 }
-
-//Displayer oled = Displayer();
-//ObstacleSensor obsensor = ObstacleSensor();
 #pragma endregion
 
 namespace Update{
@@ -70,21 +63,16 @@ namespace DrivePolicy {
     TracePolicy tracePolicy = TRACE_STRAIGHT;
     uint8_t lastIOL = 0;
     
-    const int RPM_base = 180;
+    const int RPM_base = 120;
     const int RPM_softturn_inner = 10;
-    const int RPM_softturn_outer = 180;
+    const int RPM_softturn_outer = 120;
     const int RPM_sharpturn_inner = 0;
-    const int RPM_sharpturn_outer = 180;
+    const int RPM_sharpturn_outer = 120;
     const uint32_t WaitForsharpTurn = 600;
     uint32_t sinceSoftTurn = 0;
 
     const uint32_t lostTimeOut = 5000;
     uint32_t lastIOLTime = 0;
-
-    void search(){
-        leftwheel.setTargetRPM(RPM_softturn_outer);
-        rightwheel.setTargetRPM(RPM_softturn_inner);
-    }
 
     void updateTracePolicy(uint8_t state){
         bool IRchanged = state!=lastIOL;
@@ -108,11 +96,6 @@ namespace DrivePolicy {
             }
         }
         else{
-            Serial.print(F("IRCHANGED:"));
-            Serial.print(lastIOL);
-            Serial.print(':');
-            Serial.println(state);
-
             switch(tracePolicy){
                 case TRACE_STRAIGHT:
                     if(state & 0b100){
@@ -242,27 +225,51 @@ namespace IOstream{
             leftwheel.setPID(p, i, d);
             rightwheel.setPID(p, i, d);
         }
+        else if(strcmp(command[0], "EMERGENCYSTOP") == 0){
+            DrivePolicy::emergencystop();
+        }
+        else if(strcmp(command[0], "LINETRACE") == 0){
+            DrivePolicy::drivemode = 1;
+        }
+        else if(strcmp(command[0], "STOP") == 0){
+            DrivePolicy::drivemode = 0;
+        }
     }
-    void reportDriveMode(){
-        Serial.print(F("DRIVEMODE:"));
-        Serial.println(DrivePolicy::drivemode);
+    void reportStatus(){
+        char message[35];
+        char leftrpm[7];
+        char rightrpm[7];
+        bool willRun = leftwheel.getTargetRPM()!=0 || rightwheel.getTargetRPM()!=0;
+        dtostrf(leftwheel.getEstimatedRPM(), 1, 2, leftrpm);
+        dtostrf(rightwheel.getEstimatedRPM(), 1, 2, rightrpm);
+        snprintf(message, sizeof(message), "%d,%d,%d,%d,%d,%s,%s",
+            willRun? 1 : 0,
+            DrivePolicy::range,
+            DrivePolicy::lastIOL & 0b100? 1 : 0,
+            DrivePolicy::lastIOL & 0b010? 1 : 0,
+            DrivePolicy::lastIOL & 0b001? 1 : 0,
+            leftrpm,
+            rightrpm);
+        Serial.println(message);
     }
 }
 
 namespace Update {
-    uint32_t lastloopmillis = 0;
     uint32_t lastcalmillis = 0;
     uint32_t lastcalmillis_fast = 0;
     uint32_t lastconmillis = 0;
     uint32_t lastconmillis_fine = 0;
+    uint32_t lastserialmillis = 0;
     uint32_t calperiod = 1000;
     uint32_t calperiod_fast = 1000;
     uint32_t conperiod = 1000;
     uint32_t conperiod_fine = 1000;
+    uint32_t serialperiod = 1000;
 
     void init(){
-        lastloopmillis = 0;
+        lastserialmillis = 0;
         lastcalmillis = 0;
+        lastcalmillis_fast = 0;
         lastconmillis = 0;
         lastconmillis_fine = 0;
     }
@@ -331,13 +338,6 @@ namespace Update {
         if(cmillis-lastcalmillis>=calperiod){
             leftwheel.estimateAverageRPM(cmillis-lastcalmillis);
             rightwheel.estimateAverageRPM(cmillis-lastcalmillis);
-            
-            /*if(obsensor.pollRange(DrivePolicy::range)){
-                if(DrivePolicy::range>=0){
-                    DrivePolicy::onobstacle =
-                        DrivePolicy::range<DrivePolicy::obstacleStopDistanceMm;
-                }
-            }*/
 
             lastcalmillis = cmillis;
             return 1;
@@ -393,11 +393,12 @@ namespace Update {
         return 0;
     }
 
-    int updateLoop(){
-        if(cmillis-lastloopmillis>=1000){
-            monitor();
+    int updateSerial(){
+        if(cmillis-lastserialmillis>=serialperiod){
+            //monitor();
+            IOstream::reportStatus();
 
-            lastloopmillis = cmillis;
+            lastserialmillis = cmillis;
             return 1;
         }
         return 0;
@@ -419,8 +420,7 @@ void setup() {
     Update::calperiod_fast = 5;
     Update::conperiod = 20;
     Update::conperiod_fine = 10;
-    //oled.init();
-    //obsensor.init(100);
+    Update::serialperiod = 1000;
     HCSR04::setup();
     LineSensor::setupSensors();
     DrivePolicy::drivemode = 1;
@@ -435,7 +435,7 @@ void loop() {
     Update::updateFast();
     Update::updateCon();
     Update::updateFine();
-    Update::updateLoop();
+    Update::updateSerial();
     Update::updateInstant();
     Update::end();
 }

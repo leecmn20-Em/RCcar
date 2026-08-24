@@ -47,8 +47,11 @@ public:
     uint32_t getEncoderCount(){
         return enc_count;
     }
-    double getEstimatedRPM(){
+    float getEstimatedRPM(){
         return rpm_est;
+    }
+    float getTargetRPM(){
+        return rpm_tgt;
     }
     void onEncoderInterrupt(){
         uint32_t now = micros();

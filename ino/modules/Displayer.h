@@ -1,7 +1,5 @@
 #pragma once
 
-#include "DebugLog.h"
-
 #include <Adafruit_SSD1306.h>
 #include <Wire.h>
 
@@ -10,7 +8,7 @@ public:
     using Adafruit_SSD1306::Adafruit_SSD1306;
     void init(){
         if (!Adafruit_SSD1306::begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-            AGV_DEBUG_PRINTLN(F("OLED initialization failed"));
+            Serial.println(F("OLED initialization failed"));
             for(;;);
         }
         delay(2000);
