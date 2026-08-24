@@ -129,6 +129,7 @@ namespace DrivePolicy {
         if(onobstacle){
             leftwheel.stop();
             rightwheel.stop();
+            lastIOLTime = 0;
             return;
         }
 
