@@ -28,9 +28,9 @@ Wheel rightwheel = Wheel(Motor_Right1,Motor_Right2,Encoder_Right);
 void ISRencoder_left();
 #line 29 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_right();
-#line 410 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 406 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void setup();
-#line 428 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
+#line 424 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void loop();
 #line 26 "C:\\Users\\121\\Desktop\\0727\\RCcar\\ino\\ino.ino"
 void ISRencoder_left(){
@@ -74,7 +74,7 @@ namespace DrivePolicy {
     const uint32_t lostTimeOut = 5000;
     uint32_t lastIOLTime = 0;
 
-    String drivestate;
+    const char* drivestate = "";
 
     void updateTracePolicy(uint8_t state){
         bool IRchanged = state!=lastIOL;
@@ -245,19 +245,15 @@ namespace IOstream{
     }
     void reportStatus(){
         char message[50];
-        char leftrpm[7];
-        char rightrpm[7];
-        bool willRun = leftwheel.getTargetRPM()!=0 || rightwheel.getTargetRPM()!=0;
-        dtostrf(leftwheel.getEstimatedRPM(), 1, 2, leftrpm);
-        dtostrf(rightwheel.getEstimatedRPM(), 1, 2, rightrpm);
-        snprintf(message, sizeof(message), "AGV,%s,%d,%d,%d,%d,%s,%s",
-            willRun? 1 : 0,
+        snprintf(message, sizeof(message), "AGV,%s,%d,%d,%d,%d,%d,%d",
+            DrivePolicy::drivestate,
             DrivePolicy::range,
             DrivePolicy::lastIOL & 0b100? 1 : 0,
             DrivePolicy::lastIOL & 0b010? 1 : 0,
             DrivePolicy::lastIOL & 0b001? 1 : 0,
-            leftrpm,
-            rightrpm);
+            (int)leftwheel.getTargetRPM(),
+            (int)rightwheel.getTargetRPM()
+        );
         Serial.println(message);
     }
 }
