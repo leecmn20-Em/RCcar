@@ -131,7 +131,7 @@ namespace DrivePolicy {
         if(onobstacle){
             leftwheel.stop();
             rightwheel.stop();
-            lastIOLTime = 0;
+            lastIOLTime = Update::cmillis;
             drivestate = "OBSTACLE";
             return;
         }
@@ -344,6 +344,7 @@ namespace Update {
             if(HCSR04::readDistance(DrivePolicy::range)){
                 if(DrivePolicy::range>=0){
                     DrivePolicy::onobstacle =
+                        DrivePolicy::range >= 0 &&
                         DrivePolicy::range<DrivePolicy::obstacleStopDistanceMm;
                 }
             }
