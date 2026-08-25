@@ -41,6 +41,8 @@ namespace DrivePolicy {
     int range = -1;
     bool onobstacle = false;
     const int obstacleStopDistanceMm = 120;
+    const uint32_t obstacleTimeOut = 1000;
+    uint32_t lastRange = 0;
 
     enum TracePolicy : uint8_t {
         TRACE_STRAIGHT = 0,
@@ -343,9 +345,16 @@ namespace Update {
         if(cmillis-lastcalmillis_fast>=calperiod_fast){
             if(HCSR04::readDistance(DrivePolicy::range)){
                 if(DrivePolicy::range>=0){
-                    DrivePolicy::onobstacle =
-                        DrivePolicy::range >= 0 &&
-                        DrivePolicy::range<DrivePolicy::obstacleStopDistanceMm;
+                    DrivePolicy::onobstacle = DrivePolicy::range<DrivePolicy::obstacleStopDistanceMm;
+                    DrivePolicy::lastRange = cmillis;
+                }
+                else{
+                    if(cmillis-DrivePolicy::lastRange>=DrivePolicy::obstacleTimeOut){
+                        DrivePolicy::onobstacle = false;
+                    }
+                    else{
+                        DrivePolicy::onobstacle = true;
+                    }
                 }
             }
 
