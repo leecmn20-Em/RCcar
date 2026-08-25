@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "modules\DebugLog.h"
 #include "modules\Commands.h"
 #include "modules\Wheel.h"
 #include "modules\LineSensor.h"
@@ -63,8 +64,6 @@ namespace DrivePolicy {
 
     const uint32_t lostTimeOut = 5000;
     uint32_t lastIOLTime = 0;
-
-    const char* drivestate = "";
 
     void updateTracePolicy(uint8_t state){
         bool IRchanged = state!=lastIOL;
@@ -132,7 +131,6 @@ namespace DrivePolicy {
             leftwheel.stop();
             rightwheel.stop();
             lastIOLTime = Update::cmillis;
-            drivestate = "OBSTACLE";
             return;
         }
 
@@ -168,19 +166,17 @@ namespace DrivePolicy {
         drivemode = 2;
         leftwheel.setTargetRPM(ls);
         rightwheel.setTargetRPM(rs);
-        Serial.print("left wheel RPM set to: ");
-        Serial.println(ls);
-        Serial.print("right wheel RPM set to: ");
-        Serial.println(rs);
-        drivestate = "FORCEDRUN";
+        AGV_DEBUG_PRINT(F("left wheel RPM set to: "));
+        AGV_DEBUG_PRINTLN(ls);
+        AGV_DEBUG_PRINT(F("right wheel RPM set to: "));
+        AGV_DEBUG_PRINTLN(rs);
     }
 
     void emergencystop(){
         drivemode = -1;
         leftwheel.stop();
         rightwheel.stop();
-        Serial.println(F("EMERGENCYSTOPPED"));
-        drivestate = "EMERGENCYSTOPPED";
+        AGV_DEBUG_PRINTLN(F("EMERGENCYSTOPPED"));
     }
 
     void drive(){
@@ -188,10 +184,8 @@ namespace DrivePolicy {
             case 0: //stop
                 leftwheel.setTargetRPM(0);
                 rightwheel.setTargetRPM(0);
-                drivestate = "STOP";
                 break;
             case 1: //free trace
-                drivestate = "TRACING";
                 lineTrace();
                 break;
             default:
@@ -206,6 +200,53 @@ namespace DrivePolicy {
 }
 
 namespace IOstream{
+    constexpr float STOP_ENTER_RPM = 3.0f;
+    constexpr float STOP_EXIT_RPM = 5.0f;
+    constexpr uint32_t STOP_ENTER_CONFIRM_MS = 400;
+    constexpr uint32_t STOP_EXIT_CONFIRM_MS = 400;
+
+    bool stopCandidateActive = false;
+    bool moveCandidateActive = false;
+    bool stopConfirmed = false;
+    uint32_t stopCandidateStartedMs = 0;
+    uint32_t moveCandidateStartedMs = 0;
+
+    bool updateMotionStopState(float leftRpm, float rightRpm, uint32_t nowMs){
+        if(stopConfirmed){
+            if(leftRpm>=STOP_EXIT_RPM || rightRpm>=STOP_EXIT_RPM){
+                if(!moveCandidateActive){
+                    moveCandidateActive = true;
+                    moveCandidateStartedMs = nowMs;
+                }
+                else if(nowMs-moveCandidateStartedMs>=STOP_EXIT_CONFIRM_MS){
+                    stopConfirmed = false;
+                    moveCandidateActive = false;
+                }
+            }
+            else{
+                moveCandidateActive = false;
+            }
+            return stopConfirmed;
+        }
+
+        moveCandidateActive = false;
+        if(leftRpm<=STOP_ENTER_RPM && rightRpm<=STOP_ENTER_RPM){
+            if(!stopCandidateActive){
+                stopCandidateActive = true;
+                stopCandidateStartedMs = nowMs;
+            }
+            else if(nowMs-stopCandidateStartedMs>=STOP_ENTER_CONFIRM_MS){
+                stopConfirmed = true;
+                stopCandidateActive = false;
+            }
+        }
+        else{
+            stopCandidateActive = false;
+        }
+
+        return stopConfirmed;
+    }
+
     void doSerialCommand(){
         char* command[COMMAND_MAXLENGTH] = {};
         if(!getSerialCommand(command)){
@@ -234,17 +275,33 @@ namespace IOstream{
         }
     }
     void reportStatus(){
-        char message[50];
-        snprintf(message, sizeof(message), "AGV,%s,%d,%d,%d,%d,%d,%d",
-            DrivePolicy::drivestate,
-            DrivePolicy::range,
-            DrivePolicy::lastIOL & 0b100? 1 : 0,
-            DrivePolicy::lastIOL & 0b010? 1 : 0,
-            DrivePolicy::lastIOL & 0b001? 1 : 0,
-            (int)leftwheel.getEstimatedRPM(),
-            (int)rightwheel.getEstimatedRPM()
-        );
-        Serial.println(message);
+        static bool previousObstacle = false;
+        const bool enteredObstacle =
+            DrivePolicy::onobstacle && !previousObstacle;
+        previousObstacle = DrivePolicy::onobstacle;
+
+        const float leftRpm = leftwheel.getEstimatedRPM();
+        const float rightRpm = rightwheel.getEstimatedRPM();
+        const bool stopped =
+            updateMotionStopState(leftRpm, rightRpm, Update::cmillis);
+
+        const char* event = enteredObstacle
+            ? "OBSTACLE"
+            : stopped ? "STOP" : "TRACING";
+        Serial.print(F("AGV,"));
+        Serial.print(event);
+        Serial.print(',');
+        Serial.print(DrivePolicy::range);
+        Serial.print(',');
+        Serial.print((DrivePolicy::lastIOL >> 2) & 0x01);
+        Serial.print(',');
+        Serial.print((DrivePolicy::lastIOL >> 1) & 0x01);
+        Serial.print(',');
+        Serial.print(DrivePolicy::lastIOL & 0x01);
+        Serial.print(',');
+        Serial.print(leftRpm, 2);
+        Serial.print(',');
+        Serial.println(rightRpm, 2);
     }
 }
 
@@ -258,7 +315,7 @@ namespace Update {
     uint32_t calperiod_fast = 1000;
     uint32_t conperiod = 1000;
     uint32_t conperiod_fine = 1000;
-    uint32_t serialperiod = 1000;
+    uint32_t serialperiod = 200;
 
     void init(){
         lastserialmillis = 0;
@@ -277,53 +334,53 @@ namespace Update {
     }
 
     void monitor(){
-        Serial.println(F("=========="));
-        Serial.print(F("Drivemode: "));
-        Serial.println(DrivePolicy::drivemode);
-        Serial.print(F("Left wheel: cur_duty "));
-        Serial.print(leftwheel.getCurrentDuty());
-        Serial.print(F(" / tgt_duty "));
-        Serial.print(leftwheel.getTargetDuty());
-        Serial.print(F(" / cur_RPM "));
-        Serial.println(leftwheel.getEstimatedRPM());
-        Serial.print(F("Right wheel: cur_duty "));
-        Serial.print(rightwheel.getCurrentDuty());
-        Serial.print(F(" / tgt_duty "));
-        Serial.print(rightwheel.getTargetDuty());
-        Serial.print(F(" / cur_RPM "));
-        Serial.println(rightwheel.getEstimatedRPM());
-        Serial.print(F("on-line?: "));
-        Serial.print(DrivePolicy::lastIOL & 0b100? 'O':'X');
-        Serial.print(F(" - "));
-        Serial.print(DrivePolicy::lastIOL & 0b010? 'O':'X');
-        Serial.print(F(" - "));
-        Serial.println(DrivePolicy::lastIOL & 0b001? 'O':'X');
-        Serial.print(F("Obstacle? "));
+        AGV_DEBUG_PRINTLN(F("=========="));
+        AGV_DEBUG_PRINT(F("Drivemode: "));
+        AGV_DEBUG_PRINTLN(DrivePolicy::drivemode);
+        AGV_DEBUG_PRINT(F("Left wheel: cur_duty "));
+        AGV_DEBUG_PRINT(leftwheel.getCurrentDuty());
+        AGV_DEBUG_PRINT(F(" / tgt_duty "));
+        AGV_DEBUG_PRINT(leftwheel.getTargetDuty());
+        AGV_DEBUG_PRINT(F(" / cur_RPM "));
+        AGV_DEBUG_PRINTLN(leftwheel.getEstimatedRPM());
+        AGV_DEBUG_PRINT(F("Right wheel: cur_duty "));
+        AGV_DEBUG_PRINT(rightwheel.getCurrentDuty());
+        AGV_DEBUG_PRINT(F(" / tgt_duty "));
+        AGV_DEBUG_PRINT(rightwheel.getTargetDuty());
+        AGV_DEBUG_PRINT(F(" / cur_RPM "));
+        AGV_DEBUG_PRINTLN(rightwheel.getEstimatedRPM());
+        AGV_DEBUG_PRINT(F("on-line?: "));
+        AGV_DEBUG_PRINT(DrivePolicy::lastIOL & 0b100? 'O':'X');
+        AGV_DEBUG_PRINT(F(" - "));
+        AGV_DEBUG_PRINT(DrivePolicy::lastIOL & 0b010? 'O':'X');
+        AGV_DEBUG_PRINT(F(" - "));
+        AGV_DEBUG_PRINTLN(DrivePolicy::lastIOL & 0b001? 'O':'X');
+        AGV_DEBUG_PRINT(F("Obstacle? "));
         if(DrivePolicy::onobstacle){
-            Serial.println(F("yes"));
+            AGV_DEBUG_PRINTLN(F("yes"));
         }
         else{
-            Serial.println(F("no"));
+            AGV_DEBUG_PRINTLN(F("no"));
         }
-        Serial.print(F("Current trace policy: "));
+        AGV_DEBUG_PRINT(F("Current trace policy: "));
         switch(DrivePolicy::tracePolicy){
             case DrivePolicy::TRACE_STRAIGHT:
-                Serial.println(F("Going straight"));
+                AGV_DEBUG_PRINTLN(F("Going straight"));
                 break;
             case DrivePolicy::TRACE_TURN_LEFT:
-                Serial.println(F("Turning left"));
+                AGV_DEBUG_PRINTLN(F("Turning left"));
                 break;
             case DrivePolicy::TRACE_TURN_RIGHT:
-                Serial.println(F("Turning right"));
+                AGV_DEBUG_PRINTLN(F("Turning right"));
                 break;
             case DrivePolicy::TRACE_TURN_LEFT_SOFT:
-                Serial.println(F("Turning left softly"));
+                AGV_DEBUG_PRINTLN(F("Turning left softly"));
                 break;
             case DrivePolicy::TRACE_TURN_RIGHT_SOFT:
-                Serial.println(F("Turning right softly"));
+                AGV_DEBUG_PRINTLN(F("Turning right softly"));
                 break;
             default:
-                Serial.println(F("Can't find the policy"));
+                AGV_DEBUG_PRINTLN(F("Can't find the policy"));
                 break;
         }
     }
@@ -406,7 +463,7 @@ namespace Update {
 
 void setup() {
     Serial.begin(115200);
-    Serial.println(F("Arduino Booting..."));
+    AGV_DEBUG_PRINTLN(F("Arduino Booting..."));
     leftwheel.setup();
     rightwheel.setup();
     attachInterrupt(digitalPinToInterrupt(leftwheel.getEncoder()), ISRencoder_left, FALLING);
@@ -419,7 +476,7 @@ void setup() {
     HCSR04::setup();
     LineSensor::setupSensors();
     DrivePolicy::drivemode = 1;
-    Serial.println(F("Arduino ONLINE"));
+    AGV_DEBUG_PRINTLN(F("Arduino ONLINE"));
 }
 
 void loop() {

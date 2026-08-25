@@ -1,17 +1,18 @@
 #pragma once
 
 #include "Adafruit_VL53L0X.h"
+#include "DebugLog.h"
 
 class ObstacleSensor : public Adafruit_VL53L0X{
 public:
     using Adafruit_VL53L0X::Adafruit_VL53L0X;
     void init(uint16_t period){
         if(!begin()){
-            Serial.println(F("Obstacle sensor initialize failed"));
+            AGV_DEBUG_PRINTLN(F("Obstacle sensor initialize failed"));
             for(;;);
         }
         if(!startRangeContinuous(period)){
-            Serial.println(F("Obstacle sensor ranging failed"));
+            AGV_DEBUG_PRINTLN(F("Obstacle sensor ranging failed"));
             for(;;);
         }
     }
